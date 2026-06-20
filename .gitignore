@@ -1,0 +1,11 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# editor / temp
+*.bak
+*.bak.*
+_*.js
+_render-*.png
+*.log
