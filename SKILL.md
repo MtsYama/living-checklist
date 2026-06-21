@@ -70,6 +70,7 @@ skill 目录 `templates/` 是一个**模板库** —— 同一套引擎 + 不同
   - `item.id`:**只需在同一模块内唯一**。引擎用复合键 `item::<mid>::<iid>` 存储,跨模块 / 跨清单撞名都安全(命名空间隔离)。
   - `item.html`:条目正文,支持行内 HTML(`<code>` `<strong>` `<a>` 等)。
   - **可选富字段(不填则降级回最简样式 · 向后兼容)**:`module.stepNum`(步骤号,如 "1")/ `module.tag`(`"key"` 关键 / `"skip"` 可跳过 → 带文字 badge)/ `module.meta`(标题下一行小字 · 背景 / 硬约束)/ `module.notePlaceholder`(备注框占位)/ `module.links`(`[{ text, href }]` 模块底部参考链接)/ `item.defaultChecked`(见下「自动勾选规则」)/ `module.fillData`(`[{ label, value }]` 帮你预填的字段 · 渲染成每字段「复制」+「复制全部」)。
+  - `item.children`(嵌套二级子清单):某条目下挂一层**可折叠**的更细清单。值为 `[{ id, html, defaultChecked? }]`,另可选 `item.childrenLabel`(折叠按钮文案,缺省用 I18N `subToggle`)。子项**独立勾选**(独立命名空间键 `sub::<mid>::<iid>::<sid>`),**不沉底、不计入进度、不参与整步归档** —— 用来表达「随讨论 / 文件更新,在原有条目下补更细的规则和对应清单」。子项 `id` 只需在该父条目内唯一。**只一层**(子项自己不再嵌套)。见 basics demo 的「需要更细的步骤」条。
 
 `[2] CONFIG` 段:换清单**务必改 `storagePrefix`**(隔离 localStorage)。`lang` 默认语言 · `languages` 这份清单提供哪些语言(**只显示这些** · 单语言则不显示语言键 · **数组顺序 = 切换器按钮顺序**)· `theme`(auto/light/dark)· `font`(noto/system)· `summaryDefaultOpen` / `moduleDefaultOpen`。
 
