@@ -1,10 +1,12 @@
-# living-checklist
+# Living Checklist
 
-> A single HTML file that turns any plan into a living, checkable, self-saving checklist.
+> A single HTML file that turns any step-by-step process into a living, self-saving checklist.
+
+*Step by step HTML*, which is what I usually call it.
 
 *简体中文 → [README.zh.md](README.zh.md)*
 
-**living-checklist** is one self-contained `.html` file. Inline CSS, inline JS, zero dependencies. Double-click it and it opens straight from `file://` in your browser. No build step, no server, no internet needed to run it.
+**Living Checklist** is one self-contained `.html` file. Inline CSS, inline JS, zero dependencies. Double-click it and it opens straight from `file://` in your browser. No build step, no server, no internet needed to run it.
 
 You don't edit code to use it. You edit the *content* (a small DATA + CONFIG section with "fill your data here" anchors) and the engine underneath stays untouched. Then it comes alive: check an item and it slides to the bottom of its step, finish a whole step and the card folds itself away into a "Done" area, and a progress bar tracks the whole thing. Every check, fold, and note is saved to your browser automatically. Close the tab and reopen it later, and your progress is right where you left it.
 
