@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Living Checklist · Step by step HTML</title>
+<meta name="description" content="A single HTML file that turns any step-by-step process into a living, self-saving checklist. Inline CSS + JS, zero dependencies, double-click to open." />
+
+<!-- Google Fonts: Cormorant Garamond (display) · Manrope (body) · IBM Plex Mono (mono) · LXGW WenKai TC (CJK) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=LXGW+WenKai+TC:wght@400;700&display=swap" rel="stylesheet" />
+
+<style>
+  /* ============================================================
+     Living Checklist — landing page
+     Visual: MX_Studio (Yama personal brand · atelier default theme)
+     Toggle styling ported 1:1 from atelier base.css
+     ============================================================ */
+  :root {
+    --bg: #000000;
+    --fg: #ECE6D5;
+    --fg-2: #D6CFBB;
+    --fg-3: #A89F88;
+    --accent: #AA9068;
+    --accent-fill: #AA9068;
+    --on-accent: #000000;
+    --rule-strong: #5C4E35;
+    --rule: #2A2419;
+    --rule-soft: #1C180F;
+    --radius: 0;
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+    --font-display: "Cormorant Garamond", "LXGW WenKai TC", Georgia, serif;
+    --font-body: "Manrope", "LXGW WenKai TC", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+    --font-cjk: "LXGW WenKai TC", "Manrope", system-ui, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    /* R-29 · orphan/widow control */
+    text-wrap: pretty;
+    orphans: 3;
+    widows: 3;
+  }
+  ::selection { background: var(--accent-fill); color: var(--on-accent); }
+
+  /* CJK locales lean on LXGW WenKai TC for body too */
+  html[lang="zh-Hans"] body,
+  html[lang="zh-Hant"] body,
+  html[lang="ja"] body { font-family: var(--font-cjk); }
+
+  .wrap { max-width: 940px; margin: 0 auto; padding: 0 clamp(1.3rem, 5vw, 2.6rem); }
+
+  a { color: var(--accent); text-underline-offset: 3px; }
+  a:hover { color: var(--fg); }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  /* ---------- top bar · language toggle ---------- */
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(0, 0, 0, 0.86);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .topbar-inner {
+    max-width: 940px; margin: 0 auto;
+    padding: 0.8rem clamp(1.3rem, 5vw, 2.6rem);
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .topbar-label {
+    font-family: var(--font-mono);
+    font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--fg-3);
+  }
+
+  /* toggle — ported 1:1 from atelier base.css */
+  .toggle { display: flex; gap: 6px; }
+  .toggle button {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 15px; letter-spacing: 0.03em;
+    min-height: 44px; padding: 0 16px;
+    border: 1px solid var(--rule-strong);
+    background: transparent; color: var(--fg-2);
+    cursor: pointer;
+    border-radius: 0;
+    transition: all 0.16s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .toggle button:hover { border-color: var(--accent); color: var(--fg); }
+  .toggle button[aria-pressed="true"] {
+    background: var(--accent-fill); color: var(--on-accent); border-color: var(--accent-fill);
+  }
+
+  /* ---------- hero ---------- */
+  .hero { padding: clamp(3.6rem, 9vw, 6.4rem) 0 clamp(2.4rem, 5vw, 3.6rem); }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 14px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.4rem;
+  }
+  .hero-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(2.9rem, 8vw, 5.2rem);
+    line-height: 1.04;
+    letter-spacing: -0.01em;
+    color: var(--fg);
+    text-wrap: balance;
+    max-width: 18ch;
+  }
+  .hero-title em { font-style: italic; color: var(--accent); font-weight: inherit; }
+  .hero-sub {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+    letter-spacing: 0.08em;
+    color: var(--fg-3);
+    margin-top: 1.1rem;
+    font-weight: 400;
+  }
+  .hero-lead {
+    margin-top: 1.9rem;
+    font-size: clamp(1.15rem, 2.3vw, 1.4rem);
+    line-height: 1.6;
+    color: var(--fg-2);
+    max-width: 56ch;
+  }
+  .hero-actions {
+    margin-top: 2.4rem;
+    display: flex; gap: 0.9rem; flex-wrap: wrap;
+  }
+
+  /* buttons */
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: var(--font-body); font-weight: 600;
+    font-size: 16px; letter-spacing: 0.01em;
+    min-height: 48px; padding: 0 24px;
+    border: 1px solid var(--fg); background: transparent; color: var(--fg);
+    cursor: pointer; border-radius: var(--radius);
+    text-decoration: none;
+    transition: all 0.16s var(--ease);
+  }
+  .btn:hover { background: var(--fg); color: var(--bg); }
+  .btn--filled { background: var(--accent-fill); color: var(--on-accent); border-color: var(--accent-fill); }
+  .btn--filled:hover { background: transparent; color: var(--fg); border-color: var(--fg); }
+
+  /* ---------- section scaffold ---------- */
+  .section { padding: clamp(2.8rem, 6vw, 4.4rem) 0; border-top: 1px solid var(--rule); }
+  .section-head { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .section-no {
+    font-family: var(--font-mono);
+    font-size: 14px; letter-spacing: 0.1em; color: var(--accent);
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.7rem, 4vw, 2.5rem);
+    line-height: 1.15;
+    letter-spacing: -0.005em;
+    color: var(--fg);
+    text-wrap: balance;
+  }
+  .section-lead {
+    font-size: clamp(1.08rem, 2vw, 1.25rem);
+    line-height: 1.62; color: var(--fg-2); max-width: 60ch;
+    margin-bottom: 2.2rem;
+  }
+
+  /* ---------- feature list ---------- */
+  .features { list-style: none; }
+  .features li {
+    display: grid; grid-template-columns: auto 1fr; gap: 1.1rem;
+    padding: 1.25rem 0; border-top: 1px solid var(--rule);
+    align-items: baseline;
+  }
+  .features li:last-child { border-bottom: 1px solid var(--rule); }
+  .features .f-mark {
+    font-family: var(--font-mono); font-size: 15px;
+    color: var(--accent); font-variant-numeric: tabular-nums;
+  }
+  .features .f-text { font-size: 1.08rem; line-height: 1.55; color: var(--fg-2); }
+  .features .f-text strong { color: var(--fg); font-weight: 600; }
+
+  /* ---------- screenshots ---------- */
+  .shots {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem;
+  }
+  @media (max-width: 720px) { .shots { grid-template-columns: 1fr; } }
+  .shot { display: flex; flex-direction: column; gap: 0.7rem; }
+  .shot img {
+    width: 100%; height: auto; display: block;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--radius);
+    background: var(--rule-soft);
+  }
+  .shot-cap {
+    font-family: var(--font-mono); font-size: 13px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3);
+  }
+
+  /* ---------- usage cards ---------- */
+  .usage { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+  @media (max-width: 720px) { .usage { grid-template-columns: 1fr; } }
+  .usage-card {
+    border: 1px solid var(--rule-strong);
+    padding: 1.6rem 1.5rem;
+    display: flex; flex-direction: column; gap: 0.8rem;
+    background: var(--rule-soft);
+  }
+  .usage-no {
+    font-family: var(--font-mono); font-size: 14px;
+    letter-spacing: 0.1em; color: var(--accent);
+  }
+  .usage-title {
+    font-family: var(--font-display); font-weight: 500;
+    font-size: 1.5rem; line-height: 1.2; color: var(--fg);
+  }
+  .usage-body { font-size: 1.02rem; line-height: 1.55; color: var(--fg-2); }
+  .usage-body code {
+    font-family: var(--font-mono); font-size: 0.88em;
+    color: var(--accent); background: rgba(170, 144, 104, 0.1);
+    padding: 0.1em 0.35em;
+  }
+
+  /* ---------- example callout ---------- */
+  .example {
+    border: 1px solid var(--accent);
+    padding: clamp(1.8rem, 4vw, 2.6rem);
+    display: flex; flex-direction: column; gap: 1.2rem;
+    align-items: flex-start;
+  }
+  .example-quote {
+    font-family: var(--font-display); font-style: italic;
+    font-size: clamp(1.3rem, 2.8vw, 1.7rem); line-height: 1.4;
+    color: var(--fg); max-width: 58ch;
+  }
+  .example-note { font-size: 1.05rem; line-height: 1.55; color: var(--fg-2); max-width: 60ch; }
+
+  /* ---------- footer ---------- */
+  .footer {
+    border-top: 1px solid var(--rule); margin-top: 1rem;
+    padding: 2.2rem 0 3rem;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    font-family: var(--font-mono); font-size: 14px;
+    letter-spacing: 0.04em; color: var(--fg-3);
+  }
+  .footer a { color: var(--fg-2); text-transform: uppercase; letter-spacing: 0.06em; }
+  .footer a:hover { color: var(--accent); }
+  .footer-links { display: flex; gap: 1.4rem; flex-wrap: wrap; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <span class="topbar-label">Living&nbsp;Checklist</span>
+    <div class="toggle" role="group" aria-label="Language / 语言">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="fr" aria-pressed="false">FR</button>
+      <button type="button" data-lang="zh-Hans" aria-pressed="false">简</button>
+      <button type="button" data-lang="zh-Hant" aria-pressed="false">繁</button>
+      <button type="button" data-lang="ja" aria-pressed="false">日</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="eyebrow" data-i18n="eyebrow">Open source · single file · MIT</p>
+    <h1 class="hero-title" data-i18n-html="title">Living Checklist</h1>
+    <span class="hero-sub" data-i18n="sub">Step by step HTML</span>
+    <p class="hero-lead" data-i18n="lead"></p>
+    <div class="hero-actions">
+      <a class="btn btn--filled" href="https://github.com/MtsYama/living-checklist" data-i18n="ctaRepo">View on GitHub</a>
+      <a class="btn" href="examples/europe-japan-trip.html" data-i18n="ctaExample">See a live example</a>
+    </div>
+  </section>
+
+  <!-- WHAT IT IS -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-no">01</span>
+      <h2 class="section-title" data-i18n="whatTitle"></h2>
+    </div>
+    <p class="section-lead" data-i18n="whatBody"></p>
+    <ul class="features" data-i18n-list="features"></ul>
+  </section>
+
+  <!-- SCREENSHOTS -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-no">02</span>
+      <h2 class="section-title" data-i18n="shotsTitle"></h2>
+    </div>
+    <div class="shots">
+      <figure class="shot">
+        <img src="assets/base-light.png" alt="" data-alt="shotBaseAlt" />
+        <figcaption class="shot-cap" data-i18n="shotBase"></figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="assets/mx-dark.png" alt="" data-alt="shotMxAlt" />
+        <figcaption class="shot-cap" data-i18n="shotMx"></figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="assets/example.png" alt="" data-alt="shotExAlt" />
+        <figcaption class="shot-cap" data-i18n="shotEx"></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- THREE WAYS -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-no">03</span>
+      <h2 class="section-title" data-i18n="useTitle"></h2>
+    </div>
+    <div class="usage">
+      <article class="usage-card">
+        <span class="usage-no">01</span>
+        <h3 class="usage-title" data-i18n="use1Title"></h3>
+        <p class="usage-body" data-i18n-html="use1Body"></p>
+      </article>
+      <article class="usage-card">
+        <span class="usage-no">02</span>
+        <h3 class="usage-title" data-i18n="use2Title"></h3>
+        <p class="usage-body" data-i18n-html="use2Body"></p>
+      </article>
+      <article class="usage-card">
+        <span class="usage-no">03</span>
+        <h3 class="usage-title" data-i18n="use3Title"></h3>
+        <p class="usage-body" data-i18n-html="use3Body"></p>
+      </article>
+    </div>
+  </section>
+
+  <!-- WORKED EXAMPLE -->
+  <section class="section">
+    <div class="section-head">
+      <span class="section-no">04</span>
+      <h2 class="section-title" data-i18n="exTitle"></h2>
+    </div>
+    <p class="section-lead" data-i18n="exLead"></p>
+    <div class="example">
+      <p class="example-quote" data-i18n="exQuote"></p>
+      <p class="example-note" data-i18n="exNote"></p>
+      <a class="btn btn--filled" href="examples/europe-japan-trip.html" data-i18n="exCta"></a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer wrap">
+  <span data-i18n="footMade">Built by Mts Yama · MIT License</span>
+  <span class="footer-links">
+    <a href="https://github.com/MtsYama/living-checklist">GitHub</a>
+    <a href="https://github.com/MtsYama/living-checklist#readme" data-i18n="footReadme">Readme</a>
+    <a href="https://github.com/MtsYama/living-checklist/blob/main/LICENSE">MIT</a>
+  </span>
+</footer>
+
+<script>
+  "use strict";
+
+  // ====== content[lang] · 5 languages: en / fr / zh-Hans / zh-Hant / ja ======
+  // Term "Step by step HTML" stays in English in every language.
+  var content = {
+    "en": {
+      eyebrow: "Open source · single file · MIT",
+      title: "Living Checklist",
+      sub: "Step by step HTML",
+      lead: "A single HTML file that turns any step-by-step process into a living checklist that saves itself.",
+      ctaRepo: "View on GitHub",
+      ctaExample: "See a live example",
+
+      whatTitle: "What it is",
+      whatBody: "One self-contained .html file. Inline CSS, inline JS, zero dependencies. Double-click it and it opens straight from file:// — no build, no server, no internet. You edit the content, not the engine, and it comes alive.",
+      features: [
+        "<strong>Items sink as you check them</strong> — a smooth FLIP animation slides done items to the bottom of their step, so what's left stays on top.",
+        "<strong>Steps file themselves away</strong> — finish a whole step and the card folds and moves into a Done area.",
+        "<strong>Progress bar</strong> tracks completion across every step, with a note box per step.",
+        "<strong>Everything auto-saves</strong> to your browser. Close the tab, reopen it, your checks and notes are right where you left them.",
+        "<strong>Five languages built in</strong> — English, Français, 简体中文, 繁體中文, 日本語, keyed per locale."
+      ],
+
+      shotsTitle: "Two skins, one engine",
+      shotBase: "Base template · light",
+      shotMx: "MX Studio template · dark",
+      shotEx: "Worked example",
+      shotBaseAlt: "Base template in light theme — green accent, clean layout",
+      shotMxAlt: "MX Studio template in dark theme — gold accent, editorial serif",
+      shotExAlt: "The Europe and Japan trip example, fully built out",
+
+      useTitle: "Three ways to use it",
+      use1Title: "By hand",
+      use1Body: "Copy a template, edit the <code>DATA</code> and <code>CONFIG</code> sections, open the file. No tooling required.",
+      use2Title: "As a Claude skill",
+      use2Body: "This repo is the skill. Clone it into <code>~/.claude/skills/</code> and ask your AI: make me a checklist for X.",
+      use3Title: "Chat only",
+      use3Body: "No command line. Copy the built-in prompt, paste it into any web AI chat — ChatGPT, Claude, Gemini — and it generates a checklist for you.",
+
+      exTitle: "From messy input to a plan",
+      exLead: "The example takes a single run-on, voice-dictated trip request and turns it into an organized, time-sequenced, checkable plan across seven modules: visa, flights, stay, food, museums, gifts, pre-departure.",
+      exQuote: "Off from July 15 to Aug 15, want to travel Europe, mainly France and Italy, then swing by Japan. Chinese passport. Already booked the Shanghai → France flight…",
+      exNote: "The booked flights come pre-checked, known identity fields are pre-filled, and everything still unknown is left as a clear prompting placeholder.",
+      exCta: "Open the live example",
+
+      footMade: "Built by Mts Yama · MIT License",
+      footReadme: "Readme"
+    },
+
+    "fr": {
+      eyebrow: "Open source · fichier unique · MIT",
+      title: "Living Checklist",
+      sub: "Step by step HTML",
+      lead: "Un seul fichier HTML qui transforme n'importe quel processus étape par étape en une checklist vivante qui se sauvegarde toute seule.",
+      ctaRepo: "Voir sur GitHub",
+      ctaExample: "Voir un exemple",
+
+      whatTitle: "Ce que c'est",
+      whatBody: "Un fichier .html autonome. CSS intégré, JS intégré, zéro dépendance. Double-cliquez et il s'ouvre directement depuis file:// — aucun build, aucun serveur, aucune connexion. Vous modifiez le contenu, pas le moteur, et tout prend vie.",
+      features: [
+        "<strong>Les éléments coulent quand vous les cochez</strong> — une animation FLIP fluide glisse les éléments terminés vers le bas de leur étape, ce qui reste demeure en haut.",
+        "<strong>Les étapes se rangent toutes seules</strong> — terminez une étape entière et la carte se replie dans une zone Terminé.",
+        "<strong>Une barre de progression</strong> suit l'avancement de chaque étape, avec une zone de notes par étape.",
+        "<strong>Tout se sauvegarde</strong> dans votre navigateur. Fermez l'onglet, rouvrez-le : vos coches et vos notes sont exactement là où vous les aviez laissées.",
+        "<strong>Cinq langues intégrées</strong> — English, Français, 简体中文, 繁體中文, 日本語, indexées par locale."
+      ],
+
+      shotsTitle: "Deux habillages, un seul moteur",
+      shotBase: "Modèle de base · clair",
+      shotMx: "Modèle MX Studio · sombre",
+      shotEx: "Exemple concret",
+      shotBaseAlt: "Modèle de base en thème clair — accent vert, mise en page épurée",
+      shotMxAlt: "Modèle MX Studio en thème sombre — accent doré, serif éditorial",
+      shotExAlt: "L'exemple de voyage Europe et Japon, entièrement construit",
+
+      useTitle: "Trois façons de l'utiliser",
+      use1Title: "À la main",
+      use1Body: "Copiez un modèle, modifiez les sections <code>DATA</code> et <code>CONFIG</code>, ouvrez le fichier. Aucun outil requis.",
+      use2Title: "Comme skill Claude",
+      use2Body: "Ce dépôt est le skill. Clonez-le dans <code>~/.claude/skills/</code> et demandez à votre IA : fais-moi une checklist pour X.",
+      use3Title: "Chat seulement",
+      use3Body: "Sans ligne de commande. Copiez le prompt intégré, collez-le dans n'importe quel chat IA — ChatGPT, Claude, Gemini — et il vous génère une checklist.",
+
+      exTitle: "D'une demande brouillonne à un plan",
+      exLead: "L'exemple part d'une demande de voyage dictée d'un seul trait et la transforme en un plan organisé, ordonné dans le temps et cochable, réparti sur sept modules : visa, vols, hébergement, repas, musées, cadeaux, avant le départ.",
+      exQuote: "Congé du 15 juillet au 15 août, envie de voyager en Europe, surtout la France et l'Italie, puis un saut au Japon. Passeport chinois. Vol Shanghai → France déjà réservé…",
+      exNote: "Les vols réservés arrivent déjà cochés, les champs d'identité connus sont pré-remplis, et tout ce qui reste inconnu est laissé comme un repère clair à compléter.",
+      exCta: "Ouvrir l'exemple",
+
+      footMade: "Créé par Mts Yama · Licence MIT",
+      footReadme: "Readme"
+    },
+
+    "zh-Hans": {
+      eyebrow: "开源 · 单文件 · MIT",
+      title: "活页清单",
+      sub: "Step by step HTML",
+      lead: "一个 HTML 文件，把任何 step-by-step 的流程，变成一份会自己保存进度的「活的」清单。",
+      ctaRepo: "在 GitHub 查看",
+      ctaExample: "看一个实例",
+
+      whatTitle: "这是什么",
+      whatBody: "一个自包含的 .html，CSS 和 JS 全内联，零依赖。双击就能从 file:// 直接打开 —— 不用构建、不用服务器、不用联网。你只改内容，不碰引擎，它就活了起来。",
+      features: [
+        "<strong>勾掉就沉底</strong> —— 用 FLIP 动画把勾完的条目平滑滑到这一步底部，没做的留在上面。",
+        "<strong>整步做完自己归档</strong> —— 一步勾满，卡片就折叠、收进「已完成」区。",
+        "<strong>顶部总进度条</strong>，每一步还配一个备注框。",
+        "<strong>全部自动保存</strong>到浏览器。关掉再打开，勾选和备注都还在原处。",
+        "<strong>内置五种语言</strong> —— English、Français、简体中文、繁體中文、日本語，按 locale 分键。"
+      ],
+
+      shotsTitle: "两套皮肤，同一个引擎",
+      shotBase: "base 模板 · 浅色",
+      shotMx: "MX Studio 模板 · 深色",
+      shotEx: "走通的例子",
+      shotBaseAlt: "浅色主题的 base 模板 —— 绿色点缀，干净排版",
+      shotMxAlt: "深色主题的 MX Studio 模板 —— 金色点缀，编辑风衬线",
+      shotExAlt: "欧洲 + 日本旅行的例子，完整填好的样子",
+
+      useTitle: "三种用法",
+      use1Title: "当人手动用",
+      use1Body: "复制一份模板，改 <code>DATA</code> 和 <code>CONFIG</code> 两段，打开文件。不用任何工具。",
+      use2Title: "当 Claude skill 用",
+      use2Body: "这个 repo 本身就是 skill。clone 到 <code>~/.claude/skills/</code>，然后跟 AI 说：给我做一份关于 X 的清单。",
+      use3Title: "纯聊天",
+      use3Body: "不用命令行。复制内置的提示词，粘到任意网页 AI 对话里 —— ChatGPT、Claude、Gemini —— 它就替你生成一份清单。",
+
+      exTitle: "把乱糟糟的需求变成计划",
+      exLead: "例子拿一段一口气说完、语音口述的旅行需求，把它变成一份有条理、按时间排好、可勾选的计划，分成七个模块：签证、机票、住宿、吃、博物馆、礼物、出发前。",
+      exQuote: "7 月 15 号到 8 月 15 号休假，想去欧洲，主要法国和意大利，再顺道去趟日本。中国护照。上海 → 法国的机票已经订了……",
+      exNote: "订好的机票预先勾上，已知的身份信息预先填好，所有还不确定的字段，都留成清楚的提示性占位符。",
+      exCta: "打开实例",
+
+      footMade: "Mts Yama 制作 · MIT 协议",
+      footReadme: "说明文档"
+    },
+
+    "zh-Hant": {
+      eyebrow: "開源 · 單檔案 · MIT",
+      title: "活頁清單",
+      sub: "Step by step HTML",
+      lead: "一個 HTML 檔案，把任何 step-by-step 的流程，變成一份會自己儲存進度的「活的」清單。",
+      ctaRepo: "在 GitHub 查看",
+      ctaExample: "看一個實例",
+
+      whatTitle: "這是什麼",
+      whatBody: "一個自包含的 .html，CSS 和 JS 全內聯，零依賴。雙擊就能從 file:// 直接打開 —— 不用建置、不用伺服器、不用連網。你只改內容，不碰引擎，它就活了起來。",
+      features: [
+        "<strong>勾掉就沉底</strong> —— 用 FLIP 動畫把勾完的項目平滑滑到這一步底部，沒做的留在上面。",
+        "<strong>整步做完自己歸檔</strong> —— 一步勾滿，卡片就摺疊、收進「已完成」區。",
+        "<strong>頂部總進度條</strong>，每一步還配一個備註框。",
+        "<strong>全部自動儲存</strong>到瀏覽器。關掉再打開，勾選和備註都還在原處。",
+        "<strong>內建五種語言</strong> —— English、Français、简体中文、繁體中文、日本語，按 locale 分鍵。"
+      ],
+
+      shotsTitle: "兩套皮膚，同一個引擎",
+      shotBase: "base 模板 · 淺色",
+      shotMx: "MX Studio 模板 · 深色",
+      shotEx: "走通的例子",
+      shotBaseAlt: "淺色主題的 base 模板 —— 綠色點綴，乾淨排版",
+      shotMxAlt: "深色主題的 MX Studio 模板 —— 金色點綴，編輯風襯線",
+      shotExAlt: "歐洲 + 日本旅行的例子，完整填好的樣子",
+
+      useTitle: "三種用法",
+      use1Title: "當人手動用",
+      use1Body: "複製一份模板，改 <code>DATA</code> 和 <code>CONFIG</code> 兩段，打開檔案。不用任何工具。",
+      use2Title: "當 Claude skill 用",
+      use2Body: "這個 repo 本身就是 skill。clone 到 <code>~/.claude/skills/</code>，然後跟 AI 說：給我做一份關於 X 的清單。",
+      use3Title: "純聊天",
+      use3Body: "不用命令列。複製內建的提示詞，貼到任意網頁 AI 對話裡 —— ChatGPT、Claude、Gemini —— 它就替你生成一份清單。",
+
+      exTitle: "把亂糟糟的需求變成計畫",
+      exLead: "例子拿一段一口氣說完、語音口述的旅行需求，把它變成一份有條理、按時間排好、可勾選的計畫，分成七個模組：簽證、機票、住宿、吃、博物館、禮物、出發前。",
+      exQuote: "7 月 15 號到 8 月 15 號休假，想去歐洲，主要法國和義大利，再順道去趟日本。中國護照。上海 → 法國的機票已經訂了……",
+      exNote: "訂好的機票預先勾上，已知的身分資訊預先填好，所有還不確定的欄位，都留成清楚的提示性佔位符。",
+      exCta: "打開實例",
+
+      footMade: "Mts Yama 製作 · MIT 授權",
+      footReadme: "說明文件"
+    },
+
+    "ja": {
+      eyebrow: "オープンソース · 単一ファイル · MIT",
+      title: "活页清单",
+      sub: "Step by step HTML",
+      lead: "あらゆる step-by-step なプロセスを、自分で進捗を保存し続ける「生きたチェックリスト」に変える、たった 1 つの HTML ファイル。",
+      ctaRepo: "GitHub で見る",
+      ctaExample: "実例を見る",
+
+      whatTitle: "これは何か",
+      whatBody: "それ自体で完結した 1 つの .html。CSS も JS もインライン、依存ゼロ。ダブルクリックすれば file:// から直接開きます —— ビルドなし、サーバーなし、インターネットも不要。編集するのはコンテンツだけ、エンジンには触れず、それは命を持ちます。",
+      features: [
+        "<strong>チェックすると項目が沈む</strong> —— なめらかな FLIP アニメーションで完了した項目をそのステップの一番下へ移し、残りが上に保たれます。",
+        "<strong>ステップが自分で片付く</strong> —— 1 つのステップを終えるとカードがたたまれ「完了」エリアへ移動します。",
+        "<strong>進捗バー</strong>が全ステップの進み具合を追い、ステップごとにメモ欄が付きます。",
+        "<strong>すべて自動保存</strong>。タブを閉じて開き直しても、チェックもメモも離れたときのままです。",
+        "<strong>5 言語を内蔵</strong> —— English、Français、简体中文、繁體中文、日本語、ロケールごとにキー分け。"
+      ],
+
+      shotsTitle: "2 つのスキン、1 つのエンジン",
+      shotBase: "ベーステンプレート · ライト",
+      shotMx: "MX Studio テンプレート · ダーク",
+      shotEx: "実例",
+      shotBaseAlt: "ライトテーマのベーステンプレート —— グリーンのアクセント、すっきりしたレイアウト",
+      shotMxAlt: "ダークテーマの MX Studio テンプレート —— ゴールドのアクセント、エディトリアルなセリフ",
+      shotExAlt: "ヨーロッパ + 日本の旅行の実例、完成した状態",
+
+      useTitle: "3 つの使い方",
+      use1Title: "手で使う",
+      use1Body: "テンプレートをコピーし、<code>DATA</code> と <code>CONFIG</code> を編集してファイルを開くだけ。ツールは不要です。",
+      use2Title: "Claude スキルとして",
+      use2Body: "このリポジトリ自体がスキルです。<code>~/.claude/skills/</code> に clone して、AI に「X のチェックリストを作って」と頼むだけ。",
+      use3Title: "チャットだけ",
+      use3Body: "コマンドライン不要。内蔵のプロンプトをコピーして、好きな Web の AI チャット —— ChatGPT、Claude、Gemini —— に貼れば、チェックリストを生成してくれます。",
+
+      exTitle: "雑な入力から計画へ",
+      exLead: "実例は、一息に話した音声口述の旅行リクエストを、整理され、時系列に並び、チェックできる計画に変えます。7 つのモジュール：ビザ、フライト、宿泊、食事、美術館、お土産、出発前。",
+      exQuote: "7 月 15 日から 8 月 15 日まで休暇、ヨーロッパ、主にフランスとイタリアを旅して、それから日本にも寄りたい。中国のパスポート。上海 → フランスのフライトはもう予約済み……",
+      exNote: "予約済みのフライトは最初からチェック済み、分かっている身元情報は事前入力、まだ不明なものはすべて明確な記入用プレースホルダーとして残されます。",
+      exCta: "実例を開く",
+
+      footMade: "Mts Yama 制作 · MIT ライセンス",
+      footReadme: "Readme"
+    }
+  };
+
+  var LANGS = ["en", "fr", "zh-Hans", "zh-Hant", "ja"];
+
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function applyLang(lang) {
+    if (!content[lang]) lang = "en";
+    var c = content[lang];
+    document.documentElement.lang = lang;
+
+    // plain text nodes
+    document.querySelectorAll("[data-i18n]").forEach(function (el) {
+      var key = el.getAttribute("data-i18n");
+      if (c[key] != null) el.textContent = c[key];
+    });
+
+    // nodes that intentionally carry inline markup (e.g. <code>, <em>)
+    document.querySelectorAll("[data-i18n-html]").forEach(function (el) {
+      var key = el.getAttribute("data-i18n-html");
+      if (c[key] != null) el.innerHTML = c[key];
+    });
+
+    // feature list
+    document.querySelectorAll("[data-i18n-list]").forEach(function (el) {
+      var key = el.getAttribute("data-i18n-list");
+      var items = c[key];
+      if (!Array.isArray(items)) return;
+      el.innerHTML = items.map(function (txt) {
+        return '<li><span class="f-mark" aria-hidden="true">+</span>' +
+               '<span class="f-text">' + txt + "</span></li>";
+      }).join("");
+    });
+
+    // image alt text
+    document.querySelectorAll("[data-alt]").forEach(function (el) {
+      var key = el.getAttribute("data-alt");
+      if (c[key] != null) el.setAttribute("alt", c[key]);
+    });
+
+    // toggle pressed state
+    document.querySelectorAll(".toggle button").forEach(function (btn) {
+      btn.setAttribute("aria-pressed", btn.getAttribute("data-lang") === lang ? "true" : "false");
+    });
+  }
+
+  // wire up the toggle
+  document.querySelectorAll(".toggle button").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      applyLang(btn.getAttribute("data-lang"));
+    });
+  });
+
+  // default en; optionally detect from navigator.language
+  function detectLang() {
+    var nav = (navigator.language || "en").toLowerCase();
+    if (nav.indexOf("zh") === 0) {
+      return (nav.indexOf("hant") > -1 || nav.indexOf("tw") > -1 ||
+              nav.indexOf("hk") > -1 || nav.indexOf("mo") > -1) ? "zh-Hant" : "zh-Hans";
+    }
+    if (nav.indexOf("ja") === 0) return "ja";
+    if (nav.indexOf("fr") === 0) return "fr";
+    return "en";
+  }
+
+  applyLang(detectLang());
+</script>
+</body>
+</html>

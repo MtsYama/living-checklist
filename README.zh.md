@@ -1,6 +1,7 @@
 # 活页清单
 
-English → [README.md](README.md)
+[English](README.md) · [Français](README.fr.md) · **简体中文** · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md)
+
 
 「Step by step HTML」,我一般也这么叫它。
 

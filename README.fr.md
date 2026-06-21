@@ -1,0 +1,109 @@
+# Living Checklist
+
+[English](README.md) · **Français** · [简体中文](README.zh.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md)
+
+> Un seul fichier HTML qui transforme n'importe quel processus étape par étape en une checklist vivante qui se sauvegarde toute seule.
+
+*Step by step HTML*, c'est comme ça que je l'appelle habituellement.
+
+
+**Living Checklist** est un unique fichier `.html` autonome. CSS intégré, JS intégré, zéro dépendance. Double-cliquez dessus et il s'ouvre directement depuis `file://` dans votre navigateur. Aucune étape de build, aucun serveur, aucune connexion internet nécessaire pour le faire fonctionner.
+
+Vous ne modifiez pas de code pour l'utiliser. Vous modifiez le *contenu* (une petite section DATA + CONFIG avec des repères « remplissez vos données ici ») et le moteur en dessous reste intact. Ensuite, tout prend vie : cochez un élément et il glisse vers le bas de son étape, terminez une étape entière et la carte se replie d'elle-même dans une zone « Terminé », et une barre de progression suit l'ensemble. Chaque coche, repli et note est enregistré automatiquement dans votre navigateur. Fermez l'onglet et rouvrez-le plus tard : votre progression est exactement là où vous l'aviez laissée.
+
+## Captures d'écran
+
+| Modèle de base (clair) | Modèle MX Studio (sombre) | Exemple concret |
+|---|---|---|
+| ![Modèle de base, thème clair](assets/base-light.png) | ![Modèle MX Studio, thème sombre](assets/mx-dark.png) | ![Exemple de voyage Europe + Japon](assets/example.png) |
+
+## Démarrage rapide
+
+1. Téléchargez ou copiez un modèle depuis [`templates/`](templates/) — commencez par [`base.html`](templates/base.html).
+2. Double-cliquez dessus. Il s'ouvre dans votre navigateur.
+3. C'est tout. Cliquez sur les éléments pour les cocher, saisissez des notes, regardez les étapes se replier à mesure que vous les terminez.
+
+Pour le rendre *vôtre*, ouvrez le fichier dans n'importe quel éditeur de texte et modifiez les deux sections clairement repérées près du haut : `[1] DATA` (vos étapes et vos éléments) et `[2] CONFIG` (titre, langues, thème). Le code du moteur qui les suit n'a jamais besoin d'être touché.
+
+## Ce qu'il fait concrètement
+
+- **Les éléments coulent quand vous les cochez** — une animation FLIP fluide déplace les éléments terminés vers le bas de leur étape, de sorte que ce qu'il reste à faire demeure en haut.
+- **Les étapes se rangent toutes seules** — terminez chaque élément d'une étape et la carte entière se replie et se déplace dans une zone « Terminé ».
+- **Une barre de progression** en haut suit l'avancement à travers toutes les étapes.
+- **Une zone de note par étape** pour tout ce que vous souhaitez noter.
+- **Tout se sauvegarde automatiquement** dans `localStorage`. Fermez et rouvrez : vos coches, vos replis et vos notes sont toujours là.
+- **Barre d'outils** : Tout déplier · Tout replier · Réinitialiser les coches · **Copier progression + retour** (regroupe votre progression actuelle et vos notes en markdown dans votre presse-papiers, pour que vous puissiez les recoller dans une conversation avec une IA et demander la prochaine révision).
+- **Contrôles flottants** (en bas à droite) : changement de langue (uniquement les langues que cette checklist propose réellement), un sélecteur de thème à 3 positions (Auto / Clair / Sombre — le bouton affiche un petit badge « A » en mode Auto), et un sélecteur de police (Noto / système).
+- **5 langues** prêtes à l'emploi : 简体中文, 繁體中文, English, Français, 日本語. Les données sont indexées par locale.
+- **Accessible par défaut** : texte du corps de 18 px et plus, navigation au clavier, anneaux de focus visibles, une barre de progression ARIA et des régions live, un comportement de repli correct pour les lecteurs d'écran, et il respecte `prefers-reduced-motion`.
+
+## Trois façons de l'utiliser
+
+**1. En tant qu'humain, à la main.** Copiez un modèle, modifiez les sections DATA et CONFIG, ouvrez le fichier. Aucun outillage requis.
+
+**2. En tant que skill Claude.** Ce dépôt *est* le skill — [`SKILL.md`](SKILL.md) à la racine plus les modèles. Clonez-le dans `~/.claude/skills/living-checklist/` (ou installez-le via une place de marché de plugins) et demandez simplement à votre IA : *« fais-moi une checklist pour X. »* Elle remplit le modèle à votre place.
+
+**3. En conversation uniquement, sans ligne de commande.** Ouvrez n'importe quelle checklist et cliquez sur le bouton **« Copier le prompt »** dans la bannière du haut. Collez-le dans n'importe quelle conversation IA sur le web — ChatGPT, Claude, Gemini, peu importe ce que vous utilisez — et elle vous génère une checklist HTML simple. Aucune installation, aucune CLI, rien à configurer.
+
+## Exemple concret
+
+[`examples/`](examples/) illustre tout l'intérêt de cet outil : transformer une demande désordonnée et dictée à l'oral en un plan organisé, ordonné dans le temps et cochable.
+
+- **L'entrée** → [`examples/europe-japan-trip-prompt.md`](examples/europe-japan-trip-prompt.md)
+- **Le résultat** → [`examples/europe-japan-trip.html`](examples/europe-japan-trip.html) (habillage base) et [`examples/europe-japan-trip-mx.html`](examples/europe-japan-trip-mx.html) (habillage MX)
+
+L'entrée est une unique demande de voyage d'un seul tenant, dictée à la voix — le genre de chose que vous diriez réellement à voix haute :
+
+> *« Off du 15 juillet au 15 août, j'ai envie de voyager en Europe, surtout en France et en Italie, puis de faire un saut au Japon. Passeport chinois. J'ai déjà réservé le vol Shanghai → France, le retour pas encore. Je suis difficile côté nourriture. Je veux absolument le Louvre, et s'il y a un jour où c'est calme je préférerais y aller ce jour-là, quitte à sacrifier une journée libre... »*
+
+À partir de cela, le skill produit un plan structuré comportant **7 modules** : visa, vols, hébergement, nourriture, musées et expositions, cadeaux, et préparatifs avant le départ. Il tient aussi compte du contexte :
+
+- Les deux vols déjà réservés arrivent **pré-cochés**.
+- Les champs d'identité sont **pré-remplis** à partir de ce qui est connu (un exemple « John Doe »).
+- Tout ce qui reste inconnu — numéro de passeport, vol de retour, détails du visa — est laissé sous forme de **repère à compléter** pour que le plan vous indique exactement ce qui manque.
+
+Voilà la boucle : entrée désordonnée, plan organisé en sortie, et vous cochez au fur et à mesure.
+
+## Personnaliser / créer votre propre habillage
+
+Les deux modèles sont deux *habillages* posés sur le même moteur :
+
+| Modèle | Apparence | Polices | Thème par défaut |
+|---|---|---|---|
+| [`base.html`](templates/base.html) | Clair, accent vert, épuré | Noto | Auto |
+| [`mx-studio.html`](templates/mx-studio.html) | Noir noir + or, éditorial, grands numéros de folio par étape, icônes Phosphor | Cormorant Garamond + Alegreya + LXGW WenKai + IBM Plex Mono | Sombre |
+
+Pour créer votre propre habillage, copiez un modèle et changez les variables CSS en haut (couleurs, polices, espacement). Les données et le moteur restent les mêmes, vous pouvez donc restyliser librement sans casser aucun comportement. Si vous voulez un point de départ déjà affirmé, forkez `mx-studio.html` et changez la palette.
+
+## Organisation du dépôt
+
+```
+living-checklist/
+├── README.md              ce fichier (anglais)
+├── README.zh.md           简体中文
+├── LICENSE                MIT
+├── SKILL.md               définition du skill Claude (ce dépôt est le skill)
+├── templates/
+│   ├── base.html          clair / vert / Noto — défaut général
+│   └── mx-studio.html     noir noir / or / serif
+├── examples/
+│   ├── europe-japan-trip.html       exemple concret (habillage base)
+│   ├── europe-japan-trip-mx.html    exemple concret (habillage MX)
+│   └── europe-japan-trip-prompt.md  l'entrée désordonnée derrière
+└── assets/
+    ├── base-light.png     capture d'écran — modèle de base
+    ├── mx-dark.png        capture d'écran — modèle MX
+    └── example.png        capture d'écran — l'exemple de voyage
+```
+
+## Licence
+
+[MIT](LICENSE). L'usage commercial est autorisé. Forkez-le, vendez ce que vous construisez avec, sans contrepartie.
+
+Toutes les polices sont livrées sous OFL ou MIT via Google Fonts, il n'y a donc aucune restriction de police non commerciale à gérer.
+
+## Crédits
+
+Réalisé par **Mts Yama** ([@MtsYama](https://github.com/MtsYama)) · [github.com/MtsYama/living-checklist](https://github.com/MtsYama/living-checklist)
+
+Polices : Noto, Cormorant Garamond, Alegreya, LXGW WenKai, et IBM Plex Mono (toutes via Google Fonts). Icônes de l'habillage MX issues de [Phosphor](https://phosphoricons.com/).

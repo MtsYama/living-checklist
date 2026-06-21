@@ -1,10 +1,11 @@
 # Living Checklist
 
+**English** · [Français](README.fr.md) · [简体中文](README.zh.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md)
+
 > A single HTML file that turns any step-by-step process into a living, self-saving checklist.
 
 *Step by step HTML*, which is what I usually call it.
 
-*简体中文 → [README.zh.md](README.zh.md)*
 
 **Living Checklist** is one self-contained `.html` file. Inline CSS, inline JS, zero dependencies. Double-click it and it opens straight from `file://` in your browser. No build step, no server, no internet needed to run it.
 
