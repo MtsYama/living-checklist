@@ -247,6 +247,16 @@
     border-radius: var(--radius);
     background: var(--rule-soft);
   }
+  .shot-link { display: block; position: relative; cursor: pointer; }
+  .shot-link img { transition: border-color 0.16s var(--ease), transform 0.16s var(--ease); }
+  .shot-link:hover img { border-color: var(--accent); transform: translateY(-2px); }
+  .shot-link::after {
+    content: "\2197"; position: absolute; top: 10px; right: 10px;
+    font-family: var(--font-mono); font-size: 13px; line-height: 1;
+    color: var(--on-accent); background: var(--accent-fill); padding: 5px 7px;
+    opacity: 0.85; transition: opacity 0.16s var(--ease);
+  }
+  .shot-link:hover::after { opacity: 1; }
   .shot-cap {
     font-family: var(--font-mono); font-size: 13px;
     letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3);
@@ -335,7 +345,8 @@
     <span class="hero-sub" data-i18n="sub">Step by step HTML</span>
     <p class="hero-lead" data-i18n="lead"></p>
     <div class="hero-actions">
-      <a class="btn btn--filled" href="examples/europe-japan-trip.html" data-i18n="ctaExample">Try a live example</a>
+      <a class="btn btn--filled" href="templates/base.html" data-i18n="ctaTemplate">Try the template</a>
+      <a class="btn" href="examples/europe-japan-trip.html" data-i18n="ctaExample">See a real example</a>
       <a class="btn" href="https://github.com/MtsYama/living-checklist" data-i18n="ctaRepo">View on GitHub</a>
     </div>
   </section>
@@ -377,15 +388,15 @@
     </div>
     <div class="shots">
       <figure class="shot">
-        <img src="assets/base-light.png" alt="" data-alt="shotBaseAlt" />
+        <a class="shot-link" href="templates/base.html" target="_blank" rel="noopener"><img src="assets/base-light.png" alt="" data-alt="shotBaseAlt" /></a>
         <figcaption class="shot-cap" data-i18n="shotBase"></figcaption>
       </figure>
       <figure class="shot">
-        <img src="assets/mx-dark.png" alt="" data-alt="shotMxAlt" />
+        <a class="shot-link" href="templates/mx-studio.html" target="_blank" rel="noopener"><img src="assets/mx-dark.png" alt="" data-alt="shotMxAlt" /></a>
         <figcaption class="shot-cap" data-i18n="shotMx"></figcaption>
       </figure>
       <figure class="shot">
-        <img src="assets/example.png" alt="" data-alt="shotExAlt" />
+        <a class="shot-link" href="examples/europe-japan-trip.html" target="_blank" rel="noopener"><img src="assets/example.png" alt="" data-alt="shotExAlt" /></a>
         <figcaption class="shot-cap" data-i18n="shotEx"></figcaption>
       </figure>
     </div>
@@ -472,7 +483,8 @@
       forNotTitle: "Not for you yet if",
       forNotBody: "<ul><li>you want a polished, ready-made AI app you just install and use;</li><li>you want it wired into Notion or other tools;</li><li>none of that exists yet (it's on the roadmap).</li></ul>",
       ctaRepo: "View on GitHub",
-      ctaExample: "Try a live example",
+      ctaTemplate: "Try the template",
+      ctaExample: "See a real example",
 
       whatTitle: "Under the hood",
       whatBody: "One self-contained .html file. Inline CSS, inline JS, zero dependencies. Double-click it and it opens straight from file:// — no build, no server, no internet. You edit the content, not the engine, and it comes alive.",
@@ -524,7 +536,8 @@
       forNotTitle: "Pas encore pour vous si",
       forNotBody: "<ul><li>vous voulez une appli d'IA soignée, prête à l'emploi, à simplement installer et utiliser ;</li><li>vous la voulez reliée à Notion ou à d'autres outils ;</li><li>rien de tout cela n'existe encore (c'est sur la feuille de route).</li></ul>",
       ctaRepo: "Voir sur GitHub",
-      ctaExample: "Essayer un exemple",
+      ctaTemplate: "Essayer le modèle",
+      ctaExample: "Voir un cas réel",
 
       whatTitle: "Sous le capot",
       whatBody: "Un fichier .html autonome. CSS intégré, JS intégré, zéro dépendance. Double-cliquez et il s'ouvre directement depuis file:// — aucun build, aucun serveur, aucune connexion. Vous modifiez le contenu, pas le moteur, et tout prend vie.",
@@ -576,7 +589,8 @@
       forNotTitle: "暂时还不适合，如果",
       forNotBody: "<ul><li>你想要一个装上就能用、完全做好的 AI App / 软件；</li><li>你想要它对接 Notion 等其它工具；</li><li>这些现在还没有（在未来规划里）。</li></ul>",
       ctaRepo: "在 GitHub 查看",
-      ctaExample: "点开试一个真实例子",
+      ctaTemplate: "试一试模板",
+      ctaExample: "看一个真实案例",
 
       whatTitle: "底层怎么回事",
       whatBody: "一个自包含的 .html，CSS 和 JS 全内联，零依赖。双击就能从 file:// 直接打开 —— 不用构建、不用服务器、不用联网。你只改内容，不碰引擎，它就活了起来。",
@@ -628,7 +642,8 @@
       forNotTitle: "暫時還不適合，如果",
       forNotBody: "<ul><li>你想要一個裝上就能用、完全做好的 AI App / 軟體；</li><li>你想要它對接 Notion 等其它工具；</li><li>這些現在還沒有（在未來規劃裡）。</li></ul>",
       ctaRepo: "在 GitHub 查看",
-      ctaExample: "點開試一個實例",
+      ctaTemplate: "試一試模板",
+      ctaExample: "看一個真實案例",
 
       whatTitle: "底層怎麼回事",
       whatBody: "一個自包含的 .html，CSS 和 JS 全內聯，零依賴。雙擊就能從 file:// 直接打開 —— 不用建置、不用伺服器、不用連網。你只改內容，不碰引擎，它就活了起來。",
@@ -680,7 +695,8 @@
       forNotTitle: "まだ向いていないのは",
       forNotBody: "<ul><li>インストールするだけで使える、洗練された完成済みの AI アプリがほしい人；</li><li>Notion など他のツールと連携させたい人；</li><li>それらはまだ存在しません（ロードマップ上のことです）。</li></ul>",
       ctaRepo: "GitHub で見る",
-      ctaExample: "実例を試す",
+      ctaTemplate: "テンプレートを試す",
+      ctaExample: "実例を見る",
 
       whatTitle: "仕組みの中身",
       whatBody: "それ自体で完結した 1 つの .html。CSS も JS もインライン、依存ゼロ。ダブルクリックすれば file:// から直接開きます —— ビルドなし、サーバーなし、インターネットも不要。編集するのはコンテンツだけ、エンジンには触れず、それは命を持ちます。",
