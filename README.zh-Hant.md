@@ -2,6 +2,11 @@
 
 [English](README.md) · [Français](README.fr.md) · [简体中文](README.zh.md) · **繁體中文** · [日本語](README.ja.md)
 
+[![GitHub Stars](https://img.shields.io/github/stars/MtsYama/living-checklist?style=social)](https://github.com/MtsYama/living-checklist/stargazers)
+
+> **覺得有用？** 給個 ⭐ Star 是對我最大的鼓勵，也歡迎分享 / 推薦給可能需要的人。
+> 關注我：[GitHub @MtsYama](https://github.com/MtsYama) · [領英 LinkedIn](https://www.linkedin.com/in/zhengshen-shu/)
+
 
 「Step by step HTML」，我一般也這麼叫它。
 

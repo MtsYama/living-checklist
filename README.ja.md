@@ -2,6 +2,11 @@
 
 [English](README.md) · [Français](README.fr.md) · [简体中文](README.zh.md) · [繁體中文](README.zh-Hant.md) · **日本語**
 
+[![GitHub Stars](https://img.shields.io/github/stars/MtsYama/living-checklist?style=social)](https://github.com/MtsYama/living-checklist/stargazers)
+
+> **役に立ちましたか？** ⭐ Star が何よりの励みになります。必要そうな人がいたら、ぜひシェアしてください。
+> フォロー：[GitHub @MtsYama](https://github.com/MtsYama) · [LinkedIn](https://www.linkedin.com/in/zhengshen-shu/)
+
 > あらゆる step-by-step なプロセスを、自分で進捗を保存し続ける「生きたチェックリスト」に変える、たった 1 つの HTML ファイル。
 
 「Step by step HTML」、私はいつもこう呼んでいます。

@@ -2,6 +2,11 @@
 
 **English** · [Français](README.fr.md) · [简体中文](README.zh.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md)
 
+[![Star on GitHub](https://img.shields.io/github/stars/MtsYama/living-checklist?style=social)](https://github.com/MtsYama/living-checklist/stargazers)
+
+> **Find it useful?** A ⭐ Star is the best encouragement, and please share it with anyone who'd find it handy.
+> Follow along: [GitHub @MtsYama](https://github.com/MtsYama) · [LinkedIn](https://www.linkedin.com/in/zhengshen-shu/)
+
 > A single HTML file that turns any step-by-step process into a living, self-saving checklist.
 
 *Step by step HTML*, which is what I usually call it.
