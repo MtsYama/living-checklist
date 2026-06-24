@@ -22,6 +22,29 @@
 
 不用 Claude Code？還有兩種走法：把 repo clone 到 `~/.claude/skills/living-checklist/`，或者乾脆不裝，[把 prompt 複製](#三種用法)到任意網頁 AI 聊天裡。詳見下面[三種用法](#三種用法)。
 
+## 搭配其它工具 / 模型用
+
+它不綁定 Claude。`SKILL.md` 就是一份任何工具都能讀的普通 markdown，所以有兩條路。
+
+**模式 A——程式碼（CLI / 編輯器裡的 AI agent）。** 把 repo clone 下來，讓工具指向 `SKILL.md`。其中幾款支援一行指令裝好：
+
+| 工具 | 安裝 / 用法 |
+|---|---|
+| Claude Code | `/plugin marketplace add MtsYama/living-checklist`，再 `/plugin install living-checklist@living-checklist` |
+| OpenAI Codex CLI | `$skill-installer install https://github.com/MtsYama/living-checklist`（Codex 原生讀 `SKILL.md`） |
+| GitHub Copilot | `gh skill install MtsYama/living-checklist`（原生支援 `SKILL.md`） |
+| Gemini CLI | `gemini extensions install https://github.com/MtsYama/living-checklist` |
+| Cursor | clone → 把 `SKILL.md` 的內容放進 `.cursor/rules/living-checklist.mdc`，並引用 `@templates/base.html` |
+| Windsurf | clone → 把 `SKILL.md` 內容放進 `.windsurf/rules/living-checklist.md` |
+| Cline / Roo | clone → 把 `SKILL.md` 內容放進 `.clinerules` |
+| Aider | clone → `aider --read SKILL.md templates/base.html` |
+
+**模式 B——聊天（任意聊天機器人，啥都不用裝）。** 打開任意一份清單，點「複製這段提示詞」，連同你自己的資料一起貼進任意 AI 對話，它就會回傳一個完整的單 HTML 檔案。把它存成 `something.html`，雙擊打開即可。ChatGPT（Canvas）、Claude（Artifacts）、Gemini（Canvas）都能用，會就地內嵌預覽；輸出特別長時可能被截斷，跟它說一句「繼續」就行。
+
+**中文模型（聊天模式）。** 豆包 / 通义千问 / 腾讯元宝 / 智谱清言（GLM）都會輸出完整 HTML *並且*就地內嵌預覽。Kimi 透過一個部署連結預覽。DeepSeek / 文心一言 / 讯飞星火 會輸出 HTML 但沒有內嵌預覽（存成 `.html` 雙擊打開），且長 HTML 可能被截斷——讓它「繼續」，或分幾段生成。
+
+**通用兜底（任何模型）。** 不管哪個模型給你的 HTML——把程式碼複製下來，存成 `name.html`，雙擊。零依賴，離線也能跑。
+
 
 「Step by step HTML」，我一般也這麼叫它。
 
@@ -33,7 +56,9 @@
 
 **適合誰。** 已經習慣用 AI、喜歡用清單、想讓 AI 常幫你拉一份的人；或者覺得現有清單工具用著不太順手、想試點別的的人。暫時還不適合想要一個裝上就能用、且開箱即對接 Notion 的成品 app 的人。
 
-![base 模板，淺色](assets/base-zh-Hant.png)
+![base 模板，黛藍配色，淺色](assets/base-zh-Hant.png)
+
+![base 模板，酒紅配色，淺色](assets/base-burgundy-zh-Hant.png)
 
 ## 這是什麼
 

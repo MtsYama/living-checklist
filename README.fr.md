@@ -22,6 +22,29 @@ Ensuite, lancez `/living-checklist:living-checklist`, ou demandez simplement à 
 
 Vous n'utilisez pas Claude Code ? Deux autres voies : clonez ce dépôt dans `~/.claude/skills/living-checklist/`, ou sautez l'installation et [copiez le prompt](#trois-façons-de-lutiliser) dans n'importe quelle conversation IA sur le web. Voir [Trois façons de l'utiliser](#trois-façons-de-lutiliser) plus bas.
 
+## L'utiliser avec d'autres outils / modèles
+
+Il n'est pas lié à Claude. `SKILL.md` est du markdown ordinaire que n'importe quel outil peut lire, d'où deux entrées possibles.
+
+**Mode A — Code (agents IA en CLI / éditeur).** Clonez le dépôt et pointez l'outil vers `SKILL.md`. Plusieurs proposent une installation en une ligne :
+
+| Outil | Installation / usage |
+|---|---|
+| Claude Code | `/plugin marketplace add MtsYama/living-checklist` puis `/plugin install living-checklist@living-checklist` |
+| OpenAI Codex CLI | `$skill-installer install https://github.com/MtsYama/living-checklist` (Codex lit `SKILL.md` nativement) |
+| GitHub Copilot | `gh skill install MtsYama/living-checklist` (`SKILL.md` natif) |
+| Gemini CLI | `gemini extensions install https://github.com/MtsYama/living-checklist` |
+| Cursor | clonez → mettez le contenu de `SKILL.md` dans `.cursor/rules/living-checklist.mdc`, référencez `@templates/base.html` |
+| Windsurf | clonez → contenu de `SKILL.md` dans `.windsurf/rules/living-checklist.md` |
+| Cline / Roo | clonez → contenu de `SKILL.md` dans `.clinerules` |
+| Aider | clonez → `aider --read SKILL.md templates/base.html` |
+
+**Mode B — Conversation (n'importe quel chatbot, rien à installer).** Ouvrez une checklist, cliquez sur **« Copier le prompt »**, collez-le dans n'importe quelle conversation IA avec vos propres données : elle renvoie un fichier HTML unique et complet. Enregistrez-le sous `quelquechose.html` et double-cliquez pour l'ouvrir. Fonctionne avec ChatGPT (Canvas), Claude (Artifacts) et Gemini (Canvas) — ils affichent un aperçu intégré ; une sortie très longue peut être coupée, dites-lui simplement de continuer.
+
+**Modèles chinois (mode Conversation).** 豆包 / 通义千问 / 腾讯元宝 / 智谱清言（GLM） produisent tous le HTML complet *et* l'affichent en aperçu intégré. Kimi affiche l'aperçu via un lien de déploiement. DeepSeek / 文心一言 / 讯飞星火 produisent le HTML mais sans aperçu intégré (enregistrez en `.html` et double-cliquez) et peuvent couper un HTML long — demandez-lui de « continuer » ou de générer en plusieurs parties.
+
+**Solution universelle (tout modèle).** Quel que soit le HTML que vous renvoie un modèle — copiez le code, enregistrez sous `nom.html`, double-cliquez. Zéro dépendance, fonctionne hors ligne.
+
 > Un seul fichier HTML qui transforme n'importe quel processus étape par étape en une checklist vivante qui se sauvegarde toute seule.
 
 *Step by step HTML*, c'est comme ça que je l'appelle habituellement.
@@ -37,9 +60,11 @@ Vous ne modifiez pas de code pour l'utiliser. Vous modifiez le *contenu* (une pe
 
 ## Captures d'écran
 
-| Modèle de base (clair) | Modèle MX Studio (sombre) | Exemple concret |
-|---|---|---|
-| ![Modèle de base, thème clair](assets/base-fr.png) | ![Modèle MX Studio, thème sombre](assets/mx-fr.png) | ![Exemple de voyage Europe + Japon](assets/example-fr.png) |
+| Base · Lapis blue (clair) | Base · Burgundy (clair) |
+|---|---|
+| ![Modèle de base, Lapis blue, thème clair](assets/base-fr.png) | ![Modèle de base, Burgundy, thème clair](assets/base-burgundy-fr.png) |
+| **MX Studio (sombre)** | **Exemple concret** |
+| ![Modèle MX Studio, thème sombre](assets/mx-fr.png) | ![Exemple de voyage Europe + Japon](assets/example-fr.png) |
 
 Le modèle par défaut est livré en deux couleurs nettes — **Lapis blue** (par défaut) et **Burgundy** — plus l'habillage sombre de créateur **MX Studio**.
 

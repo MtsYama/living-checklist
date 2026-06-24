@@ -22,6 +22,29 @@ Then either run `/living-checklist:living-checklist`, or just ask the AI *"make 
 
 Don't use Claude Code? Two other ways: clone this repo into `~/.claude/skills/living-checklist/`, or skip install entirely and [copy the prompt](#three-ways-to-use-it) into any web AI chat. See [Three ways to use it](#three-ways-to-use-it) below.
 
+## Using it with other tools / models
+
+It isn't tied to Claude. `SKILL.md` is plain markdown that any tool can read, so there are two ways in.
+
+**Mode A — Code (CLI / editor AI agents).** Clone the repo and point the tool at `SKILL.md`. Several have a one-line install:
+
+| Tool | Install / use |
+|---|---|
+| Claude Code | `/plugin marketplace add MtsYama/living-checklist` then `/plugin install living-checklist@living-checklist` |
+| OpenAI Codex CLI | `$skill-installer install https://github.com/MtsYama/living-checklist` (Codex reads `SKILL.md` natively) |
+| GitHub Copilot | `gh skill install MtsYama/living-checklist` (native `SKILL.md`) |
+| Gemini CLI | `gemini extensions install https://github.com/MtsYama/living-checklist` |
+| Cursor | clone → put `SKILL.md`'s contents in `.cursor/rules/living-checklist.mdc`, reference `@templates/base.html` |
+| Windsurf | clone → `SKILL.md` contents into `.windsurf/rules/living-checklist.md` |
+| Cline / Roo | clone → `SKILL.md` contents into `.clinerules` |
+| Aider | clone → `aider --read SKILL.md templates/base.html` |
+
+**Mode B — Chat (any chatbot, nothing installed).** Open any checklist, click **"Copy the prompt"**, paste it into any AI chat along with your own data, and it returns a complete single HTML file. Save that as `something.html` and double-click to open. Works with ChatGPT (Canvas), Claude (Artifacts), and Gemini (Canvas) — they preview it inline; very long output can truncate, just tell it to continue.
+
+**Chinese models (Chat mode).** 豆包 / 通义千问 / 腾讯元宝 / 智谱清言（GLM） all output the full HTML *and* preview it inline. Kimi previews via a deploy link. DeepSeek / 文心一言 / 讯飞星火 output the HTML but have no inline preview (save as `.html` and double-click) and can truncate long HTML — ask it to "continue" or generate in parts.
+
+**Universal fallback (every model).** Whatever HTML any model hands you — copy the code, save as `name.html`, double-click. Zero dependencies, works offline.
+
 > A single HTML file that turns any step-by-step process into a living, self-saving checklist.
 
 *Step by step HTML*, which is what I usually call it.
@@ -37,9 +60,11 @@ You don't edit code to use it. You edit the *content* (a small DATA + CONFIG sec
 
 ## Screenshots
 
-| Base template (light) | MX Studio template (dark) | Worked example |
-|---|---|---|
-| ![Base template, light theme](assets/base-en.png) | ![MX Studio template, dark theme](assets/mx-en.png) | ![Europe + Japan trip example](assets/example-en.png) |
+| Base · Lapis blue (light) | Base · Burgundy (light) |
+|---|---|
+| ![Base template, Lapis blue, light theme](assets/base-en.png) | ![Base template, Burgundy, light theme](assets/base-burgundy-en.png) |
+| **MX Studio (dark)** | **Worked example** |
+| ![MX Studio template, dark theme](assets/mx-en.png) | ![Europe + Japan trip example](assets/example-en.png) |
 
 The default template ships in two clean colors — **Lapis blue** (default) and **Burgundy** — plus the **MX Studio** dark designer skin.
 
