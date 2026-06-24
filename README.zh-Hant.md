@@ -9,6 +9,10 @@
 
 > **點開就能試（不用裝任何東西）：** https://mtsyama.github.io/living-checklist/
 
+![活頁清單演示](assets/demo-zh-Hant.gif)
+
+*勾一條它就收起，做完一整步卡片就折疊——全程自動存在瀏覽器裡。*
+
 ## 安裝（一次貼上）
 
 用 Claude Code 的話，把這個 repo 當 plugin marketplace 加進去，再裝 skill：

@@ -9,6 +9,10 @@
 
 > **Try it live (nothing to install):** https://mtsyama.github.io/living-checklist/
 
+![Living Checklist demo](assets/demo-en.gif)
+
+*Check an item, it tucks away; finish a step, the card folds — all saved in your browser.*
+
 ## Install (one paste)
 
 If you use Claude Code, add this repo as a plugin marketplace and install the skill:

@@ -262,6 +262,40 @@
     margin: 0.4rem 0 1.4rem;
   }
 
+  /* ---------- demo gif · the "it's alive" centerpiece ---------- */
+  .demo {
+    margin: 0 0 2.6rem;
+    display: flex; flex-direction: column; gap: 0.7rem;
+  }
+  .demo-link {
+    display: block; position: relative; cursor: pointer;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    background: var(--rule-soft);
+    padding: clamp(0.5rem, 1.6vw, 0.9rem);
+    box-shadow: 0 1px 0 var(--rule-strong);
+    transition: border-color 0.16s var(--ease), transform 0.16s var(--ease);
+  }
+  .demo-link:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .demo-link img {
+    width: 100%; height: auto; display: block;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--radius);
+    background: var(--bg);
+  }
+  .demo-link::after {
+    content: "\25B6 LIVE"; position: absolute; top: 14px; left: 14px;
+    font-family: var(--font-mono); font-size: 12px; line-height: 1;
+    letter-spacing: 0.12em;
+    color: var(--on-accent); background: var(--accent-fill); padding: 6px 9px;
+    opacity: 0.92; transition: opacity 0.16s var(--ease);
+  }
+  .demo-link:hover::after { opacity: 1; }
+  .demo-cap {
+    font-family: var(--font-mono); font-size: 14px;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--fg-3);
+  }
+
   /* ---------- screenshots ---------- */
   .shots {
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem;
@@ -488,18 +522,47 @@
       <h2 class="section-title" data-i18n="whatTitle"></h2>
     </div>
     <p class="section-lead" data-i18n="whatBody"></p>
+
+    <!-- DEMO GIF · the strongest "it's alive" visual · swaps by language -->
+    <figure class="demo">
+      <a class="demo-link" href="templates/base.html" target="_blank" rel="noopener">
+        <img id="demoGif" src="assets/demo-en.gif" alt="" data-alt="demoAlt"
+             data-img-en="assets/demo-en.gif"
+             data-img-fr="assets/demo-fr.gif"
+             data-img-zh-Hans="assets/demo-zh-Hans.gif"
+             data-img-zh-Hant="assets/demo-zh-Hant.gif"
+             data-img-ja="assets/demo-ja.gif" />
+      </a>
+      <figcaption class="demo-cap" data-i18n="demoCap"></figcaption>
+    </figure>
+
     <h3 class="shots-subtitle" data-i18n="shotsTitle"></h3>
     <div class="shots">
       <figure class="shot">
-        <a class="shot-link" href="templates/base.html" target="_blank" rel="noopener"><img src="assets/base-blue.png" alt="" data-alt="shotBlueAlt" /></a>
+        <a class="shot-link" href="templates/base.html" target="_blank" rel="noopener"><img src="assets/base-en.png" alt="" data-alt="shotBlueAlt"
+          data-img-en="assets/base-en.png"
+          data-img-fr="assets/base-fr.png"
+          data-img-zh-Hans="assets/base-zh-Hans.png"
+          data-img-zh-Hant="assets/base-zh-Hant.png"
+          data-img-ja="assets/base-ja.png" /></a>
         <figcaption class="shot-cap" data-i18n="shotBlue"></figcaption>
       </figure>
       <figure class="shot">
-        <a class="shot-link" href="templates/base-burgundy.html" target="_blank" rel="noopener"><img src="assets/base-burgundy.png" alt="" data-alt="shotBurgundyAlt" /></a>
+        <a class="shot-link" href="templates/base-burgundy.html" target="_blank" rel="noopener"><img src="assets/base-burgundy-en.png" alt="" data-alt="shotBurgundyAlt"
+          data-img-en="assets/base-burgundy-en.png"
+          data-img-fr="assets/base-burgundy-fr.png"
+          data-img-zh-Hans="assets/base-burgundy-zh-Hans.png"
+          data-img-zh-Hant="assets/base-burgundy-zh-Hant.png"
+          data-img-ja="assets/base-burgundy-ja.png" /></a>
         <figcaption class="shot-cap" data-i18n="shotBurgundy"></figcaption>
       </figure>
       <figure class="shot">
-        <a class="shot-link" href="templates/mx-studio.html" target="_blank" rel="noopener"><img src="assets/mx-dark.png" alt="" data-alt="shotMxAlt" /></a>
+        <a class="shot-link" href="templates/mx-studio.html" target="_blank" rel="noopener"><img src="assets/mx-en.png" alt="" data-alt="shotMxAlt"
+          data-img-en="assets/mx-en.png"
+          data-img-fr="assets/mx-fr.png"
+          data-img-zh-Hans="assets/mx-zh-Hans.png"
+          data-img-zh-Hant="assets/mx-zh-Hant.png"
+          data-img-ja="assets/mx-ja.png" /></a>
         <figcaption class="shot-cap" data-i18n="shotMx"></figcaption>
       </figure>
     </div>
@@ -566,6 +629,9 @@
       shotBurgundyAlt: "Base template in Burgundy — light theme, wine-red accent",
       shotMxAlt: "MX Studio designer skin — dark theme, gold accent, editorial serif",
 
+      demoCap: "Live demo — check, note, collapse, save",
+      demoAlt: "Animated demo: checking items folds them into a Done group, finished steps collapse in place, and progress saves",
+
       useTitle: "Three ways to use it",
       use1Title: "By hand",
       use1Body: "Copy a template, edit the <code>DATA</code> and <code>CONFIG</code> sections, open the file. No tooling required.",
@@ -628,6 +694,9 @@
       shotBlueAlt: "Modèle de base par défaut, bleu lapis — thème clair, accent bleu, mise en page épurée",
       shotBurgundyAlt: "Modèle de base en bordeaux — thème clair, accent lie-de-vin",
       shotMxAlt: "Habillage signé MX Studio — thème sombre, accent doré, serif éditorial",
+
+      demoCap: "Démo en direct — cocher, annoter, replier, sauvegarder",
+      demoAlt: "Démo animée : cocher des éléments les plie dans un groupe Terminé, les étapes finies se replient sur place, et la progression se sauvegarde",
 
       useTitle: "Trois façons de l'utiliser",
       use1Title: "À la main",
@@ -692,6 +761,9 @@
       shotBurgundyAlt: "酒红配色的 base 模板 —— 浅色主题，酒红点缀",
       shotMxAlt: "MX Studio 设计师皮肤 —— 深色主题，金色点缀，编辑风衬线",
 
+      demoCap: "实时演示 —— 勾选、备注、折叠、自存",
+      demoAlt: "动态演示：勾掉条目会折进「已完成」组，整步做完就地折叠，进度自动保存",
+
       useTitle: "三种用法",
       use1Title: "当人手动用",
       use1Body: "复制一份模板，改 <code>DATA</code> 和 <code>CONFIG</code> 两段，打开文件。不用任何工具。",
@@ -754,6 +826,9 @@
       shotBlueAlt: "預設 base 模板 · 黛藍 —— 淺色主題，藍色點綴，乾淨排版",
       shotBurgundyAlt: "酒紅配色的 base 模板 —— 淺色主題，酒紅點綴",
       shotMxAlt: "MX Studio 設計師皮膚 —— 深色主題，金色點綴，編輯風襯線",
+
+      demoCap: "即時演示 —— 勾選、備註、摺疊、自存",
+      demoAlt: "動態演示：勾掉項目會摺進「已完成」組，整步做完就地摺疊，進度自動儲存",
 
       useTitle: "三種用法",
       use1Title: "當人手動用",
@@ -818,6 +893,9 @@
       shotBurgundyAlt: "バーガンディのベーステンプレート —— ライトテーマ、ワインレッドのアクセント",
       shotMxAlt: "MX Studio デザイナースキン —— ダークテーマ、ゴールドのアクセント、エディトリアルなセリフ",
 
+      demoCap: "ライブデモ —— チェック、メモ、折りたたみ、自動保存",
+      demoAlt: "アニメーションデモ：項目をチェックすると「完了」グループにたたまれ、終えたステップはその場で折りたたまれ、進捗が保存されます",
+
       useTitle: "3 つの使い方",
       use1Title: "手で使う",
       use1Body: "テンプレートをコピーし、<code>DATA</code> と <code>CONFIG</code> を編集してファイルを開くだけ。ツールは不要です。",
@@ -873,6 +951,12 @@
         return '<li><span class="f-mark" aria-hidden="true">—</span>' +
                '<span class="f-text">' + txt + "</span></li>";
       }).join("");
+    });
+
+    // language-aware images (demo gif + screenshots) — swap src to this lang's file
+    document.querySelectorAll("img[data-img-" + lang + "]").forEach(function (el) {
+      var src = el.getAttribute("data-img-" + lang);
+      if (src) el.setAttribute("src", src);
     });
 
     // image alt text

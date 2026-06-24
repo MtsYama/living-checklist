@@ -9,6 +9,10 @@
 
 > **Essayez-le en ligne (rien à installer) :** https://mtsyama.github.io/living-checklist/
 
+![Démo de Living Checklist](assets/demo-fr.gif)
+
+*Cochez une ligne, elle se range ; finissez une étape, la carte se replie — tout est sauvegardé dans votre navigateur.*
+
 ## Installation (un copier-coller)
 
 Si vous utilisez Claude Code, ajoutez ce dépôt comme place de marché de plugins, puis installez le skill :
