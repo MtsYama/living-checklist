@@ -273,7 +273,7 @@
   .features-more .features li:first-child { border-top: none; }
 
   /* ---------- roadmap · Now → Next ---------- */
-  .roadmap { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 1.4rem 2.4rem; margin-top: 0.4rem; }
+  .roadmap { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem 2.4rem; margin-top: 0.4rem; }
   @media (max-width: 760px) { .roadmap { grid-template-columns: 1fr; } }
   .rm-col { display: flex; flex-direction: column; }
   /* the "Next" column gets the accent edge + a touch more presence */
@@ -423,10 +423,9 @@
     display: flex; flex-direction: column; gap: 0.8rem;
     background: var(--rule-soft);
   }
-  /* feature cell: a touch more breathing room + a hairline accent edge (no new colors) */
+  /* feature cell: a touch more breathing room; outer frame matches the other two cards */
   .usage-feature {
     padding: 1.9rem 1.8rem;
-    border-left: 2px solid var(--accent);
   }
   .usage-no {
     font-family: var(--font-mono); font-size: 14px;
@@ -636,6 +635,7 @@
         </span>
         <h3 class="rm-headline" data-i18n="rmNowHeadline"></h3>
         <p class="rm-note" data-i18n-html="rmNowNote"></p>
+        <ul class="rm-list" data-i18n-list="rmNowList"></ul>
       </div>
       <div class="rm-col rm-col--next">
         <span class="rm-kicker">
@@ -760,6 +760,11 @@
       rmTagLive: "Available today",
       rmNowHeadline: "The free single-file tool you can use right now",
       rmNowNote: "Bring your own AI, generate a checklist, double-click the file. Progress saves itself, steps collapse as you go. <strong>It works today, and it always will</strong> — no account, no setup, nothing to wait for.",
+      rmNowList: [
+        "<strong>One HTML file that builds the page for you</strong> — it lays out the checklist structure, the steps and the table, all in a single file. Double-click it and it runs in your browser. Nothing to install.",
+        "<strong>No AI inside — you bring your own</strong> — and that's on purpose. The file gives you the page and the structure; your own AI (ChatGPT, Claude, anything) fills in the content, or you type it in by hand. You stay in control of what goes in.",
+        "<strong>Handy if web pages are a chore</strong> — for anyone who finds building form- or table-shaped pages a hassle, or for makers and designers who just want a clean, structured page fast, without coding one from scratch."
+      ],
       rmNextKicker: "Next",
       rmTagDev: "In development",
       rmNextHeadline: "A hosted app that just works",
@@ -841,6 +846,11 @@
       rmTagLive: "Disponible",
       rmNowHeadline: "L'outil gratuit en fichier unique, utilisable dès maintenant",
       rmNowNote: "Apportez votre IA, générez une checklist, double-cliquez le fichier. La progression se sauvegarde toute seule, les étapes se replient au fil de l'eau. <strong>Ça marche aujourd'hui, et ça marchera toujours</strong> — sans compte, sans installation, rien à attendre.",
+      rmNowList: [
+        "<strong>Un seul fichier HTML qui construit la page pour vous</strong> — il met en place la structure de la checklist, les étapes et le tableau, le tout dans un fichier unique. Double-cliquez et il s'ouvre dans votre navigateur. Rien à installer.",
+        "<strong>Aucune IA à l'intérieur — vous apportez la vôtre</strong> — et c'est voulu. Le fichier vous donne la page et la structure ; votre propre IA (ChatGPT, Claude, n'importe laquelle) en remplit le contenu, ou vous le saisissez à la main. Vous gardez la main sur ce qui entre.",
+        "<strong>Pratique si les pages web vous pèsent</strong> — pour quiconque trouve fastidieux de bâtir des pages en formulaire ou en tableau, ou pour les créateurs et designers qui veulent juste une page propre et structurée, vite, sans la coder de zéro."
+      ],
       rmNextKicker: "La suite",
       rmTagDev: "En développement",
       rmNextHeadline: "Une appli hébergée qui marche, tout simplement",
@@ -922,6 +932,11 @@
       rmTagLive: "今天就能用",
       rmNowHeadline: "免费的单文件工具，现在就能上手",
       rmNowNote: "用你自己的 AI 生成一份清单，双击打开文件。进度自动留痕，做到哪一步就地折叠。<strong>今天能用，以后也一直能用</strong> —— 不用注册、不用安装，什么都不用等。",
+      rmNowList: [
+        "<strong>一个 HTML 文件，替你把页面搭好</strong> —— 清单的结构、步骤、表格，全在这一个文件里排好了。双击就在浏览器里跑起来，什么都不用装。",
+        "<strong>里面没有 AI，你自带 AI</strong> —— 这是有意为之。文件给你页面和结构，内容由你自己的 AI（ChatGPT、Claude，随便哪个）来填，或者你自己手敲。装什么进去，你说了算。",
+        "<strong>觉得做网页麻烦的人尤其顺手</strong> —— 给那些觉得搭表单、做表格页面很烦的人，或是想要一张干净、有条理的页面、又不想从零写代码的创作者和设计师。"
+      ],
       rmNextKicker: "接下来",
       rmTagDev: "开发中",
       rmNextHeadline: "一个开箱即用的在线 App",
@@ -1003,6 +1018,11 @@
       rmTagLive: "今天就能用",
       rmNowHeadline: "免費的單檔案工具，現在就能上手",
       rmNowNote: "用你自己的 AI 生成一份清單，雙擊打開檔案。進度自動留痕，做到哪一步就地摺疊。<strong>今天能用，以後也一直能用</strong> —— 不用註冊、不用安裝，什麼都不用等。",
+      rmNowList: [
+        "<strong>一個 HTML 檔案，替你把頁面搭好</strong> —— 清單的結構、步驟、表格，全在這一個檔案裡排好了。雙擊就在瀏覽器裡跑起來，什麼都不用裝。",
+        "<strong>裡面沒有 AI，你自帶 AI</strong> —— 這是有意為之。檔案給你頁面和結構，內容由你自己的 AI（ChatGPT、Claude，隨便哪個）來填，或者你自己手敲。裝什麼進去，你說了算。",
+        "<strong>覺得做網頁麻煩的人尤其順手</strong> —— 給那些覺得搭表單、做表格頁面很煩的人，或是想要一張乾淨、有條理的頁面、又不想從零寫程式碼的創作者和設計師。"
+      ],
       rmNextKicker: "接下來",
       rmTagDev: "開發中",
       rmNextHeadline: "一個開箱即用的線上 App",
@@ -1084,6 +1104,11 @@
       rmTagLive: "今日から使える",
       rmNowHeadline: "無料の単一ファイルツール、いますぐ使えます",
       rmNowNote: "あなた自身の AI でチェックリストを生成し、ファイルをダブルクリック。進捗はひとりでに保存され、進めたステップはその場で折りたたまれます。<strong>今日も使えて、これからもずっと使えます</strong> —— アカウントも、インストールも、待ち時間も要りません。",
+      rmNowList: [
+        "<strong>ページを組み立てる、一つの HTML ファイル</strong> —— チェックリストの構造も、ステップも、表も、この一つのファイルに収まっています。ダブルクリックすればブラウザで動き、インストールは要りません。",
+        "<strong>中に AI はありません。AI はあなたが持ち込みます</strong> —— これは意図したものです。ファイルはページと構造を用意し、中身はあなた自身の AI（ChatGPT でも Claude でも）が埋めるか、自分で打ち込みます。何を入れるかは、あなた次第です。",
+        "<strong>ウェブページが面倒な人にこそ便利</strong> —— フォームや表のページを作るのが億劫な人や、きれいで整ったページを手早く欲しいけれど一から書きたくない作り手やデザイナーのために。"
+      ],
       rmNextKicker: "これから",
       rmTagDev: "開発中",
       rmNextHeadline: "開いたらすぐ使える、ホスト型アプリ",
