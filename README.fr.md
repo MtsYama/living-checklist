@@ -146,7 +146,7 @@ Pour créer votre propre habillage, copiez un modèle et changez les variables C
 ```
 living-checklist/
 ├── README.md              ce fichier (anglais)
-├── README.zh.md           chinois simplifié
+├── README.*.md           versions en d'autres langues
 ├── LICENSE                MIT
 ├── SKILL.md               définition du skill Claude (ce dépôt est le skill)
 ├── templates/
@@ -171,4 +171,4 @@ Toutes les polices sont livrées sous OFL ou MIT via Google Fonts, il n'y a donc
 
 Réalisé par **Mts Yama** ([@MtsYama](https://github.com/MtsYama)) · [github.com/MtsYama/living-checklist](https://github.com/MtsYama/living-checklist)
 
-Polices : Noto, Cormorant Garamond, Alegreya, LXGW WenKai, et IBM Plex Mono (toutes via Google Fonts). Icônes de l'habillage MX issues de [Phosphor](https://phosphoricons.com/).
+Polices : Noto, Cormorant Garamond, Alegreya, LXGW WenKai, et IBM Plex Mono (toutes via Google Fonts). Les icônes de tout le projet — la page d'accueil, les modèles et les exemples — proviennent de [Phosphor](https://phosphoricons.com/).

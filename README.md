@@ -146,7 +146,7 @@ To make your own skin, copy a template and change the CSS variables at the top (
 ```
 living-checklist/
 ├── README.md              this file (English)
-├── README.zh.md           Simplified Chinese
+├── README.*.md           other-language versions
 ├── LICENSE                MIT
 ├── SKILL.md               Claude skill definition (this repo is the skill)
 ├── templates/
@@ -171,4 +171,4 @@ All fonts ship under OFL or MIT via Google Fonts, so there are no non-commercial
 
 Built by **Mts Yama** ([@MtsYama](https://github.com/MtsYama)) · [github.com/MtsYama/living-checklist](https://github.com/MtsYama/living-checklist)
 
-Fonts: Noto, Cormorant Garamond, Alegreya, LXGW WenKai, and IBM Plex Mono (all via Google Fonts). Icons in the MX skin from [Phosphor](https://phosphoricons.com/).
+Fonts: Noto, Cormorant Garamond, Alegreya, LXGW WenKai, and IBM Plex Mono (all via Google Fonts). Icons throughout — the landing page, templates, and examples — are from [Phosphor](https://phosphoricons.com/).
