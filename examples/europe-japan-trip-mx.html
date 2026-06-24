@@ -6,23 +6,24 @@
 <title>活页清单 · 设计师模板</title>
 <!--
   ============================================================================
-  活页清单 · LIVING CHECKLIST 引擎 · base 模板 · v3
+  LIVING CHECKLIST (活页清单) engine · base template · v3
   ============================================================================
-  单 HTML 文件 · 内嵌 CSS+JS · 数据驱动 · 进度存 localStorage。
-  联网时用 Cormorant + Alegreya + 霞鹜文楷(web);离线自动退回系统字体。
+  Single HTML file · inline CSS+JS · data-driven · progress stored in localStorage.
+  Uses Cormorant + Alegreya + LXGW WenKai 霞鹜文楷 (web) when online; falls back
+  to system fonts when offline.
 
-  ============= 在这里填你的数据 =============
-    搜 "[1] DATA"   → 改 SUMMARY + MODULES(可单语言数组 · 也可按 locale 键多语言)。
-    搜 "[2] CONFIG" → 改 storagePrefix / lang / languages / theme / font。
-    搜 "[2b] I18N"  → UI 文案多语言(换语言层 · 一般不用动)。
-    [3] CSS / [4] ENGINE 通常不用动。
+  ============= FILL IN YOUR DATA HERE =============
+    Search "[1] DATA"   → edit SUMMARY + MODULES (single-language array, or multi-language keyed by locale).
+    Search "[2] CONFIG" → edit storagePrefix / lang / languages / theme / font.
+    Search "[2b] I18N"  → UI strings, multi-language (the localization layer · usually no need to touch).
+    [3] CSS / [4] ENGINE usually don't need touching.
 
-  v3 在 v2(富 schema + 反馈导出 + 自动勾选)基础上加：
-    · 活页清单中文名 · MX 字体(Cormorant + Alegreya + 霞鹜文楷)+ 字体切换
-    · 暗色 / 浅色切换(跟随系统 + 记忆)
-    · 语言切换(简中 / 繁中 / EN / FR / JA · 只显示该清单提供的语言)
-    · 右下角悬浮控制簇(语言 · 日月 · 字体)
-    · 标签图例(有 tag 才显示)+ 柔和配色
+  v3 builds on v2 (rich schema + feedback export + auto-checking) by adding:
+    · Chinese product name "活页清单" · MX fonts (Cormorant + Alegreya + LXGW WenKai 霞鹜文楷) + font toggle
+    · Dark / light toggle (follows the system + remembers your choice)
+    · Language switch (zh-Hans / zh-Hant / EN / FR / JA · only the languages this checklist provides are shown)
+    · Bottom-right floating control cluster (language · sun/moon · font)
+    · Tag legend (shown only when there are tags) + soft color palette
   ============================================================================
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,31 +35,31 @@
      ========================================================================= */
 
   :root {
-    /* 字号 — A11y 硬规则：正文目标 20px · caption/mono/tag >=14px */
+    /* Font sizes — A11y hard rule: body target 20px · caption/mono/tag >=14px */
     --fs-body: 20px;
     --fs-title: 1.35rem;
     --fs-summary-title: 1.15rem;
     --fs-caption: 14px;
     --fs-mono: 14px;
 
-    /* —— 浅色主题(默认)—— */
+    /* —— Light theme (default) —— */
     --c-bg: #ece6d5;
     --c-card: #f4efe2;
     --c-ink: #1a1a17;
     --c-ink-soft: #6b6657;
     --c-line: #d8cfb8;
     --c-accent: #8a6f3f;
-    --c-accent-soft: #e6dcc2;       /* 标签「关键」柔和底 */
+    --c-accent-soft: #e6dcc2;       /* soft ground for the "Key" tag */
     --c-on-accent: #ffffff;
     --c-accent-grad: #aa9068;
-    --c-skip-bg: #e0d8c5;           /* 标签「可跳过」灰底 */
+    --c-skip-bg: #e0d8c5;           /* gray ground for the "Skip-ok" tag */
     --c-skip-ink: #6b6657;
     --c-done: #9a9484;
     --c-focus: #5a6fd6;
     --c-ctrl-bg: rgba(244,239,226,.92);
     --c-ctrl-line: #d8cfb8;
 
-    /* 字体 —— MX 套：Latin=Cormorant + Alegreya · CJK=霞鹜文楷(web)· 随 lang 切 */
+    /* Fonts —— MX set: Latin=Cormorant + Alegreya · CJK=LXGW WenKai 霞鹜文楷 (web) · switches with lang */
     --font-cjk: "LXGW WenKai TC", "Shippori Mincho", serif;
     --font-cjk-serif: "LXGW WenKai TC", "Shippori Mincho", serif;
     --font-sans: "Alegreya", var(--font-cjk), Georgia, "Songti SC", serif;
@@ -72,16 +73,16 @@
     --ease: cubic-bezier(.22,.61,.36,1);
   }
 
-  /* CJK 字体随语言切(简→SC · 繁→TC · 日→JP) */
+  /* CJK font switches with language (Hans→SC · Hant→TC · ja→JP) */
   html[lang="zh-Hant"] { --font-cjk: "LXGW WenKai TC", serif; }
   html[lang="ja"]      { --font-cjk: "Shippori Mincho", "LXGW WenKai TC", serif; }
 
-  /* 字体切到「系统默认」 */
+  /* Font switched to "system default" */
   html[data-font="system"] {
     --font-sans: system-ui, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
   }
 
-  /* —— 深色主题 —— */
+  /* —— Dark theme —— */
   html[data-theme="dark"] {
     --c-bg: #000000;
     --c-card: #131210;
@@ -119,7 +120,7 @@
 
   .wrap { max-width: 760px; margin: 0 auto; padding: 24px 18px 96px; }
 
-  /* ---- 页眉 + 进度 ---- */
+  /* ---- Header + progress ---- */
   header.app-head { margin-bottom: 8px; }
   .app-head h1 { font-size: 1.55rem; margin: 0 0 4px; }
   .app-sub { font-size: var(--fs-caption); color: var(--c-ink-soft); margin: 0 0 12px; }
@@ -133,7 +134,7 @@
   .progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--c-accent), var(--c-accent-grad)); border-radius: 99px; transition: width var(--t-mid) var(--ease); }
   .progress-label { font-variant-numeric: tabular-nums; font-weight: 700; white-space: nowrap; color: var(--c-accent); }
 
-  /* ---- 通用按钮 ---- */
+  /* ---- Generic button ---- */
   .btn {
     font: inherit; font-size: var(--fs-caption); cursor: pointer;
     border: 1px solid var(--c-line); background: var(--c-card); color: var(--c-ink);
@@ -145,18 +146,18 @@
   .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
   .toolbar[hidden] { display: none; }
   .btn-toggle[aria-pressed="true"] { border-color: var(--c-accent); color: var(--c-accent); background: var(--c-accent-soft); }
-  /* 顶栏工具收起切钮(收起后只剩进度条)*/
+  /* Top-bar tools collapse toggle (once collapsed, only the progress bar remains) */
   .bar-toggle { margin-left: auto; font: inherit; cursor: pointer; border: 1px solid var(--c-line); background: var(--c-card); color: var(--c-ink-soft); border-radius: 99px; padding: 4px 12px; line-height: 1.2; }
   .bar-toggle:hover { border-color: var(--c-accent); color: var(--c-accent); }
   .bar-toggle .chevron { font-size: .85em; }
 
-  /* ---- 折叠头 ---- */
+  /* ---- Collapse header ---- */
   .collapse-head { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: none; border: none; font: inherit; cursor: pointer; padding: 0; color: inherit; }
   .chevron { flex: 0 0 auto; width: 1em; transition: transform var(--t-mid) var(--ease); font-size: .9em; color: var(--c-ink-soft); }
   [aria-expanded="false"] .chevron { transform: rotate(-90deg); }
   .collapse-sleeve { overflow: hidden; transition: max-height var(--t-mid) var(--ease), opacity var(--t-mid) var(--ease); }
 
-  /* ---- 顶部 CTA(可选 · 引导去 GitHub / 让 AI 装 · 真实用户设 cta:null 隐藏)---- */
+  /* ---- Top CTA (optional · prompts going to GitHub / having an AI install it · real users set cta:null to hide) ---- */
   .cta-bar { display: block; font-size: var(--fs-caption); line-height: 1.6; text-wrap: balance; line-break: strict; overflow-wrap: break-word; color: var(--c-ink-soft); background: var(--c-accent-soft); border: 1px dashed var(--c-line); border-radius: var(--radius); padding: 12px 16px; margin-bottom: 16px; }
   .cta-bar a { color: var(--c-accent); font-weight: 600; text-decoration: none; }
   .cta-bar a:hover { text-decoration: underline; }
@@ -165,18 +166,18 @@
   .cta-line { margin-top: 5px; }
   .cta-sep { color: var(--c-line); }
 
-  /* ---- 现状块 ---- */
+  /* ---- Status block ---- */
   .summary { background: var(--c-accent-soft); border: 1px solid var(--c-line); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 18px; }
   .summary h2 { font-size: var(--fs-summary-title); margin: 0; }
   .summary .body { margin-top: 12px; }
   .summary .body > :first-child { margin-top: 0; }
   .summary .body > :last-child { margin-bottom: 0; }
 
-  /* ---- 标签图例 ---- */
+  /* ---- Tag legend ---- */
   .legend { font-size: var(--fs-caption); color: var(--c-ink-soft); margin: 0 0 18px; line-height: 1.9; }
   .legend b { color: var(--c-ink); }
 
-  /* ---- 模块卡片 ---- */
+  /* ---- Module card ---- */
   .module { background: var(--c-card); border: 1px solid var(--c-line); border-radius: var(--radius); padding: 14px 16px; margin-bottom: var(--gap); transition: border-color var(--t-mid) var(--ease), opacity var(--t-mid) var(--ease), background var(--t-mid) var(--ease); }
   .module-head h2 { font-size: var(--fs-title); margin: 0; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
   .module-count { font-size: var(--fs-caption); color: var(--c-ink-soft); font-weight: 400; font-variant-numeric: tabular-nums; }
@@ -186,7 +187,7 @@
   .module.done .module-count { display: none; }
   .module.done { opacity: .82; background: var(--c-bg); }
 
-  /* 模块头富信息 */
+  /* Module-header rich info */
   .module-step {
     display: inline-block; font-size: var(--fs-caption); font-weight: 700;
     color: var(--c-on-accent); background: var(--c-accent);
@@ -195,15 +196,15 @@
   }
   .module.done .module-step { background: var(--c-done); }
   .tag { display: inline-block; font-size: var(--fs-caption); font-weight: 600; line-height: 1.3; padding: 1px 10px; border-radius: 99px; vertical-align: middle; margin-left: 4px; }
-  .tag-key  { color: var(--c-accent); background: var(--c-accent-soft); }   /* 柔和：浅底+绿字 */
-  .tag-skip { color: var(--c-skip-ink); background: var(--c-skip-bg); }     /* 柔和：灰底+灰字 */
+  .tag-key  { color: var(--c-accent); background: var(--c-accent-soft); }   /* soft: light ground + accent text */
+  .tag-skip { color: var(--c-skip-ink); background: var(--c-skip-bg); }     /* soft: gray ground + gray text */
   .module-meta { font-size: var(--fs-caption); color: var(--c-ink-soft); margin: 6px 0 0 calc(1em + 10px); }
   .module-links { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: var(--fs-caption); }
   .module-links a { color: var(--c-accent); text-underline-offset: 3px; }
   .module-icon, .summary-icon { display: inline-flex; vertical-align: -0.12em; margin-right: 3px; }
   .module-icon svg, .summary-icon svg { width: 1.05em; height: 1.05em; fill: var(--c-accent); }
 
-  /* ---- item(每条 = 左主体 + 常驻备注 · 宽屏备注在右侧栏,窄屏堆在下面)---- */
+  /* ---- item (each one = main body on the left + always-on note · on wide screens the note sits in a right column, on narrow screens it stacks below) ---- */
   ul.items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
   li.item { display: grid; grid-template-columns: minmax(0,1fr); gap: 8px 14px; padding: 8px; border-radius: 8px; transition: background var(--t-fast) var(--ease); }
   li.item:hover, li.item:focus-within { background: var(--c-accent-soft); box-shadow: inset 3px 0 0 var(--c-accent); }
@@ -212,17 +213,17 @@
   .item-main label { cursor: pointer; flex: 1 1 auto; }
   .item-main label code { font-size: var(--fs-mono); background: var(--c-accent-soft); padding: 1px 5px; border-radius: 5px; font-family: var(--font-mono); }
   .item-main label a { color: var(--c-accent); text-underline-offset: 3px; }
-  /* 正文里提到「别处的按钮 / 控件」时,套成跟真按钮一样的小胶囊(姚飞建议 · 一眼认出)*/
+  /* When the body text mentions "a button / control elsewhere", wrap it in a little pill that looks like the real button (so it's recognized at a glance) */
   .ui-ref { display: inline-block; font-size: .92em; font-weight: 600; line-height: 1.45; padding: 1px 9px; border-radius: 99px; border: 1px solid var(--c-line); background: var(--c-card); color: var(--c-ink); white-space: nowrap; vertical-align: baseline; }
   li.item.checked .item-main label { color: var(--c-done); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--c-done) 60%, transparent); }
-  /* 宽屏:备注移到右侧常驻栏,子清单整行铺开 */
+  /* Wide screens: the note moves to an always-on right column, and sub-lists span the full row */
   @media (min-width: 820px) {
     li.item { grid-template-columns: minmax(0,1fr) var(--note-col, 240px); align-items: start; }
     li.item > .item-main { grid-column: 1; grid-row: 1; }
     li.item > .item-note { grid-column: 2; grid-row: 1; }
     li.item > .subbranch { grid-column: 1 / -1; grid-row: 2; }
   }
-  /* 「敢点」引导:第一条未勾选项的方框脉冲 + 一行提示(勾一次后永久消失)*/
+  /* "Dare to click" nudge: pulse the first unchecked item's box + a one-line hint (gone for good after one check) */
   @keyframes lc-nudge-ring { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--c-accent) 55%, transparent); } 70% { box-shadow: 0 0 0 9px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
   li.item.nudge .item-main input[type="checkbox"] { border-radius: 5px; animation: lc-nudge-ring 1.5s var(--ease) infinite; }
   .nudge-hint { flex: 0 0 100%; font-size: var(--fs-caption); color: var(--c-accent); font-weight: 600; margin: 4px 0 0 34px; }
@@ -230,7 +231,7 @@
   .item-note.note-nudge .nudge-hint { margin: 4px 0 0 0; }
   a.link-nudge { border-radius: 4px; animation: lc-nudge-ring 1.5s var(--ease) infinite; }
   @media (prefers-reduced-motion: reduce) { li.item.nudge .item-main input[type="checkbox"], .item-note.note-nudge textarea, a.link-nudge { animation: none; } }
-  /* 二级子清单(嵌套 · 可折叠 · 子项独立勾选) */
+  /* Second-level sub-list (nested · collapsible · sub-items checked independently) */
   .subbranch { flex: 0 0 100%; box-sizing: border-box; padding-left: 34px; margin-top: 4px; }
   .sub-toggle { font-size: .92em; color: var(--c-ink-soft); padding: 4px 0; gap: 8px; }
   .sub-toggle .chevron { font-size: .8em; }
@@ -241,14 +242,14 @@
   li.subitem label { cursor: pointer; flex: 1 1 auto; }
   li.subitem.checked label { color: var(--c-done); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--c-done) 60%, transparent); }
 
-  /* ---- 每条常驻备注(醒目、不折叠 · 一眼能看出能写字)---- */
+  /* ---- Per-item always-on note (prominent, never folded · obviously writable at a glance) ---- */
   .item-note { display: block; min-width: 0; }
   .item-note textarea { width: 100%; box-sizing: border-box; font: inherit; font-size: var(--fs-caption); padding: 6px 10px; border: 1px solid var(--c-line); border-radius: 8px; resize: vertical; min-height: 32px; background: transparent; color: var(--c-ink); transition: min-height var(--t-fast) var(--ease), background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease); }
   .item-note textarea::placeholder { color: var(--c-ink-soft); opacity: .75; }
-  /* 空着 = 轻;聚焦或写了字 = 变醒目(accent 底 + 长高)*/
+  /* Empty = subtle; focused or filled = becomes prominent (accent ground + grows taller) */
   .item-note textarea:focus, .item-note textarea:not(:placeholder-shown) { min-height: 64px; background: var(--c-accent-soft); border-color: var(--c-ink-soft); }
 
-  /* ---- fillData:帮你填好 + 一键复制 ---- */
+  /* ---- fillData: pre-filled for you + one-click copy ---- */
   .fill-wrap { margin-top: 12px; border: 1px solid var(--c-line); border-radius: 8px; overflow: hidden; }
   .fill-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px 10px; background: var(--c-accent-soft); font-size: var(--fs-caption); color: var(--c-ink-soft); }
   .fill-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-top: 1px solid var(--c-line); font-size: var(--fs-caption); }
@@ -257,12 +258,12 @@
   .fill-copy, .fill-copyall { flex: 0 0 auto; font: inherit; font-size: 13px; cursor: pointer; border: 1px solid var(--c-line); background: var(--c-card); color: var(--c-ink); padding: 3px 11px; border-radius: 99px; }
   .fill-copy:hover, .fill-copyall:hover { border-color: var(--c-accent); color: var(--c-accent); }
 
-  /* ---- 已完成分隔线 ---- */
+  /* ---- Done divider line ---- */
   .done-divider { display: flex; align-items: center; gap: 12px; margin: 28px 0 14px; color: var(--c-done); font-size: var(--fs-caption); font-weight: 600; letter-spacing: .03em; }
   .done-divider::before, .done-divider::after { content: ""; flex: 1; height: 1px; background: var(--c-line); }
   .done-divider.hidden { display: none; }
 
-  /* ---- 每步顶部「✓ 已完成 N」收起组(勾完的条目收进这里 · 默认收起 · 一键展开找回)---- */
+  /* ---- Per-step top "✓ Done N" collapse group (checked items tuck in here · collapsed by default · one click to expand and find them) ---- */
   .done-group { margin: 0 0 10px; }
   .done-group[hidden] { display: none; }
   .done-group-head { width: 100%; padding: 6px 8px; border-radius: 8px; background: var(--c-bg); color: var(--c-done); font-size: var(--fs-caption); font-weight: 700; gap: 8px; }
@@ -274,7 +275,7 @@
   .items-done li.item:hover, .items-done li.item:focus-within { box-shadow: none; }
   @media (prefers-reduced-motion: reduce) { .done-group-head.bump { animation: none; } }
 
-  /* ---- 悬浮控制簇(右下角 · fixed)---- */
+  /* ---- Floating control cluster (bottom-right · fixed) ---- */
   .float-controls {
     position: fixed; right: 16px; bottom: 16px; z-index: 50;
     display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end;
@@ -302,13 +303,13 @@
   #fcTheme { position: relative; }
   html[data-theme-mode="auto"] #fcTheme::after { content: "A"; position: absolute; right: 1px; bottom: 0; font-size: 9px; line-height: 1; font-weight: 700; pointer-events: none; }
   .fc-font[aria-pressed="true"] { background: var(--c-accent); color: #fff; }
-  /* 控制簇收起:收起后只剩一个小旋钮(防遮挡)*/
+  /* Control cluster collapsed: once collapsed only a small knob remains (avoids blocking content) */
   .fc-body { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
   .float-controls[data-open="false"] .fc-body { display: none; }
   .fc-handle { font: inherit; font-size: 16px; cursor: pointer; line-height: 1; border: 1px solid transparent; background: transparent; color: var(--c-ink-soft); padding: 5px 9px; border-radius: 99px; }
   .fc-handle:hover { background: var(--c-accent-soft); color: var(--c-accent); }
 
-  /* ---- 焦点环 ---- */
+  /* ---- Focus ring ---- */
   a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, .collapse-head:focus-visible {
     outline: 3px solid var(--c-focus); outline-offset: 2px; border-radius: 6px;
   }
@@ -325,7 +326,7 @@
     .app-bar { margin: 0 -12px 14px; padding: 8px 12px; }
   }
 
-  /* MX:标题 Cormorant + LXGW · stepNum 大号斜体数字靠右 · 图标金色 */
+  /* MX: titles in Cormorant + LXGW · stepNum is a large right-aligned italic number · gold icons */
   .app-head h1, .summary h2, .module-head h2 { font-family: var(--font-display); font-weight: 600; letter-spacing: .01em; }
   .app-head h1 { font-size: 1.9rem; }
   .module { position: relative; padding-right: 92px; overflow: hidden; }
@@ -334,7 +335,7 @@
 </style>
 </head>
 <body>
-<!-- 悬浮控制簇(由引擎注入) -->
+<!-- Floating control cluster (injected by the engine) -->
 <div class="float-controls" id="floatControls" aria-label="界面控制"></div>
 
 <div class="wrap">
@@ -378,11 +379,12 @@
 "use strict";
 
 /* ===========================================================================
-   [1] DATA —— 内容(可单语言数组 · 也可按 locale 键多语言)
-   本 demo 是「自文档化」清单：它一边演示功能，一边讲解自己怎么用。
-   多语言写法：SUMMARY / MODULES = { 'zh-Hans': …, 'en': … }。
-   单语言写法：直接给数组 / 字符串即可(向后兼容)。
-   item.id / module.id 跨语言保持一致 → 切语言不丢勾选。
+   [1] DATA —— content (single-language array, or multi-language keyed by locale)
+   This demo is a "self-documenting" checklist: it demonstrates the features while
+   explaining how to use itself.
+   Multi-language form: SUMMARY / MODULES = { 'zh-Hans': …, 'en': … }.
+   Single-language form: just give an array / string (backward compatible).
+   item.id / module.id stay consistent across languages → switching language keeps your checks.
    =========================================================================== */
 
 const SUMMARY = {
@@ -1303,18 +1305,18 @@ const MODULES = {
 
 const CONFIG = {
   storagePrefix: "living-checklist::europe-japan-trip-mx::",
-  lang: "zh-Hans",                                   // 默认语言
-  languages: ["en", "fr", "zh-Hans", "zh-Hant", "ja"], // 这份清单提供哪些语言(只显示这些)
-  theme: "dark",                                    // "auto" | "light" | "dark"(默认值 · 用户切了以 localStorage 为准)
+  lang: "zh-Hans",                                   // default language
+  languages: ["en", "fr", "zh-Hans", "zh-Hant", "ja"], // which languages this checklist provides (only these are shown)
+  theme: "dark",                                    // "auto" | "light" | "dark" (the default · once the user switches, localStorage wins)
   font: "noto",
-  cta: null,           // 顶部 CTA · P4 填真实 GitHub 链接 · 真实用户设 null 隐藏                                     // "noto" | "system"
+  cta: null,           // top CTA · put your real GitHub link here · real users set null to hide                                     // "noto" | "system"
   summaryDefaultOpen: true,
   moduleDefaultOpen: true,
-  moduleIcons: true,             // MX:每个 step + 现状块带 Phosphor 图标
+  moduleIcons: true,             // MX: every step + the status block carry Phosphor icons
 };
 
-/* 图标(Phosphor regular · 内联 SVG · 仅 moduleIcons:true 时显示；按 module.id 映射)
-   想给自己的模块加图标：把 Phosphor 路径加进 ICONS,再在 MODULE_ICONS 里映射 module.id。 */
+/* Icons (Phosphor regular · inline SVG · shown only when moduleIcons:true; mapped by module.id)
+   To add icons to your own modules: add the Phosphor path to ICONS, then map module.id in MODULE_ICONS. */
 const ICONS = {
   "identification-card": "M200,112a8,8,0,0,1-8,8H152a8,8,0,0,1,0-16h40A8,8,0,0,1,200,112Zm-8,24H152a8,8,0,0,0,0,16h40a8,8,0,0,0,0-16Zm40-80V200a16,16,0,0,1-16,16H40a16,16,0,0,1-16-16V56A16,16,0,0,1,40,40H216A16,16,0,0,1,232,56ZM216,200V56H40V200H216Zm-80.26-34a8,8,0,1,1-15.5,4c-2.63-10.26-13.06-18-24.25-18s-21.61,7.74-24.25,18a8,8,0,1,1-15.5-4,39.84,39.84,0,0,1,17.19-23.34,32,32,0,1,1,45.12,0A39.76,39.76,0,0,1,135.75,166ZM96,136a16,16,0,1,0-16-16A16,16,0,0,0,96,136Z",
   "airplane-tilt": "M185.33,114.21l29.14-27.42.17-.17a32,32,0,0,0-45.26-45.26c0,.06-.11.11-.17.17L141.79,70.67l-83-30.2a8,8,0,0,0-8.39,1.86l-24,24a8,8,0,0,0,1.22,12.31l63.89,42.59L76.69,136H56a8,8,0,0,0-5.65,2.34l-24,24A8,8,0,0,0,29,175.42l36.82,14.73,14.7,36.75.06.16a8,8,0,0,0,13.18,2.47l23.87-23.88A8,8,0,0,0,120,200V179.31l14.76-14.76,42.59,63.89a8,8,0,0,0,12.31,1.22l24-24a8,8,0,0,0,1.86-8.39Zm-.07,97.23-42.59-63.88A8,8,0,0,0,136.8,144c-.27,0-.53,0-.79,0a8,8,0,0,0-5.66,2.35l-24,24A8,8,0,0,0,104,176v20.69L90.93,209.76,79.43,181A8,8,0,0,0,75,176.57l-28.74-11.5L59.32,152H80a8,8,0,0,0,5.66-2.34l24-24a8,8,0,0,0-1.22-12.32L44.56,70.74l13.5-13.49,83.22,30.26a8,8,0,0,0,8.56-2L180.78,52.6A16,16,0,0,1,203.4,75.23l-32.87,30.93a8,8,0,0,0-2,8.56l30.26,83.22Z",
@@ -1332,7 +1334,7 @@ const MODULE_ICONS = { visa: "identification-card", flights: "airplane-tilt", st
 const SUMMARY_ICON = "compass";
 
 /* ===========================================================================
-   [2b] I18N —— UI 文案(换语言层)
+   [2b] I18N —— UI strings (the localization layer)
    =========================================================================== */
 const LANG_NAMES = { "zh-Hans": "简", "zh-Hant": "繁", "en": "EN", "fr": "FR", "ja": "日" };
 
@@ -1348,7 +1350,7 @@ const I18N = {
    [4] ENGINE
    =========================================================================== */
 
-/* ---------- 4.0 语言 / 内容解析 ---------- */
+/* ---------- 4.0 Language / content resolution ---------- */
 function fallbackLang() { return CONFIG.languages.indexOf("en") >= 0 ? "en" : CONFIG.languages[0]; }
 function t(key, vars) {
   const dict = I18N[CONFIG.lang] || I18N[fallbackLang()] || {};
@@ -1378,13 +1380,13 @@ function refreshActive() {
       ITEM_DEFAULTS.set(mod.id + "::" + it.id, !!it.defaultChecked);
 }
 
-/* ---------- 4.1 持久化 ---------- */
+/* ---------- 4.1 Persistence ---------- */
 function loadBool(key, fb) { try { const r = localStorage.getItem(key); return r === null ? fb : r === "1"; } catch (_) { return fb; } }
 function saveBool(key, v) { try { localStorage.setItem(key, v ? "1" : "0"); } catch (_) {} }
 function loadStr(key, fb) { try { const r = localStorage.getItem(key); return r === null ? fb : r; } catch (_) { return fb; } }
 function saveStr(key, v) { try { if (v === "") localStorage.removeItem(key); else localStorage.setItem(key, v); } catch (_) {} }
 
-/* ---------- 4.2 键名 ---------- */
+/* ---------- 4.2 Storage keys ---------- */
 const K = {
   summaryOpen: () => CONFIG.storagePrefix + "summary-open",
   toolbarOpen: () => CONFIG.storagePrefix + "toolbar-open",
@@ -1403,14 +1405,14 @@ const K = {
   font: () => CONFIG.storagePrefix + "font",
 };
 
-/* ---------- 4.3 状态查询 ---------- */
+/* ---------- 4.3 State queries ---------- */
 function isItemChecked(mid, iid) { return loadBool(K.itemChecked(mid, iid), ITEM_DEFAULTS.get(mid + "::" + iid) || false); }
 function isSubChecked(mid, iid, child) { return loadBool(K.subChecked(mid, iid, child.id), !!child.defaultChecked); }
 function isModuleDone(m) { return m.items.length > 0 && m.items.every((it) => isItemChecked(m.id, it.id)); }
 function computeProgress() { let d = 0, t2 = 0; for (const m of ACTIVE_MODULES) for (const it of m.items) { t2++; if (isItemChecked(m.id, it.id)) d++; } return { done: d, total: t2 }; }
-function autoSinkOn() { return loadBool(K.autoSink(), true); }   // 勾选后自动沉底:默认开(可在工具栏关掉,给不想条目移动的人)
-/* 「敢点」三步引导:① 勾选框 → ② 备注框 → ③ 链接。每完成一步,提示移到下一步;全程一次性,走完(done)就不再出现。
-   纯 DOM 装饰(渲染后调用),不在 renderItem 里内联 —— 这样推进时能原地更新、不丢输入焦点。 */
+function autoSinkOn() { return loadBool(K.autoSink(), true); }   // auto-sink on check: on by default (can be turned off in the toolbar, for people who don't want items moving)
+/* "Dare to click" three-step tour: ① checkbox → ② note field → ③ link. Each step completed moves the hint to the next; one-time overall, and once done it never reappears.
+   Pure DOM decoration (called after render), not inlined in renderItem —— this way it can update in place when advancing without losing input focus. */
 function tourStepNum() { const v = loadStr(K.tourStep(), "0"); return v === "done" ? 99 : (parseInt(v, 10) || 0); }
 function maybeAdvanceTour(kind) {
   const s = tourStepNum(); if (s >= 99) return;
@@ -1461,7 +1463,7 @@ function flip(elements, mutate) {
   });
 }
 
-/* ---------- 4.5 折叠动画 ---------- */
+/* ---------- 4.5 Collapse animation ---------- */
 function setCollapsed(sleeve, body, headBtn, open, animate) {
   headBtn.setAttribute("aria-expanded", String(open));
   if (sleeve._ch) { sleeve.removeEventListener("transitionend", sleeve._ch); sleeve._ch = null; }
@@ -1478,7 +1480,7 @@ function setCollapsed(sleeve, body, headBtn, open, animate) {
   }
 }
 
-/* ---------- 4.6 渲染 ---------- */
+/* ---------- 4.6 Rendering ---------- */
 const moduleCards = new Map();
 
 function widont(el) {
@@ -1505,7 +1507,7 @@ function renderItem(module, item) {
   const cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = checked; cb.id = "cb-" + module.id + "-" + item.id;
   const label = document.createElement("label"); label.setAttribute("for", cb.id); label.innerHTML = item.html; widont(label);
   cb.addEventListener("change", () => { saveBool(K.itemChecked(module.id, item.id), cb.checked); onToggle(module); maybeAdvanceTour("check"); });
-  label.querySelectorAll("a").forEach((a) => { a.target = "_blank"; a.rel = "noopener noreferrer"; });   // 链接一律新开标签页(不把清单页跳走、丢进度)
+  label.querySelectorAll("a").forEach((a) => { a.target = "_blank"; a.rel = "noopener noreferrer"; });   // always open links in a new tab (don't navigate the checklist page away and lose progress)
   const lk = label.querySelector("a"); if (lk) lk.addEventListener("click", () => maybeAdvanceTour("link"));
   main.appendChild(cb); main.appendChild(label);
   li.appendChild(main);
@@ -1513,8 +1515,8 @@ function renderItem(module, item) {
   if (item.children && item.children.length) li.appendChild(buildSubbranch(module, item));
   return li;
 }
-/* 二级子清单:某条目下挂一层可折叠的更细清单。子项独立勾选(键名 sub:: 独立命名空间),
-   不参与沉底/进度/归档 —— 纯加法,不动平铺条目的核心逻辑。 */
+/* Second-level sub-list: hang a layer of finer, collapsible checklist under an item. Sub-items are checked independently (key prefix sub:: in its own namespace),
+   and don't take part in sinking / progress / archiving —— purely additive, leaving the core logic of flat items untouched. */
 function buildSubbranch(module, item) {
   const wrap = document.createElement("div"); wrap.className = "subbranch";
   const open = loadBool(K.subOpen(module.id, item.id), true);
@@ -1539,7 +1541,7 @@ function buildSubbranch(module, item) {
 }
 function sortedItems(m) { if (!autoSinkOn()) return m.items; const u = m.items.filter((it) => !isItemChecked(m.id, it.id)); const c = m.items.filter((it) => isItemChecked(m.id, it.id)); return u.concat(c); }
 function renderItemList(m) { const ul = document.createElement("ul"); ul.className = "items"; for (const it of sortedItems(m)) ul.appendChild(renderItem(m, it)); return ul; }
-/* 每条常驻备注:宽屏在条目右侧、窄屏在条目下方,一眼可见、不折叠(可发现性) */
+/* Per-item always-on note: to the right of the item on wide screens, below it on narrow screens; visible at a glance, never folded (discoverability) */
 function renderItemNote(module, item) {
   const wrap = document.createElement("div"); wrap.className = "item-note";
   const taId = "inote-" + module.id + "-" + item.id;
@@ -1573,7 +1575,7 @@ function buildModuleCard(module) {
   if (module.meta) { const me = document.createElement("div"); me.className = "module-meta"; me.innerHTML = module.meta; widont(me); head.appendChild(me); }
   const sleeve = document.createElement("div"); sleeve.className = "collapse-sleeve";
   const body = document.createElement("div"); body.className = "module-body"; body.id = bodyId;
-  // —— 「✓ 已完成 N」收起组(置顶 · 默认收起 · N=0 或关掉自动收起时隐藏)——
+  // —— "✓ Done N" collapse group (pinned to top · collapsed by default · hidden when N=0 or auto-sink is off) ——
   const doneWrap = document.createElement("div"); doneWrap.className = "done-group";
   const dgOpen = loadBool(K.doneGroupOpen(module.id), false);
   const dgBtn = document.createElement("button"); dgBtn.type = "button"; dgBtn.className = "collapse-head done-group-head";
@@ -1586,7 +1588,7 @@ function buildModuleCard(module) {
   dgSleeve.appendChild(doneUl); doneWrap.appendChild(dgBtn); doneWrap.appendChild(dgSleeve);
   setCollapsed(dgSleeve, doneUl, dgBtn, dgOpen, false);
   dgBtn.addEventListener("click", () => { const o = dgBtn.getAttribute("aria-expanded") !== "true"; setCollapsed(dgSleeve, doneUl, dgBtn, o, true); saveBool(K.doneGroupOpen(module.id), o); });
-  // —— 在做(活跃)列表 —— 勾选的进收起组,其余按原顺序留在这里(顺序不打乱)
+  // —— Active (in-progress) list —— checked ones go into the collapse group, the rest stay here in their original order (order not shuffled)
   const activeUl = document.createElement("ul"); activeUl.className = "items items-active";
   for (const it of module.items) { const li = renderItem(module, it); ((autoSinkOn() && isItemChecked(module.id, it.id)) ? doneUl : activeUl).appendChild(li); }
   body.appendChild(doneWrap); body.appendChild(activeUl);
@@ -1664,7 +1666,7 @@ function restoreFocusAndScroll(moduleId) {
   if (card.scrollIntoView) card.scrollIntoView({ block: "nearest", behavior: prefersReducedMotion() ? "auto" : "smooth" });
 }
 
-/* ---------- 4.7 勾选交互 ---------- */
+/* ---------- 4.7 Check interaction ---------- */
 function onToggle(module) {
   const rec = moduleCards.get(module.id); if (!rec) { renderProgress(); return; }
   reflowItemsInModule(module);
@@ -1672,7 +1674,7 @@ function onToggle(module) {
   const wasDone = rec.section.classList.contains("done");
   rec.section.classList.toggle("done", nowDone);
   if (nowDone !== wasDone) {
-    const open = nowDone ? false : CONFIG.moduleDefaultOpen;   // 整步完成 → 原地折叠收起(不再滑到页面底部)
+    const open = nowDone ? false : CONFIG.moduleDefaultOpen;   // whole step done → fold in place (no longer slides to the bottom of the page)
     saveBool(K.moduleOpen(module.id), open);
     const isOpenNow = rec.headBtn.getAttribute("aria-expanded") === "true";
     if (open !== isOpenNow) setCollapsed(rec.sleeve, rec.body, rec.headBtn, open, true);
@@ -1680,8 +1682,8 @@ function onToggle(module) {
   }
   renderProgress();
 }
-/* 勾选 → 条目在「在做」与「✓已完成」收起组之间移动(带 FLIP 动画):只对移动前后都可见的条目做位移动画,
-   归入收起组的条目直接"收进去"、其余在做条目滑上来补位、计数跳一下。关掉自动收起 → 原位划掉不移动。 */
+/* On check → items move between the "in-progress" list and the "✓ Done" collapse group (with FLIP animation): only items visible both before and after move are animated;
+   items going into the collapse group just "tuck in", the remaining in-progress items slide up to fill the gap, and the count bumps. With auto-sink off → strike through in place, no movement. */
 function reflowItemsInModule(module) {
   const rec = moduleCards.get(module.id); if (!rec) return;
   const { activeUl, doneUl } = rec;
@@ -1690,7 +1692,7 @@ function reflowItemsInModule(module) {
   const doneCount = module.items.filter((it) => isItemChecked(module.id, it.id)).length;
   if (cnt) cnt.textContent = "(" + doneCount + "/" + module.items.length + ")";
   if (!autoSinkOn()) {
-    for (const it of module.items) { const li = liOf(rec, it.id); if (li) activeUl.appendChild(li); }   // 原位:全留在做列表、原顺序、勾选的划掉
+    for (const it of module.items) { const li = liOf(rec, it.id); if (li) activeUl.appendChild(li); }   // in place: all stay in the active list, original order, checked ones struck through
     updateDoneGroup(module, rec, false); return;
   }
   const dgOpen = loadBool(K.doneGroupOpen(module.id), false);
@@ -1701,7 +1703,7 @@ function reflowItemsInModule(module) {
   flip(flipEls, () => { for (const it of module.items) { const li = liOf(rec, it.id); if (li) targetOf(it).appendChild(li); } updateDoneGroup(module, rec, true); });
 }
 
-/* ---------- 4.8 分区 —— 模块一律按原顺序留在 activeHost(整步完成的原地折叠,不再搬到页面底部)---------- */
+/* ---------- 4.8 Layout —— modules all stay in activeHost in their original order (completed steps fold in place, no longer moved to the bottom of the page) ---------- */
 function placeModules() {
   const activeHost = document.getElementById("activeHost");
   for (const m of ACTIVE_MODULES) {
@@ -1713,7 +1715,7 @@ function placeModules() {
 }
 function renderModules() { const a = document.getElementById("activeHost"), d = document.getElementById("doneHost"); moduleCards.clear(); a.innerHTML = ""; if (d) d.innerHTML = ""; placeModules(); applyTourNudge(); }
 
-/* ---------- 4.9 反馈导出 ---------- */
+/* ---------- 4.9 Feedback export ---------- */
 function appTitleText() { const el = document.getElementById("app-title"); return el ? el.textContent.trim() : "Living Checklist"; }
 function buildFeedbackMarkdown() {
   const { done, total } = computeProgress();
@@ -1768,7 +1770,7 @@ function copyFeedback() {
   if (!handled) finish(legacyCopy(md));
 }
 
-/* ---------- 4.10 主题 / 字体 / 语言 控制 ---------- */
+/* ---------- 4.10 Theme / font / language controls ---------- */
 function effectiveTheme() {
   const saved = loadStr(K.theme(), CONFIG.theme);
   if (saved === "light" || saved === "dark") return saved;
@@ -1817,7 +1819,7 @@ function buildControls() {
   const host = document.getElementById("floatControls"); host.innerHTML = "";
   const open = loadBool(K.controlsOpen(), true);
   host.setAttribute("data-open", String(open));
-  // 收起旋钮:收起后只剩这个小钮(防遮挡)· 展开显示语言/主题/字体
+  // Collapse knob: once collapsed only this small button remains (avoids blocking content) · expanded it shows language/theme/font
   const handle = document.createElement("button"); handle.type = "button"; handle.className = "fc-handle"; handle.id = "fcHandle";
   handle.setAttribute("aria-expanded", String(open)); handle.setAttribute("aria-label", t("controlsToggle"));
   handle.textContent = open ? "⟩" : "⚙";
@@ -1828,7 +1830,7 @@ function buildControls() {
   });
   host.appendChild(handle);
   const bodyWrap = document.createElement("div"); bodyWrap.className = "fc-body";
-  // 语言(只显示该清单提供的语言；>1 才显示)
+  // Language (only the languages this checklist provides; shown only when >1)
   if (CONFIG.languages.length > 1) {
     const langs = document.createElement("div"); langs.className = "fc-langs"; langs.setAttribute("role", "group"); langs.setAttribute("aria-label", t("langTitle"));
     CONFIG.languages.forEach((lg) => {
@@ -1839,10 +1841,10 @@ function buildControls() {
     bodyWrap.appendChild(langs);
     const sep = document.createElement("div"); sep.className = "fc-sep"; bodyWrap.appendChild(sep);
   }
-  // 主题
+  // Theme
   const themeBtn = document.createElement("button"); themeBtn.type = "button"; themeBtn.className = "fc-icon"; themeBtn.id = "fcTheme"; themeBtn.innerHTML = SUN_MOON_SVG;
   themeBtn.addEventListener("click", toggleTheme); bodyWrap.appendChild(themeBtn);
-  // 字体
+  // Font
   const fontBtn = document.createElement("button"); fontBtn.type = "button"; fontBtn.className = "fc-icon fc-font"; fontBtn.id = "fcFont";
   const isSystem = loadStr(K.font(), CONFIG.font) === "system";
   fontBtn.textContent = isSystem ? t("fontSystem") : t("fontNoto");
@@ -1860,7 +1862,7 @@ function applyToolbarOpen() {
 }
 function toggleToolbar() { saveBool(K.toolbarOpen(), !loadBool(K.toolbarOpen(), true)); applyToolbarOpen(); }
 
-/* ---------- 4.11 工具栏 ---------- */
+/* ---------- 4.11 Toolbar ---------- */
 function refreshSinkBtn() {
   const b = document.getElementById("btnSink"); if (!b) return;
   const on = autoSinkOn();
@@ -1872,11 +1874,11 @@ function setAllOpen(open) { saveBool(K.summaryOpen(), open); for (const m of ACT
 function resetChecks() {
   if (!window.confirm(t("confirmReset"))) return;
   for (const m of ACTIVE_MODULES) { for (const it of m.items) { saveBool(K.itemChecked(m.id, it.id), false); if (it.children) for (const c of it.children) saveBool(K.subChecked(m.id, it.id, c.id), false); } saveBool(K.moduleOpen(m.id), CONFIG.moduleDefaultOpen); }
-  saveStr(K.tourStep(), "0");   // 清空 → 引导也归零,从「点方框」重新开始(否则会卡在之前推进到的那步)
+  saveStr(K.tourStep(), "0");   // reset → the tour resets too, starting over from "click the box" (otherwise it would stay stuck at the step it had advanced to)
   renderSummary(document.getElementById("summaryHost")); renderModules(); renderProgress(); announce(t("announcedReset"));
 }
 
-/* ---------- 4.12 启动 ---------- */
+/* ---------- 4.12 Startup ---------- */
 function detectLang() {
   try {
     const cands = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || ""];
@@ -1894,7 +1896,7 @@ function detectLang() {
 }
 
 function boot() {
-  // 恢复语言：已选 > 浏览器语言自适应 > CONFIG 默认
+  // Restore language: previously chosen > browser language auto-detect > CONFIG default
   const savedLang = loadStr(K.lang(), null);
   if (savedLang && CONFIG.languages.indexOf(savedLang) >= 0) CONFIG.lang = savedLang;
   else { const auto = detectLang(); if (auto) CONFIG.lang = auto; }
@@ -1911,7 +1913,7 @@ function boot() {
   renderCTA();
   renderSummary(document.getElementById("summaryHost"));
   renderLegend(); renderModules(); renderProgress();
-  // 系统主题变化时(用户未手动指定才跟随)
+  // On system theme change (only follow it if the user hasn't manually specified a theme)
   try { window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { const s = loadStr(K.theme(), CONFIG.theme); if (s !== "light" && s !== "dark") { applyTheme(); refreshControlTitles(); } }); } catch (_) {}
 }
 document.addEventListener("DOMContentLoaded", boot);
