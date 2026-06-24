@@ -16,7 +16,7 @@
 
 **Living Checklist** est un unique fichier `.html` autonome. CSS intégré, JS intégré, zéro dépendance. Double-cliquez dessus et il s'ouvre directement depuis `file://` dans votre navigateur. Aucune étape de build, aucun serveur, aucune connexion internet nécessaire pour le faire fonctionner.
 
-Vous ne modifiez pas de code pour l'utiliser. Vous modifiez le *contenu* (une petite section DATA + CONFIG avec des repères « remplissez vos données ici ») et le moteur en dessous reste intact. Ensuite, tout prend vie : cochez un élément et il glisse vers le bas de son étape, terminez une étape entière et la carte se replie d'elle-même dans une zone « Terminé », et une barre de progression suit l'ensemble. Chaque coche, repli et note est enregistré automatiquement dans votre navigateur. Fermez l'onglet et rouvrez-le plus tard : votre progression est exactement là où vous l'aviez laissée.
+Vous ne modifiez pas de code pour l'utiliser. Vous modifiez le *contenu* (une petite section DATA + CONFIG avec des repères « remplissez vos données ici ») et le moteur en dessous reste intact. Ensuite, tout prend vie : cochez un élément et il se range dans un groupe repliable « ✓ Terminé » en haut de son étape, terminez une étape entière et la carte reçoit un badge « ✓ Terminé » et se replie sur place, et une barre de progression suit l'ensemble. Chaque coche, repli et note est enregistré automatiquement dans votre navigateur. Fermez l'onglet et rouvrez-le plus tard : votre progression est exactement là où vous l'aviez laissée.
 
 **Ce que c'est (et ce que ce n'est pas).** Ce n'est pas une application finie que vous installez. C'est une façon de générer une checklist *vivante* avec une IA, ou à la main : décrivez ce dont vous avez besoin à une IA (ChatGPT, Claude, et autres), ou modifiez le fichier vous-même, et il en sort un seul fichier HTML que vous double-cliquez pour l'utiliser. L'outil lui-même ne contient aucune IA ; il s'appuie sur *votre* IA pour construire la checklist. Plus tard, il pourra devenir une application autonome qui se synchronise avec Notion et des outils similaires. Pas encore ; aujourd'hui, c'est ce seul fichier plus une skill Claude.
 
@@ -28,6 +28,8 @@ Vous ne modifiez pas de code pour l'utiliser. Vous modifiez le *contenu* (une pe
 |---|---|---|
 | ![Modèle de base, thème clair](assets/base-light.png) | ![Modèle MX Studio, thème sombre](assets/mx-dark.png) | ![Exemple de voyage Europe + Japon](assets/example.png) |
 
+Le modèle par défaut est livré en deux couleurs nettes — **Lapis blue** (par défaut) et **Burgundy** — plus l'habillage sombre de créateur **MX Studio**.
+
 ## Démarrage rapide
 
 1. Téléchargez ou copiez un modèle depuis [`templates/`](templates/) — commencez par [`base.html`](templates/base.html).
@@ -38,12 +40,15 @@ Pour le rendre *vôtre*, ouvrez le fichier dans n'importe quel éditeur de texte
 
 ## Ce qu'il fait concrètement
 
-- **Les éléments coulent quand vous les cochez** — une animation FLIP fluide déplace les éléments terminés vers le bas de leur étape, de sorte que ce qu'il reste à faire demeure en haut.
-- **Les étapes se rangent toutes seules** — terminez chaque élément d'une étape et la carte entière se replie et se déplace dans une zone « Terminé ».
+- **Les éléments cochés se rangent** — une animation FLIP fluide range les éléments terminés dans un groupe repliable « ✓ Terminé » en haut de leur étape, de sorte que ce qu'il reste à faire demeure en vue. (Vous ne voulez pas ? Désactivez « Ranger une fois terminé » dans la barre d'outils.)
+- **Les étapes se replient sur place** — terminez chaque élément d'une étape et la carte entière reçoit un badge « ✓ Terminé » et se replie là où elle est. Rien n'est déplacé en bas de la page.
+- **Une note par élément** — chaque élément a son propre champ de note. Notez une remarque, une question, une valeur à remplir plus tard ; c'est enregistré automatiquement et ça repart quand vous copiez votre progression.
+- **Sous-checklists imbriquées** — n'importe quel élément peut ouvrir une sous-liste plus fine en dessous, pour quand une ligne mérite son propre petit découpage.
+- **Un guide de prise en main unique** (modèles uniquement) vous fait passer par la première coche, la première note et la première copie, pour apprendre les gestes sans lire la doc.
 - **Une barre de progression** en haut suit l'avancement à travers toutes les étapes.
-- **Une zone de note par étape** pour tout ce que vous souhaitez noter.
 - **Tout se sauvegarde automatiquement** dans `localStorage`. Fermez et rouvrez : vos coches, vos replis et vos notes sont toujours là.
-- **Barre d'outils** : Tout déplier · Tout replier · Réinitialiser les coches · **Copier progression + retour** (regroupe votre progression actuelle et vos notes en markdown dans votre presse-papiers, pour que vous puissiez les recoller dans une conversation avec une IA et demander la prochaine révision).
+- **Barre d'outils repliable** : Tout déplier · Tout replier · Réinitialiser les coches · Ranger une fois terminé · **Copier progression + retour** (regroupe votre progression actuelle et vos notes par élément en markdown dans votre presse-papiers, pour que vous puissiez les recoller dans une conversation avec une IA et demander la prochaine révision).
+- **Les liens s'ouvrent dans un nouvel onglet**, pour que cliquer une référence n'abandonne jamais votre checklist et sa progression.
 - **Contrôles flottants** (en bas à droite) : changement de langue (uniquement les langues que cette checklist propose réellement), un sélecteur de thème à 3 positions (Auto / Clair / Sombre — le bouton affiche un petit badge « A » en mode Auto), et un sélecteur de police (Noto / système).
 - **5 langues** prêtes à l'emploi : 简体中文, 繁體中文, English, Français, 日本語. Les données sont indexées par locale.
 - **Accessible par défaut** : texte du corps de 18 px et plus, navigation au clavier, anneaux de focus visibles, une barre de progression ARIA et des régions live, un comportement de repli correct pour les lecteurs d'écran, et il respecte `prefers-reduced-motion`.
@@ -77,14 +82,15 @@ Voilà la boucle : entrée désordonnée, plan organisé en sortie, et vous coch
 
 ## Personnaliser / créer votre propre habillage
 
-Les deux modèles sont deux *habillages* posés sur le même moteur :
+Le même moteur, quelques habillages par-dessus — le modèle par défaut en deux couleurs, plus un habillage de créateur :
 
 | Modèle | Apparence | Polices | Thème par défaut |
 |---|---|---|---|
-| [`base.html`](templates/base.html) | Clair, accent vert, épuré | Noto | Auto |
+| [`base.html`](templates/base.html) | Look épuré façon app de calendrier, clair, sobre — accent **Lapis blue** (par défaut) | Sans-serif système / Noto | Auto |
+| [`base-burgundy.html`](templates/base-burgundy.html) | Le même défaut épuré dans un **Burgundy** chaleureux | Sans-serif système / Noto | Auto |
 | [`mx-studio.html`](templates/mx-studio.html) | Noir noir + or, éditorial, grands numéros de folio par étape, icônes Phosphor | Cormorant Garamond + Alegreya + LXGW WenKai + IBM Plex Mono | Sombre |
 
-Pour créer votre propre habillage, copiez un modèle et changez les variables CSS en haut (couleurs, polices, espacement). Les données et le moteur restent les mêmes, vous pouvez donc restyliser librement sans casser aucun comportement. Si vous voulez un point de départ déjà affirmé, forkez `mx-studio.html` et changez la palette.
+Pour créer votre propre habillage, copiez un modèle et changez les variables CSS en haut (couleurs, polices, espacement). Les données et le moteur restent les mêmes, vous pouvez donc restyliser librement sans casser aucun comportement. Les fichiers Lapis et Burgundy sont exactement cela : le même modèle de base avec un accent changé. Si vous voulez un point de départ déjà affirmé, forkez `mx-studio.html` et changez la palette.
 
 ## Organisation du dépôt
 
@@ -95,8 +101,9 @@ living-checklist/
 ├── LICENSE                MIT
 ├── SKILL.md               définition du skill Claude (ce dépôt est le skill)
 ├── templates/
-│   ├── base.html          clair / vert / Noto — défaut général
-│   └── mx-studio.html     noir noir / or / serif
+│   ├── base.html          défaut clair épuré — accent Lapis blue
+│   ├── base-burgundy.html même défaut — accent Burgundy
+│   └── mx-studio.html     noir noir / or / serif — habillage créateur
 ├── examples/
 │   ├── europe-japan-trip.html       exemple concret (habillage base)
 │   ├── europe-japan-trip-mx.html    exemple concret (habillage MX)

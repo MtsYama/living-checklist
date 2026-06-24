@@ -16,7 +16,7 @@
 
 **Living Checklist** is one self-contained `.html` file. Inline CSS, inline JS, zero dependencies. Double-click it and it opens straight from `file://` in your browser. No build step, no server, no internet needed to run it.
 
-You don't edit code to use it. You edit the *content* (a small DATA + CONFIG section with "fill your data here" anchors) and the engine underneath stays untouched. Then it comes alive: check an item and it slides to the bottom of its step, finish a whole step and the card folds itself away into a "Done" area, and a progress bar tracks the whole thing. Every check, fold, and note is saved to your browser automatically. Close the tab and reopen it later, and your progress is right where you left it.
+You don't edit code to use it. You edit the *content* (a small DATA + CONFIG section with "fill your data here" anchors) and the engine underneath stays untouched. Then it comes alive: check an item and it tucks into a collapsible "✓ Done" group at the top of its step, finish a whole step and the card gets a "✓ Done" badge and collapses in place, and a progress bar tracks the whole thing. Every check, fold, and note is saved to your browser automatically. Close the tab and reopen it later, and your progress is right where you left it.
 
 **What this is (and isn't).** It's not a finished app you install. It's a way to generate a *living* checklist with AI, or by hand: describe what you need to an AI (ChatGPT, Claude, and the like), or edit the file yourself, and out comes a single HTML file you double-click to use. The tool itself has no AI inside; it runs on *your* AI to build the checklist. Down the road it may grow into a standalone app that syncs with Notion and similar tools. Not yet; today it's this single file plus a Claude skill.
 
@@ -28,6 +28,8 @@ You don't edit code to use it. You edit the *content* (a small DATA + CONFIG sec
 |---|---|---|
 | ![Base template, light theme](assets/base-light.png) | ![MX Studio template, dark theme](assets/mx-dark.png) | ![Europe + Japan trip example](assets/example.png) |
 
+The default template ships in two clean colors — **Lapis blue** (default) and **Burgundy** — plus the **MX Studio** dark designer skin.
+
 ## Quick start
 
 1. Download or copy a template from [`templates/`](templates/) — start with [`base.html`](templates/base.html).
@@ -38,13 +40,16 @@ To make it *yours*, open the file in any text editor and edit the two clearly ma
 
 ## What it actually does
 
-- **Items sink as you check them** — a smooth FLIP animation moves done items to the bottom of their step, so what's left to do stays on top.
-- **Steps file themselves away** — finish every item in a step and the whole card folds and moves into a "Done" area.
+- **Checked items tuck away** — a smooth FLIP animation tucks done items into a collapsible "✓ Done" group at the top of their step, so what's left to do stays in view. (Don't want it? Toggle off "Tuck away when done" in the toolbar.)
+- **Steps collapse in place** — finish every item in a step and the whole card gets a "✓ Done" badge and collapses where it sits. Nothing gets shuffled to the bottom of the page.
+- **Per-item notes** — every item has its own note field. Jot a note, a question, a value to fill later; it saves automatically and rides along when you copy your progress.
+- **Nested sub-checklists** — any item can open a finer sub-list under it, for when one line needs its own little breakdown.
+- **A one-time onboarding walkthrough** (templates only) nudges you through the first check, note, and copy so you learn the moves without reading docs.
 - **Progress bar** at the top tracks completion across all steps.
-- **A note box per step** for anything you want to jot down.
 - **Everything auto-saves** to `localStorage`. Close and reopen, and your checks, folds, and notes are all still there.
-- **Toolbar**: Expand all · Collapse all · Reset checks · **Copy progress + feedback** (bundles your current progress and notes into markdown on your clipboard, so you can paste it back into an AI chat and ask for the next revision).
+- **Collapsible toolbar** (top): Expand all · Collapse all · Reset checks · Tuck away when done · **Copy progress + feedback** (bundles your current progress and per-item notes into markdown on your clipboard, so you can paste it back into an AI chat and ask for the next revision).
 - **Floating controls** (bottom-right): language switch (only the languages this checklist actually ships), a 3-way theme toggle (Auto / Light / Dark — the button shows a small "A" badge in Auto), and a font toggle (Noto / system).
+- **Links open in a new tab**, so clicking a reference never throws away your checklist and its progress.
 - **5 languages** out of the box: 简体中文, 繁體中文, English, Français, 日本語. Data is keyed per locale.
 - **Accessible by default**: 18px+ body text, keyboard reachable, visible focus rings, an ARIA progressbar and live regions, screen-reader-correct collapse behavior, and it honors `prefers-reduced-motion`.
 
@@ -77,14 +82,15 @@ That's the loop: messy input in, organized plan out, and you check it off as you
 
 ## Customize / make your own skin
 
-The two templates are two *skins* over the same engine:
+Same engine, a few skins on top — the default template in two colors, plus a designer skin:
 
 | Template | Look | Fonts | Default theme |
 |---|---|---|---|
-| [`base.html`](templates/base.html) | Light, green accent, clean | Noto | Auto |
+| [`base.html`](templates/base.html) | Clean calendar-app look, light, restrained — **Lapis blue** accent (default) | System sans-serif / Noto | Auto |
+| [`base-burgundy.html`](templates/base-burgundy.html) | Same clean default in a warm **Burgundy** | System sans-serif / Noto | Auto |
 | [`mx-studio.html`](templates/mx-studio.html) | Dark noir + gold, editorial, big folio step numbers, Phosphor icons | Cormorant Garamond + Alegreya + LXGW WenKai + IBM Plex Mono | Dark |
 
-To make your own skin, copy a template and change the CSS variables at the top (colors, fonts, spacing). The data and engine stay the same, so you can restyle freely without breaking any behavior. If you want a starting point that's already opinionated, fork `mx-studio.html` and swap the palette.
+To make your own skin, copy a template and change the CSS variables at the top (colors, fonts, spacing). The data and engine stay the same, so you can restyle freely without breaking any behavior. The Lapis and Burgundy files are exactly this: the same base template with one swapped accent. If you want a starting point that's already opinionated, fork `mx-studio.html` and swap the palette.
 
 ## Repo layout
 
@@ -95,8 +101,9 @@ living-checklist/
 ├── LICENSE                MIT
 ├── SKILL.md               Claude skill definition (this repo is the skill)
 ├── templates/
-│   ├── base.html          light / green / Noto — general default
-│   └── mx-studio.html     dark noir / gold / serif
+│   ├── base.html          clean light default — Lapis blue accent
+│   ├── base-burgundy.html same clean default — Burgundy accent
+│   └── mx-studio.html     dark noir / gold / serif designer skin
 ├── examples/
 │   ├── europe-japan-trip.html       worked example (base skin)
 │   ├── europe-japan-trip-mx.html    worked example (MX skin)
