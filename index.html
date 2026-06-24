@@ -107,6 +107,13 @@
     font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase;
     color: var(--fg-3);
   }
+  /* language-switch affordance — sits just before the toggle */
+  .lang-label {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    user-select: none;
+  }
+  .lang-label .lang-globe { font-size: 15px; line-height: 1; opacity: 0.85; }
+  @media (max-width: 520px) { .lang-label .lang-globe { display: none; } }
 
   /* toggle — ported 1:1 from atelier base.css */
   .toggle { display: flex; gap: 6px; }
@@ -403,6 +410,7 @@
   <div class="topbar-inner">
     <span class="topbar-label">Living&nbsp;Checklist</span>
     <div class="topbar-right">
+      <span class="topbar-label lang-label" aria-hidden="true"><span class="lang-globe">🌐</span><span data-i18n="langLabel">Language</span></span>
       <div class="toggle" role="group" aria-label="Language / 语言">
         <button type="button" data-lang="en" aria-pressed="true">EN</button>
         <button type="button" data-lang="fr" aria-pressed="false">FR</button>
@@ -588,6 +596,7 @@
   // Term "Step by step HTML" stays in English in every language.
   var content = {
     "en": {
+      langLabel: "Language",
       eyebrow: "Open source · single file · MIT",
       title: "Living Checklist",
       sub: "Step by step HTML",
@@ -654,6 +663,7 @@
     },
 
     "fr": {
+      langLabel: "Langue",
       eyebrow: "Open source · fichier unique · MIT",
       title: "Living Checklist",
       sub: "Step by step HTML",
@@ -720,6 +730,7 @@
     },
 
     "zh-Hans": {
+      langLabel: "语言",
       eyebrow: "开源 · 单文件 · MIT",
       title: "活页清单",
       sub: "Step by step HTML",
@@ -786,6 +797,7 @@
     },
 
     "zh-Hant": {
+      langLabel: "語言",
       eyebrow: "開源 · 單檔案 · MIT",
       title: "活頁清單",
       sub: "Step by step HTML",
@@ -852,6 +864,7 @@
     },
 
     "ja": {
+      langLabel: "言語",
       eyebrow: "オープンソース · 単一ファイル · MIT",
       title: "活页清单",
       sub: "Step by step HTML",

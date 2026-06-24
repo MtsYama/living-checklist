@@ -45,7 +45,7 @@ Il n'est pas lié à Claude. `SKILL.md` est du markdown ordinaire que n'importe 
 
 **Mode B — Conversation (n'importe quel chatbot, rien à installer).** Ouvrez une checklist, cliquez sur **« Copier le prompt »**, collez-le dans n'importe quelle conversation IA avec vos propres données : elle renvoie un fichier HTML unique et complet. Enregistrez-le sous `quelquechose.html` et double-cliquez pour l'ouvrir. Fonctionne avec ChatGPT (Canvas), Claude (Artifacts) et Gemini (Canvas) — ils affichent un aperçu intégré ; une sortie très longue peut être coupée, dites-lui simplement de continuer.
 
-**Modèles chinois (mode Conversation).** 豆包 / 通义千问 / 腾讯元宝 / 智谱清言（GLM） produisent tous le HTML complet *et* l'affichent en aperçu intégré. Kimi affiche l'aperçu via un lien de déploiement. DeepSeek / 文心一言 / 讯飞星火 produisent le HTML mais sans aperçu intégré (enregistrez en `.html` et double-cliquez) et peuvent couper un HTML long — demandez-lui de « continuer » ou de générer en plusieurs parties.
+**Modèles chinois (mode Conversation).** 豆包 (Doubao) / 通义千问 (Qwen) / 腾讯元宝 (Tencent Yuanbao) / 智谱清言（GLM） produisent tous le HTML complet *et* l'affichent en aperçu intégré. Kimi affiche l'aperçu via un lien de déploiement. DeepSeek / 文心一言 (ERNIE) / 讯飞星火 (iFlytek Spark) produisent le HTML mais sans aperçu intégré (enregistrez en `.html` et double-cliquez) et peuvent couper un HTML long — demandez-lui de « continuer » ou de générer en plusieurs parties.
 
 **Solution universelle (tout modèle).** Quel que soit le HTML que vous renvoie un modèle — copiez le code, enregistrez sous `nom.html`, double-cliquez. Zéro dépendance, fonctionne hors ligne.
 

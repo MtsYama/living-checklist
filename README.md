@@ -45,7 +45,7 @@ It isn't tied to Claude. `SKILL.md` is plain markdown that any tool can read, so
 
 **Mode B — Chat (any chatbot, nothing installed).** Open any checklist, click **"Copy the prompt"**, paste it into any AI chat along with your own data, and it returns a complete single HTML file. Save that as `something.html` and double-click to open. Works with ChatGPT (Canvas), Claude (Artifacts), and Gemini (Canvas) — they preview it inline; very long output can truncate, just tell it to continue.
 
-**Chinese models (Chat mode).** 豆包 / 通义千问 / 腾讯元宝 / 智谱清言（GLM） all output the full HTML *and* preview it inline. Kimi previews via a deploy link. DeepSeek / 文心一言 / 讯飞星火 output the HTML but have no inline preview (save as `.html` and double-click) and can truncate long HTML — ask it to "continue" or generate in parts.
+**Chinese models (Chat mode).** 豆包 (Doubao) / 通义千问 (Qwen) / 腾讯元宝 (Tencent Yuanbao) / 智谱清言（GLM） all output the full HTML *and* preview it inline. Kimi previews via a deploy link. DeepSeek / 文心一言 (ERNIE) / 讯飞星火 (iFlytek Spark) output the HTML but have no inline preview (save as `.html` and double-click) and can truncate long HTML — ask it to "continue" or generate in parts.
 
 **Universal fallback (every model).** Whatever HTML any model hands you — copy the code, save as `name.html`, double-click. Zero dependencies, works offline.
 
