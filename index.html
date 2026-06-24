@@ -340,14 +340,29 @@
     letter-spacing: 0.06em; text-transform: uppercase; color: var(--fg-3);
   }
 
-  /* ---------- usage cards ---------- */
-  .usage { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
-  @media (max-width: 720px) { .usage { grid-template-columns: 1fr; } }
+  /* ---------- usage cards · bento grid ---------- */
+  .usage {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    grid-auto-rows: 1fr;
+    gap: 1.2rem;
+  }
+  /* big left feature = the Claude-skill card, spans both rows */
+  .usage-feature { grid-row: 1 / span 2; }
+  @media (max-width: 720px) {
+    .usage { grid-template-columns: 1fr; }
+    .usage-feature { grid-row: auto; }
+  }
   .usage-card {
     border: 1px solid var(--rule-strong);
     padding: 1.6rem 1.5rem;
     display: flex; flex-direction: column; gap: 0.8rem;
     background: var(--rule-soft);
+  }
+  /* feature cell: a touch more breathing room + a hairline accent edge (no new colors) */
+  .usage-feature {
+    padding: 1.9rem 1.8rem;
+    border-left: 2px solid var(--accent);
   }
   .usage-no {
     font-family: var(--font-mono); font-size: 14px;
@@ -505,13 +520,8 @@
       <h2 class="section-title" data-i18n="useTitle"></h2>
     </div>
     <div class="usage">
-      <article class="usage-card">
+      <article class="usage-card usage-feature">
         <span class="usage-no">01</span>
-        <h3 class="usage-title" data-i18n="use1Title"></h3>
-        <p class="usage-body" data-i18n-html="use1Body"></p>
-      </article>
-      <article class="usage-card">
-        <span class="usage-no">02</span>
         <h3 class="usage-title" data-i18n="use2Title"></h3>
         <div class="usage-body">
           <p data-i18n-html="use2Intro"></p>
@@ -522,9 +532,14 @@
         </div>
       </article>
       <article class="usage-card">
-        <span class="usage-no">03</span>
+        <span class="usage-no">02</span>
         <h3 class="usage-title" data-i18n="use3Title"></h3>
         <p class="usage-body" data-i18n-html="use3Body"></p>
+      </article>
+      <article class="usage-card">
+        <span class="usage-no">03</span>
+        <h3 class="usage-title" data-i18n="use1Title"></h3>
+        <p class="usage-body" data-i18n-html="use1Body"></p>
       </article>
     </div>
   </section>
