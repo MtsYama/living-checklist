@@ -146,7 +146,7 @@ Pour créer votre propre habillage, copiez un modèle et changez les variables C
 ```
 living-checklist/
 ├── README.md              ce fichier (anglais)
-├── README.zh.md           简体中文
+├── README.zh.md           chinois simplifié
 ├── LICENSE                MIT
 ├── SKILL.md               définition du skill Claude (ce dépôt est le skill)
 ├── templates/
@@ -158,7 +158,7 @@ living-checklist/
 │   ├── europe-japan-trip-mx.html    exemple concret (habillage MX)
 │   └── europe-japan-trip-prompt.md  l'entrée désordonnée derrière
 └── assets/
-    └── *.png              captures d'écran par langue (base / MX / exemple × en·fr·简·繁·日)
+    └── *.png              captures d'écran par langue (base / MX / exemple × EN·FR·ZH-Hans·ZH-Hant·JA)
 ```
 
 ## Licence

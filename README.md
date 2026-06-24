@@ -146,7 +146,7 @@ To make your own skin, copy a template and change the CSS variables at the top (
 ```
 living-checklist/
 ├── README.md              this file (English)
-├── README.zh.md           简体中文
+├── README.zh.md           Simplified Chinese
 ├── LICENSE                MIT
 ├── SKILL.md               Claude skill definition (this repo is the skill)
 ├── templates/
@@ -158,7 +158,7 @@ living-checklist/
 │   ├── europe-japan-trip-mx.html    worked example (MX skin)
 │   └── europe-japan-trip-prompt.md  the messy input behind it
 └── assets/
-    └── *.png              per-language screenshots (base / MX / example × en·fr·简·繁·日)
+    └── *.png              per-language screenshots (base / MX / example × EN·FR·ZH-Hans·ZH-Hant·JA)
 ```
 
 ## License
