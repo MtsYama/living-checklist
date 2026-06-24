@@ -129,9 +129,7 @@ living-checklist/
 │   ├── europe-japan-trip-mx.html    exemple concret (habillage MX)
 │   └── europe-japan-trip-prompt.md  l'entrée désordonnée derrière
 └── assets/
-    ├── base-light.png     capture d'écran — modèle de base
-    ├── mx-dark.png        capture d'écran — modèle MX
-    └── example.png        capture d'écran — l'exemple de voyage
+    └── *.png              captures d'écran par langue (base / MX / exemple × en·fr·简·繁·日)
 ```
 
 ## Licence

@@ -129,9 +129,7 @@ living-checklist/
 │   ├── europe-japan-trip-mx.html    worked example (MX skin)
 │   └── europe-japan-trip-prompt.md  the messy input behind it
 └── assets/
-    ├── base-light.png     screenshot — base template
-    ├── mx-dark.png        screenshot — MX template
-    └── example.png        screenshot — the trip example
+    └── *.png              per-language screenshots (base / MX / example × en·fr·简·繁·日)
 ```
 
 ## License
