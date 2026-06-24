@@ -272,6 +272,70 @@
   .features-more > summary:hover { color: var(--fg); }
   .features-more .features li:first-child { border-top: none; }
 
+  /* ---------- roadmap · Now → Next ---------- */
+  .roadmap { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 1.4rem 2.4rem; margin-top: 0.4rem; }
+  @media (max-width: 760px) { .roadmap { grid-template-columns: 1fr; } }
+  .rm-col { display: flex; flex-direction: column; }
+  /* the "Next" column gets the accent edge + a touch more presence */
+  .rm-col--next {
+    border-left: 2px solid var(--accent);
+    padding-left: clamp(1.2rem, 3vw, 1.8rem);
+  }
+  @media (max-width: 760px) {
+    .rm-col--next { border-left: none; border-top: 1px solid var(--rule); padding-left: 0; padding-top: 1.6rem; }
+  }
+  .rm-kicker {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    font-family: var(--font-mono); font-size: 13px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1rem;
+  }
+  .rm-col--now .rm-kicker { color: var(--fg-3); }
+  /* status tag — "available now" vs "in development", same gold, two weights */
+  .rm-tag {
+    font-family: var(--font-mono); font-size: 11px; line-height: 1;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 4px 7px; border: 1px solid var(--rule-strong); color: var(--fg-3);
+  }
+  .rm-tag--live { border-color: var(--accent); color: var(--accent); }
+  .rm-tag--dev {
+    border-color: var(--accent); color: var(--on-accent);
+    background: var(--accent-fill);
+  }
+  .rm-headline {
+    font-family: var(--font-display); font-weight: 500;
+    font-size: clamp(1.3rem, 2.6vw, 1.7rem); line-height: 1.25;
+    color: var(--fg); text-wrap: balance; margin-bottom: 0.7rem;
+  }
+  .rm-note { font-size: 1.02rem; line-height: 1.55; color: var(--fg-2); }
+  .rm-note strong { color: var(--fg); font-weight: 600; }
+  /* the future-goals list — each a numbered, titled line */
+  .rm-list { list-style: none; margin-top: 1.4rem; }
+  .rm-list li {
+    display: grid; grid-template-columns: auto 1fr; gap: 0.95rem;
+    padding: 1.05rem 0; border-top: 1px solid var(--rule);
+    align-items: baseline;
+  }
+  .rm-list li:first-child { border-top: none; padding-top: 0.4rem; }
+  .rm-list .rm-n {
+    font-family: var(--font-mono); font-size: 14px;
+    color: var(--accent); font-variant-numeric: tabular-nums;
+  }
+  .rm-list .rm-goal { font-size: 1.06rem; line-height: 1.5; color: var(--fg-2); }
+  .rm-list .rm-goal strong { color: var(--fg); font-weight: 600; }
+  /* open-core promise — the closing reassurance line */
+  .rm-promise {
+    margin-top: 1.6rem; padding-top: 1.2rem; border-top: 1px solid var(--rule);
+    font-size: 1.02rem; line-height: 1.55; color: var(--fg-2);
+  }
+  .rm-promise strong { color: var(--accent); font-weight: 600; }
+  /* honesty footnote under "Next" */
+  .rm-honest {
+    margin-top: 1.2rem;
+    font-family: var(--font-mono); font-size: 13px; line-height: 1.5;
+    letter-spacing: 0.02em; color: var(--fg-3);
+  }
+
   /* ---------- under-the-hood · screenshots subtitle ---------- */
   .shots-subtitle {
     font-family: var(--font-mono); font-size: 15px;
@@ -557,13 +621,33 @@
     </details>
   </section>
 
-  <!-- ROADMAP -->
+  <!-- ROADMAP · Now → Next -->
   <section class="section">
     <div class="section-head">
       <span class="section-no">04</span>
       <h2 class="section-title" data-i18n="roadmapTitle"></h2>
     </div>
-    <p class="section-lead" data-i18n="roadmapBody"></p>
+    <p class="section-lead" data-i18n="roadmapBody" style="max-width:64ch;"></p>
+    <div class="roadmap">
+      <div class="rm-col rm-col--now">
+        <span class="rm-kicker">
+          <span data-i18n="rmNowKicker"></span>
+          <span class="rm-tag rm-tag--live" data-i18n="rmTagLive"></span>
+        </span>
+        <h3 class="rm-headline" data-i18n="rmNowHeadline"></h3>
+        <p class="rm-note" data-i18n-html="rmNowNote"></p>
+      </div>
+      <div class="rm-col rm-col--next">
+        <span class="rm-kicker">
+          <span data-i18n="rmNextKicker"></span>
+          <span class="rm-tag rm-tag--dev" data-i18n="rmTagDev"></span>
+        </span>
+        <h3 class="rm-headline" data-i18n="rmNextHeadline"></h3>
+        <ul class="rm-list" data-i18n-list="rmGoals"></ul>
+        <p class="rm-promise" data-i18n-html="rmPromise"></p>
+        <p class="rm-honest" data-i18n="rmHonest"></p>
+      </div>
+    </div>
   </section>
 
   <!-- UNDER THE HOOD + SCREENSHOTS · craft proof, last -->
@@ -670,8 +754,22 @@
       title: "Living Checklist",
       sub: "Step by step HTML",
       lead: "Love making checklists but always find them clunky? They get lost, the checked stuff piles into a mess, and keeping up means scrolling back and forth. This makes a checklist that's actually alive: your progress saves itself (close it, reopen it, it's all there), everything is one tap to copy, and you can ask an AI right inside it.",
-      roadmapTitle: "Now, and what's next",
-      roadmapBody: "Right now the tool itself has no AI inside. You bring your own AI (ChatGPT, Claude, or just fill it by hand) to generate and edit a checklist, and the file makes it come alive: items tuck into a Done group at the top, steps collapse in place, progress saves. What's next: turning it into a standalone app that connects to Notion and other note tools, and stands alongside the classic Google and Microsoft checklist apps. For now it stays free and open source while the core gets solid.",
+      roadmapTitle: "Where this is going",
+      roadmapBody: "The single-file tool is real and usable today. The bigger idea is a place that takes the tinkering away — here's the plan, in the open.",
+      rmNowKicker: "Now",
+      rmTagLive: "Available today",
+      rmNowHeadline: "The free single-file tool you can use right now",
+      rmNowNote: "Bring your own AI, generate a checklist, double-click the file. Progress saves itself, steps collapse as you go. <strong>It works today, and it always will</strong> — no account, no setup, nothing to wait for.",
+      rmNextKicker: "Next",
+      rmTagDev: "In development",
+      rmNextHeadline: "A hosted app that just works",
+      rmGoals: [
+        "<strong>A hosted, managed app</strong> — no file to keep, nothing to set up or maintain. You open it and it just works, for people who'd rather not tinker.",
+        "<strong>Syncs with your own notes and calendar</strong> — plugs straight into Notion and the tools you already live in, so your checklists aren't off on their own.",
+        "<strong>One place for everything you're tracking</strong> — every checklist and project in a single dashboard, not scattered across loose files."
+      ],
+      rmPromise: "<strong>Open core, for good.</strong> The free single-file tool stays free and open source forever. The hosted app is a paid layer on top — so the thing you can use today never goes away.",
+      rmHonest: "↳ The hosted app is on the roadmap, not out yet. Building it in the open — the free tool is what's real today.",
       forWhoTitle: "What this is, and who it's for",
       forWhoLead: "It's not a finished app you download. It's a way to <strong>generate a checklist with AI</strong>: tell an AI (ChatGPT, Claude, and the like) what you need, or edit the file yourself, and out comes an HTML checklist you double-click to use. The tool itself has no AI inside; it runs on your own AI to build the checklist.<br><br>It's closer to a GPS than the to-do apps you know (Microsoft To Do, Todoist, and the like), which list your tasks and leave the sorting to you. We call it <em>living</em> because it re-plans the route around what you need, not because you sort every step yourself. So it's for people who worry they're bad at planning, or always miss a step: tell it what you're doing, and it lays out a path you can just follow.",
       forForTitle: "It's for you if",
@@ -737,8 +835,22 @@
       title: "Living Checklist",
       sub: "Step by step HTML",
       lead: "Vous aimez faire des listes mais elles vous semblent toujours peu pratiques ? On les perd de vue, les éléments cochés s'entassent en désordre, et suivre l'avancement oblige à remonter sans cesse. Celle-ci est vraiment vivante : la progression se sauvegarde toute seule (fermez, rouvrez, tout est là), tout se copie en un geste, et vous pouvez interroger une IA directement dedans.",
-      roadmapTitle: "Aujourd'hui, et la suite",
-      roadmapBody: "Pour l'instant, l'outil lui-même n'a aucune IA à l'intérieur. Vous apportez votre propre IA (ChatGPT, Claude, ou vous remplissez à la main) pour générer et modifier une checklist, et le fichier la fait vivre : les éléments se rangent dans un groupe Terminé en haut, les étapes se replient sur place, la progression se sauvegarde. La suite : en faire une application autonome qui se connecte à Notion et aux autres outils de notes, et qui se tient aux côtés des applis de checklist classiques de Google et Microsoft. Pour l'instant, ça reste gratuit et open source, le temps de bien solidifier le cœur.",
+      roadmapTitle: "Là où tout cela va",
+      roadmapBody: "L'outil en fichier unique est bien réel et utilisable aujourd'hui. L'idée plus large : un endroit qui vous épargne tout le bricolage — voici le plan, à découvert.",
+      rmNowKicker: "Aujourd'hui",
+      rmTagLive: "Disponible",
+      rmNowHeadline: "L'outil gratuit en fichier unique, utilisable dès maintenant",
+      rmNowNote: "Apportez votre IA, générez une checklist, double-cliquez le fichier. La progression se sauvegarde toute seule, les étapes se replient au fil de l'eau. <strong>Ça marche aujourd'hui, et ça marchera toujours</strong> — sans compte, sans installation, rien à attendre.",
+      rmNextKicker: "La suite",
+      rmTagDev: "En développement",
+      rmNextHeadline: "Une appli hébergée qui marche, tout simplement",
+      rmGoals: [
+        "<strong>Une appli hébergée et gérée</strong> — aucun fichier à conserver, rien à installer ni à maintenir. Vous l'ouvrez et ça marche, pour ceux qui préfèrent ne pas bricoler.",
+        "<strong>Synchronisée avec vos notes et votre agenda</strong> — branchée directement sur Notion et les outils que vous utilisez déjà, pour que vos checklists ne restent pas isolées.",
+        "<strong>Un seul endroit pour tout ce que vous suivez</strong> — chaque checklist et chaque projet dans un même tableau de bord, plus de fichiers éparpillés."
+      ],
+      rmPromise: "<strong>Open core, pour de bon.</strong> L'outil gratuit en fichier unique reste gratuit et open source pour toujours. L'appli hébergée est une couche payante par-dessus — ce que vous utilisez aujourd'hui ne disparaîtra jamais.",
+      rmHonest: "↳ L'appli hébergée est sur la feuille de route, pas encore sortie. On la construit à découvert — l'outil gratuit, lui, est bien réel aujourd'hui.",
       forWhoTitle: "Ce que c'est, et à qui ça s'adresse",
       forWhoLead: "Ce n'est pas une appli finie que vous téléchargez. C'est une façon de <strong>générer une checklist avec l'IA</strong> : décrivez ce qu'il vous faut à une IA (ChatGPT, Claude et compagnie), ou modifiez le fichier vous-même, et il en sort une checklist HTML qu'il suffit de double-cliquer pour utiliser. L'outil lui-même n'a aucune IA à l'intérieur ; il s'appuie sur votre propre IA pour construire la checklist.<br><br>C'est plus proche d'un GPS que des applis de tâches que vous connaissez (Microsoft To Do, Todoist et compagnie), qui listent vos tâches et vous en laissent le tri. On la dit <em>vivante</em> parce qu'elle recalcule l'itinéraire selon vos besoins, pas parce que vous triez chaque étape vous-même. Elle est donc faite pour ceux qui se trouvent mauvais en organisation, ou qui oublient toujours une étape : dites-lui ce que vous faites, et elle vous trace un chemin que vous n'avez plus qu'à suivre.",
       forForTitle: "C'est pour vous si",
@@ -804,8 +916,22 @@
       title: "活页清单",
       sub: "Step by step HTML",
       lead: "喜欢列清单、又老嫌它们不顺手?回头找不着、勾完乱糟糟、想跟进还得来回翻……这个把清单做「活」了：进度自动留痕（关了再开还在）、内容随手复制粘贴，有问题还能直接在里面问 AI。",
-      roadmapTitle: "现在，和接下来",
-      roadmapBody: "现在这个工具本身不带 AI。你用自己的 AI（ChatGPT、Claude，或者干脆手动）来生成和修改清单，它负责把清单「活」起来:勾掉的收进顶部「已完成」组、整步就地折叠、进度自存。接下来:把它做成一个能独立运行的 App，打通 Notion 等笔记工具，也对标 Google、微软那类传统 checklist 软件。现在先免费、开源，把核心打磨扎实。",
+      roadmapTitle: "它要走向哪里",
+      roadmapBody: "单文件的工具今天就是真的、能用的。更大的设想，是做一个把「折腾」全省掉的地方 —— 计划摆在这儿，公开来做。",
+      rmNowKicker: "现在",
+      rmTagLive: "今天就能用",
+      rmNowHeadline: "免费的单文件工具，现在就能上手",
+      rmNowNote: "用你自己的 AI 生成一份清单，双击打开文件。进度自动留痕，做到哪一步就地折叠。<strong>今天能用，以后也一直能用</strong> —— 不用注册、不用安装，什么都不用等。",
+      rmNextKicker: "接下来",
+      rmTagDev: "开发中",
+      rmNextHeadline: "一个开箱即用的在线 App",
+      rmGoals: [
+        "<strong>托管、免维护的在线 App</strong> —— 不用守着一个文件，不用安装也不用维护。打开就能用，给那些不想折腾的人。",
+        "<strong>和你自己的笔记、日历打通</strong> —— 直接接上 Notion 和你本来就在用的工具，让清单不再孤零零地待在一边。",
+        "<strong>所有要追的事，集中在一处</strong> —— 每一份清单、每一个项目都在同一个面板里，不再散落成一堆零碎文件。"
+      ],
+      rmPromise: "<strong>开放内核，长期不变。</strong>免费的单文件工具永远免费、永远开源。在线 App 是在它之上的付费层 —— 所以你今天能用的这个东西，永远不会消失。",
+      rmHonest: "↳ 在线 App 还在未来规划里，尚未上线。我们公开地把它做出来 —— 今天真正能用的，是这个免费工具。",
       forWhoTitle: "这到底是什么、给谁用",
       forWhoLead: "它不是一个下载就能用的成品 App，而是一种<strong>用 AI 生成清单</strong>的方式：你把需求说给 AI（ChatGPT、Claude 这些）、或者自己改一下文件，它就产出一个 HTML 清单，双击就能用。工具本身不带 AI，靠你自己的 AI 来把清单生成出来。<br><br>它更像导航，而不是你熟悉的那些 to-do app(Microsoft To Do、Todoist、滴答清单):那种把事情列出来、排序交给你，它帮你把路线排好、带你照着走。叫它「活」，是因为它能按你的需求把路线重排，不是让你全程手动排。所以它适合那种担心自己不会规划、老漏步骤的人:你说要做什么，它帮你排成一条照着走的路。",
       forForTitle: "适合你，如果",
@@ -871,8 +997,22 @@
       title: "活頁清單",
       sub: "Step by step HTML",
       lead: "喜歡列清單、又老嫌它們不順手?回頭找不著、勾完亂糟糟、想跟進還得來回翻……這個把清單做「活」了：進度自動留痕（關了再開還在）、內容隨手複製貼上，有問題還能直接在裡面問 AI。",
-      roadmapTitle: "現在，和接下來",
-      roadmapBody: "現在這個工具本身不帶 AI。你用自己的 AI（ChatGPT、Claude，或者乾脆手動）來生成和修改清單，它負責把清單「活」起來:勾掉的收進頂部「已完成」組、整步就地摺疊、進度自存。接下來:把它做成一個能獨立執行的 App，打通 Notion 等筆記工具，也對標 Google、微軟那類傳統 checklist 軟體。現在先免費、開源，把核心打磨扎實。",
+      roadmapTitle: "它要走向哪裡",
+      roadmapBody: "單檔案的工具今天就是真的、能用的。更大的設想，是做一個把「折騰」全省掉的地方 —— 計畫擺在這兒，公開來做。",
+      rmNowKicker: "現在",
+      rmTagLive: "今天就能用",
+      rmNowHeadline: "免費的單檔案工具，現在就能上手",
+      rmNowNote: "用你自己的 AI 生成一份清單，雙擊打開檔案。進度自動留痕，做到哪一步就地摺疊。<strong>今天能用，以後也一直能用</strong> —— 不用註冊、不用安裝，什麼都不用等。",
+      rmNextKicker: "接下來",
+      rmTagDev: "開發中",
+      rmNextHeadline: "一個開箱即用的線上 App",
+      rmGoals: [
+        "<strong>託管、免維護的線上 App</strong> —— 不用守著一個檔案，不用安裝也不用維護。打開就能用，給那些不想折騰的人。",
+        "<strong>和你自己的筆記、行事曆打通</strong> —— 直接接上 Notion 和你本來就在用的工具，讓清單不再孤零零地待在一邊。",
+        "<strong>所有要追的事，集中在一處</strong> —— 每一份清單、每一個專案都在同一個面板裡，不再散落成一堆零碎檔案。"
+      ],
+      rmPromise: "<strong>開放內核，長期不變。</strong>免費的單檔案工具永遠免費、永遠開源。線上 App 是在它之上的付費層 —— 所以你今天能用的這個東西，永遠不會消失。",
+      rmHonest: "↳ 線上 App 還在未來規劃裡，尚未上線。我們公開地把它做出來 —— 今天真正能用的，是這個免費工具。",
       forWhoTitle: "這到底是什麼、給誰用",
       forWhoLead: "它不是一個下載就能用的成品 App，而是一種<strong>用 AI 生成清單</strong>的方式：你把需求說給 AI（ChatGPT、Claude 這些）、或者自己改一下檔案，它就產出一個 HTML 清單，雙擊就能用。工具本身不帶 AI，靠你自己的 AI 來把清單生成出來。<br><br>它更像導航，而不是你熟悉的那些 to-do app(Microsoft To Do、Todoist、滴答清單):那種把事情列出來、排序交給你，它幫你把路線排好、帶你照著走。叫它「活」，是因為它能按你的需求把路線重排，不是讓你全程手動排。所以它適合那種擔心自己不會規劃、老漏步驟的人:你說要做什麼，它幫你排成一條照著走的路。",
       forForTitle: "適合你，如果",
@@ -938,8 +1078,22 @@
       title: "活页清单",
       sub: "Step by step HTML",
       lead: "チェックリストは好きだけど、いつも使いにくいと感じませんか?どこにあるか分からなくなる、チェックした項目がごちゃつく、追うのに行ったり来たり。これは本当に「生きた」リストです：進捗はひとりでに保存され（閉じて開き直してもそのまま）、何でもワンタップでコピーでき、リストの中で直接 AI に質問できます。",
-      roadmapTitle: "いまと、これから",
-      roadmapBody: "いまのところ、ツール自体に AI は入っていません。あなた自身の AI（ChatGPT、Claude、または手入力でも）でチェックリストを生成・編集し、ファイルがそれを生きたものにします：項目はステップ上部の「完了」グループにたたまれ、ステップはその場で折りたたまれ、進捗が保存されます。これから：Notion など他のメモツールとつながる単体のアプリにして、Google や Microsoft の定番チェックリストアプリと並ぶものにしていきます。当面は無料・オープンソースのまま、核をしっかり固めていきます。",
+      roadmapTitle: "これから向かう先",
+      roadmapBody: "単一ファイルのツールは、今このとおり本物で、ちゃんと使えます。その先に描いているのは、「手間」をまるごと省ける場所。計画は、こうしてオープンに進めます。",
+      rmNowKicker: "いま",
+      rmTagLive: "今日から使える",
+      rmNowHeadline: "無料の単一ファイルツール、いますぐ使えます",
+      rmNowNote: "あなた自身の AI でチェックリストを生成し、ファイルをダブルクリック。進捗はひとりでに保存され、進めたステップはその場で折りたたまれます。<strong>今日も使えて、これからもずっと使えます</strong> —— アカウントも、インストールも、待ち時間も要りません。",
+      rmNextKicker: "これから",
+      rmTagDev: "開発中",
+      rmNextHeadline: "開いたらすぐ使える、ホスト型アプリ",
+      rmGoals: [
+        "<strong>ホスト型・管理いらずのアプリ</strong> —— ファイルを抱えておく必要も、インストールや保守も不要。開けばそのまま動く、手間をかけたくない人のために。",
+        "<strong>あなたのメモやカレンダーと同期</strong> —— Notion や、ふだん使っているツールに直結。チェックリストがぽつんと孤立しません。",
+        "<strong>追っているものを、ひとつの場所に</strong> —— すべてのチェックリストとプロジェクトを一つのダッシュボードに。バラバラのファイルに散らばりません。"
+      ],
+      rmPromise: "<strong>オープンコア、ずっと変わらず。</strong>無料の単一ファイルツールは、いつまでも無料・オープンソースのまま。ホスト型アプリはその上に載る有料レイヤー —— だから今日使えるものが、消えてしまうことはありません。",
+      rmHonest: "↳ ホスト型アプリはロードマップ上で、まだ公開していません。オープンに作っています —— 今日ほんとうに使えるのは、この無料ツールです。",
       forWhoTitle: "これは何で、誰のためのものか",
       forWhoLead: "これはダウンロードして使う完成済みのアプリではなく、<strong>AI でチェックリストを生成する</strong>ための仕組みです。必要なものを AI（ChatGPT や Claude など）に伝えるか、自分でファイルを編集すると、ダブルクリックで使える HTML チェックリストが出来上がります。ツール自体に AI は入っておらず、あなた自身の AI を使ってチェックリストを作ります。<br><br>手作業で並べ替え続ける ToDo アプリ(Microsoft To Do、Todoist など)というより、カーナビに近いものです。「生きている」と呼ぶのは、あなたの必要に合わせてルートを組み直してくれるからで、すべての手順を自分で並べるからではありません。だから、自分は計画が苦手だと思っている人や、いつも手順を抜かしてしまう人に向いています：やりたいことを伝えれば、あとはたどるだけの道筋を引いてくれます。",
       forForTitle: "向いているのは",
@@ -1024,15 +1178,24 @@
       if (c[key] != null) el.innerHTML = c[key];
     });
 
-    // feature list
+    // list-typed keys — feature list uses an em-dash mark, the roadmap
+    // goals list uses a tabular 01/02/… index. Markup differs per target.
     document.querySelectorAll("[data-i18n-list]").forEach(function (el) {
       var key = el.getAttribute("data-i18n-list");
       var items = c[key];
       if (!Array.isArray(items)) return;
-      el.innerHTML = items.map(function (txt) {
-        return '<li><span class="f-mark" aria-hidden="true">—</span>' +
-               '<span class="f-text">' + txt + "</span></li>";
-      }).join("");
+      if (el.classList.contains("rm-list")) {
+        el.innerHTML = items.map(function (txt, i) {
+          var n = ("0" + (i + 1)).slice(-2);
+          return '<li><span class="rm-n" aria-hidden="true">' + n + '</span>' +
+                 '<span class="rm-goal">' + txt + "</span></li>";
+        }).join("");
+      } else {
+        el.innerHTML = items.map(function (txt) {
+          return '<li><span class="f-mark" aria-hidden="true">—</span>' +
+                 '<span class="f-text">' + txt + "</span></li>";
+        }).join("");
+      }
     });
 
     // language-aware images (demo gif + screenshots) — swap src to this lang's file
