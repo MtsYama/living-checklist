@@ -456,9 +456,14 @@
     content: "$ "; color: var(--accent); opacity: 0.7;
   }
   .usage-body .install-note { display: block; margin-top: 0.2rem; }
-  .usage-body .install-more { display: block; margin-top: 0.5rem; font-size: 0.9rem; }
-  .usage-body .install-more a { text-decoration: none; }
-  .usage-body .install-more a:hover { text-decoration: underline; }
+  .usage-body .install-more { display: block; margin-top: 0.75rem; font-size: 0.9rem; }
+  .usage-body .install-more a {
+    color: var(--accent); font-weight: 600;
+    text-decoration: underline; text-decoration-thickness: 1px;
+    text-underline-offset: 3px; text-decoration-color: rgba(170, 144, 104, 0.5);
+    transition: text-decoration-color 0.15s ease;
+  }
+  .usage-body .install-more a:hover { text-decoration-color: var(--accent); }
 
   /* ---------- example callout ---------- */
   .example {
@@ -591,7 +596,13 @@
           <pre class="install"><code><span class="cmd-line">/plugin marketplace add MtsYama/living-checklist</span><span class="cmd-line">/plugin install living-checklist@living-checklist</span></code></pre>
           <p data-i18n-html="use2Invoke"></p>
           <p class="install-note" data-i18n-html="use2Clone"></p>
-          <p class="install-more"><a href="https://github.com/MtsYama/living-checklist#using-it-with-other-tools--models" target="_blank" rel="noopener" data-i18n-html="use2More"></a></p>
+          <p class="install-more"><a href="https://github.com/MtsYama/living-checklist#using-it-with-other-tools--models" target="_blank" rel="noopener"
+             data-href-en="https://github.com/MtsYama/living-checklist#using-it-with-other-tools--models"
+             data-href-fr="https://github.com/MtsYama/living-checklist/blob/main/README.fr.md#lutiliser-avec-dautres-outils--modèles"
+             data-href-zh-Hans="https://github.com/MtsYama/living-checklist/blob/main/README.zh.md#配合其它工具--模型用"
+             data-href-zh-Hant="https://github.com/MtsYama/living-checklist/blob/main/README.zh-Hant.md#搭配其它工具--模型用"
+             data-href-ja="https://github.com/MtsYama/living-checklist/blob/main/README.ja.md#ほかのツール--モデルで使う"
+             data-i18n-html="use2More"></a></p>
         </div>
       </article>
       <article class="usage-card">
@@ -761,9 +772,9 @@
       rmNowHeadline: "The free single-file tool you can use right now",
       rmNowNote: "Bring your own AI, generate a checklist, double-click the file. Progress saves itself, steps collapse as you go. <strong>It works today, and it always will</strong> — no account, no setup, nothing to wait for.",
       rmNowList: [
-        "<strong>One HTML file that builds the page for you</strong> — it lays out the checklist structure, the steps and the table, all in a single file. Double-click it and it runs in your browser. Nothing to install.",
-        "<strong>No AI inside — you bring your own</strong> — and that's on purpose. The file gives you the page and the structure; your own AI (ChatGPT, Claude, anything) fills in the content, or you type it in by hand. You stay in control of what goes in.",
-        "<strong>Handy if web pages are a chore</strong> — for anyone who finds building form- or table-shaped pages a hassle, or for makers and designers who just want a clean, structured page fast, without coding one from scratch."
+        "<strong>A skill, not an app.</strong> — it's one self-contained HTML file — a small skill/plugin, not a standalone product. You generate it with your AI, or build it by hand; either way you open the finished file in your browser. The file gives you the structure, not the words.",
+        "<strong>No AI inside — it runs on yours.</strong> — being a skill/plugin, it has no AI of its own: your AI (ChatGPT, Claude) writes and fills the checklist, or, if you're not using AI, you supply the clear, complete content yourself. <em>(A skill is an instruction file an AI tool follows; a plugin is a small add-on you drop into that tool.)</em>",
+        "<strong>A reference template — especially if you code but UI/UX isn't your strength.</strong> — long form-style pages, to-do lists, sign-up flows, checklist pages, are easy to build badly. This one already bakes in the polish most embedded form pages miss, so it doubles as a clean sample you can copy and adapt."
       ],
       rmNextKicker: "Next",
       rmTagDev: "In development",
@@ -847,9 +858,9 @@
       rmNowHeadline: "L'outil gratuit en fichier unique, utilisable dès maintenant",
       rmNowNote: "Apportez votre IA, générez une checklist, double-cliquez le fichier. La progression se sauvegarde toute seule, les étapes se replient au fil de l'eau. <strong>Ça marche aujourd'hui, et ça marchera toujours</strong> — sans compte, sans installation, rien à attendre.",
       rmNowList: [
-        "<strong>Un seul fichier HTML qui construit la page pour vous</strong> — il met en place la structure de la checklist, les étapes et le tableau, le tout dans un fichier unique. Double-cliquez et il s'ouvre dans votre navigateur. Rien à installer.",
-        "<strong>Aucune IA à l'intérieur — vous apportez la vôtre</strong> — et c'est voulu. Le fichier vous donne la page et la structure ; votre propre IA (ChatGPT, Claude, n'importe laquelle) en remplit le contenu, ou vous le saisissez à la main. Vous gardez la main sur ce qui entre.",
-        "<strong>Pratique si les pages web vous pèsent</strong> — pour quiconque trouve fastidieux de bâtir des pages en formulaire ou en tableau, ou pour les créateurs et designers qui veulent juste une page propre et structurée, vite, sans la coder de zéro."
+        "<strong>Un skill, pas une appli.</strong> — c'est un seul fichier HTML autonome — un petit skill/plugin, pas un produit indépendant. Vous le générez avec votre IA, ou le construisez à la main ; dans les deux cas, vous ouvrez le fichier fini dans votre navigateur. Le fichier vous donne la structure, pas les mots.",
+        "<strong>Aucune IA à l'intérieur — il tourne sur la vôtre.</strong> — étant un skill/plugin, il n'a pas d'IA propre : votre IA (ChatGPT, Claude) rédige et remplit la checklist, ou, si vous n'utilisez pas d'IA, vous fournissez vous-même un contenu clair et complet. <em>(Un skill est un fichier d'instructions qu'un outil d'IA suit ; un plugin est un petit module que vous ajoutez à cet outil.)</em>",
+        "<strong>Un modèle de référence — surtout si vous codez mais que l'UI/UX n'est pas votre point fort.</strong> — les longues pages en formulaire, listes de tâches, parcours d'inscription, pages de checklist, sont faciles à mal construire. Celle-ci intègre déjà les finitions que la plupart des pages de formulaire embarquées négligent, ce qui en fait aussi un échantillon propre que vous pouvez copier et adapter."
       ],
       rmNextKicker: "La suite",
       rmTagDev: "En développement",
@@ -933,9 +944,9 @@
       rmNowHeadline: "免费的单文件工具，现在就能上手",
       rmNowNote: "用你自己的 AI 生成一份清单，双击打开文件。进度自动留痕，做到哪一步就地折叠。<strong>今天能用，以后也一直能用</strong> —— 不用注册、不用安装，什么都不用等。",
       rmNowList: [
-        "<strong>一个 HTML 文件，替你把页面搭好</strong> —— 清单的结构、步骤、表格，全在这一个文件里排好了。双击就在浏览器里跑起来，什么都不用装。",
-        "<strong>里面没有 AI，你自带 AI</strong> —— 这是有意为之。文件给你页面和结构，内容由你自己的 AI（ChatGPT、Claude，随便哪个）来填，或者你自己手敲。装什么进去，你说了算。",
-        "<strong>觉得做网页麻烦的人尤其顺手</strong> —— 给那些觉得搭表单、做表格页面很烦的人，或是想要一张干净、有条理的页面、又不想从零写代码的创作者和设计师。"
+        "<strong>是个 skill，不是 app。</strong> —— 它就是一个自包含的 HTML 文件，一个小 skill / 插件，不是独立产品。你用自己的 AI 生成它，或者手动做；最后在浏览器里打开成品。它给你的是结构，不是内容文字。",
+        "<strong>里面没有 AI，靠你的 AI 跑。</strong> —— 因为它是 skill / 插件，本身不带 AI：由你自己的 AI（ChatGPT、Claude）来写、来填这份清单；如果你不用 AI，就得自己提供清晰、完整的内容。<em>（skill = 一份给 AI 工具照着执行的说明；插件 = 装进那个工具里的一个小扩展。）</em>",
+        "<strong>一个参考模板 —— 尤其适合会写代码、但 UI/UX 是苦手的人。</strong> —— 那种长表单类页面，待办、注册流程、清单页，很容易做得糟。这个已经把大多数内嵌表单页会忽略的优化都做进去了，所以它也是个干净的样板，可以照着抄、改成你自己的。"
       ],
       rmNextKicker: "接下来",
       rmTagDev: "开发中",
@@ -1019,9 +1030,9 @@
       rmNowHeadline: "免費的單檔案工具，現在就能上手",
       rmNowNote: "用你自己的 AI 生成一份清單，雙擊打開檔案。進度自動留痕，做到哪一步就地摺疊。<strong>今天能用，以後也一直能用</strong> —— 不用註冊、不用安裝，什麼都不用等。",
       rmNowList: [
-        "<strong>一個 HTML 檔案，替你把頁面搭好</strong> —— 清單的結構、步驟、表格，全在這一個檔案裡排好了。雙擊就在瀏覽器裡跑起來，什麼都不用裝。",
-        "<strong>裡面沒有 AI，你自帶 AI</strong> —— 這是有意為之。檔案給你頁面和結構，內容由你自己的 AI（ChatGPT、Claude，隨便哪個）來填，或者你自己手敲。裝什麼進去，你說了算。",
-        "<strong>覺得做網頁麻煩的人尤其順手</strong> —— 給那些覺得搭表單、做表格頁面很煩的人，或是想要一張乾淨、有條理的頁面、又不想從零寫程式碼的創作者和設計師。"
+        "<strong>是個 skill，不是 app。</strong> —— 它就是一個自包含的 HTML 檔案，一個小 skill / 外掛，不是獨立產品。你用自己的 AI 生成它，或者手動做；最後在瀏覽器裡打開成品。它給你的是結構，不是內容文字。",
+        "<strong>裡面沒有 AI，靠你的 AI 跑。</strong> —— 因為它是 skill / 外掛，本身不帶 AI：由你自己的 AI（ChatGPT、Claude）來寫、來填這份清單；如果你不用 AI，就得自己提供清晰、完整的內容。<em>（skill = 一份給 AI 工具照著執行的說明；外掛 = 裝進那個工具裡的一個小擴充。）</em>",
+        "<strong>一個參考範本 —— 尤其適合會寫程式碼、但 UI/UX 是弱項的人。</strong> —— 那種長表單類頁面，待辦、註冊流程、清單頁，很容易做得糟。這個已經把大多數內嵌表單頁會忽略的優化都做進去了，所以它也是個乾淨的範本，可以照著抄、改成你自己的。"
       ],
       rmNextKicker: "接下來",
       rmTagDev: "開發中",
@@ -1105,9 +1116,9 @@
       rmNowHeadline: "無料の単一ファイルツール、いますぐ使えます",
       rmNowNote: "あなた自身の AI でチェックリストを生成し、ファイルをダブルクリック。進捗はひとりでに保存され、進めたステップはその場で折りたたまれます。<strong>今日も使えて、これからもずっと使えます</strong> —— アカウントも、インストールも、待ち時間も要りません。",
       rmNowList: [
-        "<strong>ページを組み立てる、一つの HTML ファイル</strong> —— チェックリストの構造も、ステップも、表も、この一つのファイルに収まっています。ダブルクリックすればブラウザで動き、インストールは要りません。",
-        "<strong>中に AI はありません。AI はあなたが持ち込みます</strong> —— これは意図したものです。ファイルはページと構造を用意し、中身はあなた自身の AI（ChatGPT でも Claude でも）が埋めるか、自分で打ち込みます。何を入れるかは、あなた次第です。",
-        "<strong>ウェブページが面倒な人にこそ便利</strong> —— フォームや表のページを作るのが億劫な人や、きれいで整ったページを手早く欲しいけれど一から書きたくない作り手やデザイナーのために。"
+        "<strong>app ではなく、skill です。</strong> —— これは自己完結した一つの HTML ファイル、小さな skill / プラグインであって、単独の製品ではありません。自分の AI で生成しても、手作業で組んでも、できあがったファイルをブラウザで開くだけです。ファイルが用意するのは構造であって、中身の言葉ではありません。",
+        "<strong>中に AI はなく、あなたの AI で動きます。</strong> —— skill / プラグインなので、それ自体には AI がありません。あなたの AI（ChatGPT、Claude）がチェックリストを書いて埋めるか、AI を使わないなら、明確でそろった内容を自分で用意します。<em>（skill とは AI ツールが従う指示ファイル、プラグインとはそのツールに差し込む小さなアドオンのことです。）</em>",
+        "<strong>参考テンプレート —— コードは書けるけれど UI/UX は得意でない人にこそ。</strong> —— フォーム形式の長いページ、ToDo リスト、登録フロー、チェックリストのページは、雑に作りがちです。これは、多くの組み込みフォームページが見落とす仕上げをすでに織り込んでいるので、そのまま写して手直しできる、きれいな見本にもなります。"
       ],
       rmNextKicker: "これから",
       rmTagDev: "開発中",
