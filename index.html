@@ -309,17 +309,22 @@
   }
   .rm-list li:first-child { border-top: none; padding-top: 0.4rem; }
   .rm-list .rm-n {
-    font-family: var(--font-mono); font-size: 14px;
-    color: var(--accent); font-variant-numeric: tabular-nums;
+    /* quiet subordinate index — distinctly smaller + dimmer than the
+       big section number (.section-no), sits below the sub-heading */
+    font-family: var(--font-mono); font-size: 12px;
+    color: var(--accent); opacity: 0.62;
+    font-variant-numeric: tabular-nums; letter-spacing: 0.02em;
     /* nudge the gold index onto the lead's visual baseline */
-    padding-top: 0.18rem;
+    padding-top: 0.42rem;
   }
   /* stacked lead (sub-heading) + explanation (body), no inline dash */
   .rm-list .rm-item-body { display: flex; flex-direction: column; }
   .rm-list .rm-lead {
     display: block;
     font-family: var(--font-display);
-    font-size: 1.18rem; line-height: 1.3;
+    /* clearly a hierarchy step above the 1rem body — sized so the CJK
+       fallback (Cormorant is Latin-only) is visibly bigger too */
+    font-size: 1.42rem; line-height: 1.28;
     font-weight: 600; color: var(--fg);
     letter-spacing: -0.003em;
   }
