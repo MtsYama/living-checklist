@@ -228,15 +228,6 @@
     margin-bottom: 2.2rem;
   }
   .section-lead strong { color: var(--fg); font-weight: 600; }
-  .forwho-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem 2.6rem; margin-top: 2rem; }
-  @media (max-width: 720px) { .forwho-cols { grid-template-columns: 1fr; } }
-  .forwho-col { border-top: 1px solid var(--rule); padding-top: 1.2rem; }
-  .forwho-col-title { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
-  .forwho-col--no .forwho-col-title { color: var(--fg-3); }
-  .forwho-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
-  .forwho-col li { font-size: 1.06rem; line-height: 1.5; color: var(--fg-2); padding-left: 1.6rem; position: relative; }
-  .forwho-col--yes li::before { content: "\2713"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
-  .forwho-col--no li::before { content: "\2014"; position: absolute; left: 0; color: var(--fg-3); }
 
   /* ---------- feature list ---------- */
   .features { list-style: none; }
@@ -273,16 +264,16 @@
   .features-more .features li:first-child { border-top: none; }
 
   /* ---------- roadmap · Now → Next ---------- */
-  .roadmap { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem 2.4rem; margin-top: 0.4rem; }
-  @media (max-width: 760px) { .roadmap { grid-template-columns: 1fr; } }
+  /* single-column "what's next" — one future-only column, capped for readability */
+  .roadmap { display: grid; grid-template-columns: minmax(0, 1fr); margin-top: 0.4rem; max-width: 64ch; }
   .rm-col { display: flex; flex-direction: column; }
-  /* the "Next" column gets the accent edge + a touch more presence */
+  /* the "Next" column keeps its accent edge as a left rail framing the whole block */
   .rm-col--next {
     border-left: 2px solid var(--accent);
     padding-left: clamp(1.2rem, 3vw, 1.8rem);
   }
   @media (max-width: 760px) {
-    .rm-col--next { border-left: none; border-top: 1px solid var(--rule); padding-left: 0; padding-top: 1.6rem; }
+    .rm-col--next { border-left: 2px solid var(--accent); padding-left: 1.2rem; }
   }
   .rm-kicker {
     display: inline-flex; align-items: center; gap: 0.6rem;
@@ -407,14 +398,17 @@
   /* ---------- usage cards · bento grid ---------- */
   .usage {
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
+    /* minmax(0,…) lets each track shrink below its content min-width, so a long
+       unbreakable line (the install <pre>) scrolls inside its own card instead of
+       blowing the grid track — and the card edge — past the section content box */
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
     grid-auto-rows: 1fr;
     gap: 1.2rem;
   }
   /* big left feature = the Claude-skill card, spans both rows */
   .usage-feature { grid-row: 1 / span 2; }
   @media (max-width: 720px) {
-    .usage { grid-template-columns: 1fr; }
+    .usage { grid-template-columns: minmax(0, 1fr); }
     .usage-feature { grid-row: auto; }
   }
   .usage-card {
@@ -549,16 +543,7 @@
       <h2 class="section-title" data-i18n="forWhoTitle"></h2>
     </div>
     <p class="section-lead" data-i18n-html="forWhoLead" style="max-width:64ch;"></p>
-    <div class="forwho-cols">
-      <div class="forwho-col forwho-col--yes">
-        <h3 class="forwho-col-title" data-i18n="forForTitle"></h3>
-        <div data-i18n-html="forForBody"></div>
-      </div>
-      <div class="forwho-col forwho-col--no">
-        <h3 class="forwho-col-title" data-i18n="forNotTitle"></h3>
-        <div data-i18n-html="forNotBody"></div>
-      </div>
-    </div>
+    <ul class="rm-list" data-i18n-list="rmNowList"></ul>
   </section>
 
   <!-- WORKED EXAMPLE · value first -->
@@ -639,18 +624,8 @@
     </div>
     <p class="section-lead" data-i18n="roadmapBody" style="max-width:64ch;"></p>
     <div class="roadmap">
-      <div class="rm-col rm-col--now">
-        <span class="rm-kicker">
-          <span data-i18n="rmNowKicker"></span>
-          <span class="rm-tag rm-tag--live" data-i18n="rmTagLive"></span>
-        </span>
-        <h3 class="rm-headline" data-i18n="rmNowHeadline"></h3>
-        <p class="rm-note" data-i18n-html="rmNowNote"></p>
-        <ul class="rm-list" data-i18n-list="rmNowList"></ul>
-      </div>
       <div class="rm-col rm-col--next">
         <span class="rm-kicker">
-          <span data-i18n="rmNextKicker"></span>
           <span class="rm-tag rm-tag--dev" data-i18n="rmTagDev"></span>
         </span>
         <h3 class="rm-headline" data-i18n="rmNextHeadline"></h3>
@@ -765,18 +740,13 @@
       title: "Living Checklist",
       sub: "Step by step HTML",
       lead: "Love making checklists but always find them clunky? They get lost, the checked stuff piles into a mess, and keeping up means scrolling back and forth. This makes a checklist that's actually alive: your progress saves itself (close it, reopen it, it's all there), everything is one tap to copy, and you can ask an AI right inside it.",
-      roadmapTitle: "Where this is going",
+      roadmapTitle: "What's next",
       roadmapBody: "The single-file tool is real and usable today. The bigger idea is a place that takes the tinkering away — here's the plan, in the open.",
-      rmNowKicker: "Now",
-      rmTagLive: "Available today",
-      rmNowHeadline: "The free single-file tool you can use right now",
-      rmNowNote: "Bring your own AI, generate a checklist, double-click the file. Progress saves itself, steps collapse as you go. <strong>It works today, and it always will</strong> — no account, no setup, nothing to wait for.",
       rmNowList: [
-        "<strong>A skill, not an app.</strong> — it's one self-contained HTML file — a small skill/plugin, not a standalone product. You generate it with your AI, or build it by hand; either way you open the finished file in your browser. The file gives you the structure, not the words.",
-        "<strong>No AI inside — it runs on yours.</strong> — being a skill/plugin, it has no AI of its own: your AI (ChatGPT, Claude) writes and fills the checklist, or, if you're not using AI, you supply the clear, complete content yourself. <em>(A skill is an instruction file an AI tool follows; a plugin is a small add-on you drop into that tool.)</em>",
-        "<strong>A reference template — especially if you code but UI/UX isn't your strength.</strong> — long form-style pages, to-do lists, sign-up flows, checklist pages, are easy to build badly. This one already bakes in the polish most embedded form pages miss, so it doubles as a clean sample you can copy and adapt."
+        "<strong>A skill, not an app</strong> — it's one self-contained HTML file, a small skill/plugin, not a standalone product. You generate it with your AI, or build it by hand; either way you open the finished file in your browser. The file gives you the structure, not the words.",
+        "<strong>No AI inside</strong> — it runs on yours: being a skill/plugin, it has no AI of its own, so your AI (ChatGPT, Claude) writes and fills the checklist, or, if you're not using AI, you supply the clear, complete content yourself. <em>(A skill is an instruction file an AI tool follows; a plugin is a small add-on you drop into that tool.)</em>",
+        "<strong>A reference template</strong> — especially if you code but UI/UX isn't your strength: long form-style pages, to-do lists, sign-up flows, checklist pages, are easy to build badly. This one already bakes in the polish most embedded form pages miss, so it doubles as a clean sample you can copy and adapt."
       ],
-      rmNextKicker: "Next",
       rmTagDev: "In development",
       rmNextHeadline: "A hosted app that just works",
       rmGoals: [
@@ -786,12 +756,8 @@
       ],
       rmPromise: "<strong>Open core, for good.</strong> The free single-file tool stays free and open source forever. The hosted app is a paid layer on top — so the thing you can use today never goes away.",
       rmHonest: "↳ The hosted app is on the roadmap, not out yet. Building it in the open — the free tool is what's real today.",
-      forWhoTitle: "What this is, and who it's for",
+      forWhoTitle: "What it is",
       forWhoLead: "It's not a finished app you download. It's a way to <strong>generate a checklist with AI</strong>: tell an AI (ChatGPT, Claude, and the like) what you need, or edit the file yourself, and out comes an HTML checklist you double-click to use. The tool itself has no AI inside; it runs on your own AI to build the checklist.<br><br>It's closer to a GPS than the to-do apps you know (Microsoft To Do, Todoist, and the like), which list your tasks and leave the sorting to you. We call it <em>living</em> because it re-plans the route around what you need, not because you sort every step yourself. So it's for people who worry they're bad at planning, or always miss a step: tell it what you're doing, and it lays out a path you can just follow.",
-      forForTitle: "It's for you if",
-      forForBody: "<ul><li>you're already comfortable using AI;</li><li>you like checklists and want AI to spin one up for you often;</li><li>the checklist tools out there don't quite feel right, and you want to try something else.</li></ul>",
-      forNotTitle: "Not for you yet if",
-      forNotBody: "<ul><li>you want a polished, ready-made AI app you just install and use;</li><li>you want it wired into Notion or other tools;</li><li>none of that exists yet (it's on the roadmap).</li></ul>",
       ctaRepo: "View on GitHub",
       ctaTemplate: "Try the template",
       ctaExample: "See a real example",
@@ -851,18 +817,13 @@
       title: "Living Checklist",
       sub: "Step by step HTML",
       lead: "Vous aimez faire des listes mais elles vous semblent toujours peu pratiques ? On les perd de vue, les éléments cochés s'entassent en désordre, et suivre l'avancement oblige à remonter sans cesse. Celle-ci est vraiment vivante : la progression se sauvegarde toute seule (fermez, rouvrez, tout est là), tout se copie en un geste, et vous pouvez interroger une IA directement dedans.",
-      roadmapTitle: "Là où tout cela va",
+      roadmapTitle: "La suite",
       roadmapBody: "L'outil en fichier unique est bien réel et utilisable aujourd'hui. L'idée plus large : un endroit qui vous épargne tout le bricolage — voici le plan, à découvert.",
-      rmNowKicker: "Aujourd'hui",
-      rmTagLive: "Disponible",
-      rmNowHeadline: "L'outil gratuit en fichier unique, utilisable dès maintenant",
-      rmNowNote: "Apportez votre IA, générez une checklist, double-cliquez le fichier. La progression se sauvegarde toute seule, les étapes se replient au fil de l'eau. <strong>Ça marche aujourd'hui, et ça marchera toujours</strong> — sans compte, sans installation, rien à attendre.",
       rmNowList: [
-        "<strong>Un skill, pas une appli.</strong> — c'est un seul fichier HTML autonome — un petit skill/plugin, pas un produit indépendant. Vous le générez avec votre IA, ou le construisez à la main ; dans les deux cas, vous ouvrez le fichier fini dans votre navigateur. Le fichier vous donne la structure, pas les mots.",
-        "<strong>Aucune IA à l'intérieur — il tourne sur la vôtre.</strong> — étant un skill/plugin, il n'a pas d'IA propre : votre IA (ChatGPT, Claude) rédige et remplit la checklist, ou, si vous n'utilisez pas d'IA, vous fournissez vous-même un contenu clair et complet. <em>(Un skill est un fichier d'instructions qu'un outil d'IA suit ; un plugin est un petit module que vous ajoutez à cet outil.)</em>",
-        "<strong>Un modèle de référence — surtout si vous codez mais que l'UI/UX n'est pas votre point fort.</strong> — les longues pages en formulaire, listes de tâches, parcours d'inscription, pages de checklist, sont faciles à mal construire. Celle-ci intègre déjà les finitions que la plupart des pages de formulaire embarquées négligent, ce qui en fait aussi un échantillon propre que vous pouvez copier et adapter."
+        "<strong>Un skill, pas une appli</strong> — c'est un seul fichier HTML autonome, un petit skill/plugin, pas un produit indépendant. Vous le générez avec votre IA, ou le construisez à la main ; dans les deux cas, vous ouvrez le fichier fini dans votre navigateur. Le fichier vous donne la structure, pas les mots.",
+        "<strong>Aucune IA à l'intérieur</strong> — il tourne sur la vôtre : étant un skill/plugin, il n'a pas d'IA propre, donc votre IA (ChatGPT, Claude) rédige et remplit la checklist, ou, si vous n'utilisez pas d'IA, vous fournissez vous-même un contenu clair et complet. <em>(Un skill est un fichier d'instructions qu'un outil d'IA suit ; un plugin est un petit module que vous ajoutez à cet outil.)</em>",
+        "<strong>Un modèle de référence</strong> — surtout si vous codez mais que l'UI/UX n'est pas votre point fort : les longues pages en formulaire, listes de tâches, parcours d'inscription, pages de checklist, sont faciles à mal construire. Celle-ci intègre déjà les finitions que la plupart des pages de formulaire embarquées négligent, ce qui en fait aussi un échantillon propre que vous pouvez copier et adapter."
       ],
-      rmNextKicker: "La suite",
       rmTagDev: "En développement",
       rmNextHeadline: "Une appli hébergée qui marche, tout simplement",
       rmGoals: [
@@ -872,13 +833,9 @@
       ],
       rmPromise: "<strong>Open core, pour de bon.</strong> L'outil gratuit en fichier unique reste gratuit et open source pour toujours. L'appli hébergée est une couche payante par-dessus — ce que vous utilisez aujourd'hui ne disparaîtra jamais.",
       rmHonest: "↳ L'appli hébergée est sur la feuille de route, pas encore sortie. On la construit à découvert — l'outil gratuit, lui, est bien réel aujourd'hui.",
-      forWhoTitle: "Ce que c'est, et à qui ça s'adresse",
+      forWhoTitle: "Ce que c'est",
       forWhoLead: "Ce n'est pas une appli finie que vous téléchargez. C'est une façon de <strong>générer une checklist avec l'IA</strong> : décrivez ce qu'il vous faut à une IA (ChatGPT, Claude et compagnie), ou modifiez le fichier vous-même, et il en sort une checklist HTML qu'il suffit de double-cliquer pour utiliser. L'outil lui-même n'a aucune IA à l'intérieur ; il s'appuie sur votre propre IA pour construire la checklist.<br><br>C'est plus proche d'un GPS que des applis de tâches que vous connaissez (Microsoft To Do, Todoist et compagnie), qui listent vos tâches et vous en laissent le tri. On la dit <em>vivante</em> parce qu'elle recalcule l'itinéraire selon vos besoins, pas parce que vous triez chaque étape vous-même. Elle est donc faite pour ceux qui se trouvent mauvais en organisation, ou qui oublient toujours une étape : dites-lui ce que vous faites, et elle vous trace un chemin que vous n'avez plus qu'à suivre.",
-      forForTitle: "C'est pour vous si",
-      forForBody: "<ul><li>vous êtes déjà à l'aise avec l'IA ;</li><li>vous aimez les checklists et vous voulez que l'IA vous en monte une souvent ;</li><li>les outils de checklist existants ne vous conviennent pas vraiment et vous voulez essayer autre chose.</li></ul>",
-      forNotTitle: "Pas encore pour vous si",
-      forNotBody: "<ul><li>vous voulez une appli d'IA soignée, prête à l'emploi, à simplement installer et utiliser ;</li><li>vous la voulez reliée à Notion ou à d'autres outils ;</li><li>rien de tout cela n'existe encore (c'est sur la feuille de route).</li></ul>",
-      ctaRepo: "Voir sur GitHub",
+      ctaRepo:"Voir sur GitHub",
       ctaTemplate: "Essayer le modèle",
       ctaExample: "Voir un cas réel",
 
@@ -937,18 +894,13 @@
       title: "活页清单",
       sub: "Step by step HTML",
       lead: "喜欢列清单、又老嫌它们不顺手?回头找不着、勾完乱糟糟、想跟进还得来回翻……这个把清单做「活」了：进度自动留痕（关了再开还在）、内容随手复制粘贴，有问题还能直接在里面问 AI。",
-      roadmapTitle: "它要走向哪里",
+      roadmapTitle: "接下来",
       roadmapBody: "单文件的工具今天就是真的、能用的。更大的设想，是做一个把「折腾」全省掉的地方 —— 计划摆在这儿，公开来做。",
-      rmNowKicker: "现在",
-      rmTagLive: "今天就能用",
-      rmNowHeadline: "免费的单文件工具，现在就能上手",
-      rmNowNote: "用你自己的 AI 生成一份清单，双击打开文件。进度自动留痕，做到哪一步就地折叠。<strong>今天能用，以后也一直能用</strong> —— 不用注册、不用安装，什么都不用等。",
       rmNowList: [
-        "<strong>是个 skill，不是 app。</strong> —— 它就是一个自包含的 HTML 文件，一个小 skill / 插件，不是独立产品。你用自己的 AI 生成它，或者手动做；最后在浏览器里打开成品。它给你的是结构，不是内容文字。",
-        "<strong>里面没有 AI，靠你的 AI 跑。</strong> —— 因为它是 skill / 插件，本身不带 AI：由你自己的 AI（ChatGPT、Claude）来写、来填这份清单；如果你不用 AI，就得自己提供清晰、完整的内容。<em>（skill = 一份给 AI 工具照着执行的说明；插件 = 装进那个工具里的一个小扩展。）</em>",
-        "<strong>一个参考模板 —— 尤其适合会写代码、但 UI/UX 是苦手的人。</strong> —— 那种长表单类页面，待办、注册流程、清单页，很容易做得糟。这个已经把大多数内嵌表单页会忽略的优化都做进去了，所以它也是个干净的样板，可以照着抄、改成你自己的。"
+        "<strong>是个 skill，不是 app</strong> —— 它就是一个自包含的 HTML 文件，一个小 skill / 插件，不是独立产品。你用自己的 AI 生成它，或者手动做；最后在浏览器里打开成品。它给你的是结构，不是内容文字。",
+        "<strong>里面没有 AI</strong> —— 靠你自己的 AI 跑：因为它是 skill / 插件，本身不带 AI，由你的 AI（ChatGPT、Claude）来写、来填这份清单；如果你不用 AI，就得自己提供清晰、完整的内容。<em>（skill = 一份给 AI 工具照着执行的说明；插件 = 装进那个工具里的一个小扩展。）</em>",
+        "<strong>一个参考模板</strong> —— 尤其适合会写代码、但 UI/UX 是苦手的人：那种长表单类页面，待办、注册流程、清单页，很容易做得糟。这个已经把大多数内嵌表单页会忽略的优化都做进去了，所以它也是个干净的样板，可以照着抄、改成你自己的。"
       ],
-      rmNextKicker: "接下来",
       rmTagDev: "开发中",
       rmNextHeadline: "一个开箱即用的在线 App",
       rmGoals: [
@@ -958,13 +910,9 @@
       ],
       rmPromise: "<strong>开放内核，长期不变。</strong>免费的单文件工具永远免费、永远开源。在线 App 是在它之上的付费层 —— 所以你今天能用的这个东西，永远不会消失。",
       rmHonest: "↳ 在线 App 还在未来规划里，尚未上线。我们公开地把它做出来 —— 今天真正能用的，是这个免费工具。",
-      forWhoTitle: "这到底是什么、给谁用",
+      forWhoTitle: "这是什么",
       forWhoLead: "它不是一个下载就能用的成品 App，而是一种<strong>用 AI 生成清单</strong>的方式：你把需求说给 AI（ChatGPT、Claude 这些）、或者自己改一下文件，它就产出一个 HTML 清单，双击就能用。工具本身不带 AI，靠你自己的 AI 来把清单生成出来。<br><br>它更像导航，而不是你熟悉的那些 to-do app(Microsoft To Do、Todoist、滴答清单):那种把事情列出来、排序交给你，它帮你把路线排好、带你照着走。叫它「活」，是因为它能按你的需求把路线重排，不是让你全程手动排。所以它适合那种担心自己不会规划、老漏步骤的人:你说要做什么，它帮你排成一条照着走的路。",
-      forForTitle: "适合你，如果",
-      forForBody: "<ul><li>你已经习惯用 AI；</li><li>你喜欢用清单，想让 AI 常帮你拉一份；</li><li>觉得现有的清单工具用着不顺手，想试点别的。</li></ul>",
-      forNotTitle: "暂时还不适合，如果",
-      forNotBody: "<ul><li>你想要一个装上就能用、完全做好的 AI App / 软件；</li><li>你想要它对接 Notion 等其它工具；</li><li>这些现在还没有（在未来规划里）。</li></ul>",
-      ctaRepo: "在 GitHub 查看",
+      ctaRepo:"在 GitHub 查看",
       ctaTemplate: "试一试模板",
       ctaExample: "看一个真实案例",
 
@@ -1023,18 +971,13 @@
       title: "活頁清單",
       sub: "Step by step HTML",
       lead: "喜歡列清單、又老嫌它們不順手?回頭找不著、勾完亂糟糟、想跟進還得來回翻……這個把清單做「活」了：進度自動留痕（關了再開還在）、內容隨手複製貼上，有問題還能直接在裡面問 AI。",
-      roadmapTitle: "它要走向哪裡",
+      roadmapTitle: "接下來",
       roadmapBody: "單檔案的工具今天就是真的、能用的。更大的設想，是做一個把「折騰」全省掉的地方 —— 計畫擺在這兒，公開來做。",
-      rmNowKicker: "現在",
-      rmTagLive: "今天就能用",
-      rmNowHeadline: "免費的單檔案工具，現在就能上手",
-      rmNowNote: "用你自己的 AI 生成一份清單，雙擊打開檔案。進度自動留痕，做到哪一步就地摺疊。<strong>今天能用，以後也一直能用</strong> —— 不用註冊、不用安裝，什麼都不用等。",
       rmNowList: [
-        "<strong>是個 skill，不是 app。</strong> —— 它就是一個自包含的 HTML 檔案，一個小 skill / 外掛，不是獨立產品。你用自己的 AI 生成它，或者手動做；最後在瀏覽器裡打開成品。它給你的是結構，不是內容文字。",
-        "<strong>裡面沒有 AI，靠你的 AI 跑。</strong> —— 因為它是 skill / 外掛，本身不帶 AI：由你自己的 AI（ChatGPT、Claude）來寫、來填這份清單；如果你不用 AI，就得自己提供清晰、完整的內容。<em>（skill = 一份給 AI 工具照著執行的說明；外掛 = 裝進那個工具裡的一個小擴充。）</em>",
-        "<strong>一個參考範本 —— 尤其適合會寫程式碼、但 UI/UX 是弱項的人。</strong> —— 那種長表單類頁面，待辦、註冊流程、清單頁，很容易做得糟。這個已經把大多數內嵌表單頁會忽略的優化都做進去了，所以它也是個乾淨的範本，可以照著抄、改成你自己的。"
+        "<strong>是個 skill，不是 app</strong> —— 它就是一個自包含的 HTML 檔案，一個小 skill / 外掛，不是獨立產品。你用自己的 AI 生成它，或者手動做；最後在瀏覽器裡打開成品。它給你的是結構，不是內容文字。",
+        "<strong>裡面沒有 AI</strong> —— 靠你自己的 AI 跑：因為它是 skill / 外掛，本身不帶 AI，由你的 AI（ChatGPT、Claude）來寫、來填這份清單；如果你不用 AI，就得自己提供清晰、完整的內容。<em>（skill = 一份給 AI 工具照著執行的說明；外掛 = 裝進那個工具裡的一個小擴充。）</em>",
+        "<strong>一個參考範本</strong> —— 尤其適合會寫程式碼、但 UI/UX 是弱項的人：那種長表單類頁面，待辦、註冊流程、清單頁，很容易做得糟。這個已經把大多數內嵌表單頁會忽略的優化都做進去了，所以它也是個乾淨的範本，可以照著抄、改成你自己的。"
       ],
-      rmNextKicker: "接下來",
       rmTagDev: "開發中",
       rmNextHeadline: "一個開箱即用的線上 App",
       rmGoals: [
@@ -1044,13 +987,9 @@
       ],
       rmPromise: "<strong>開放內核，長期不變。</strong>免費的單檔案工具永遠免費、永遠開源。線上 App 是在它之上的付費層 —— 所以你今天能用的這個東西，永遠不會消失。",
       rmHonest: "↳ 線上 App 還在未來規劃裡，尚未上線。我們公開地把它做出來 —— 今天真正能用的，是這個免費工具。",
-      forWhoTitle: "這到底是什麼、給誰用",
+      forWhoTitle: "這是什麼",
       forWhoLead: "它不是一個下載就能用的成品 App，而是一種<strong>用 AI 生成清單</strong>的方式：你把需求說給 AI（ChatGPT、Claude 這些）、或者自己改一下檔案，它就產出一個 HTML 清單，雙擊就能用。工具本身不帶 AI，靠你自己的 AI 來把清單生成出來。<br><br>它更像導航，而不是你熟悉的那些 to-do app(Microsoft To Do、Todoist、滴答清單):那種把事情列出來、排序交給你，它幫你把路線排好、帶你照著走。叫它「活」，是因為它能按你的需求把路線重排，不是讓你全程手動排。所以它適合那種擔心自己不會規劃、老漏步驟的人:你說要做什麼，它幫你排成一條照著走的路。",
-      forForTitle: "適合你，如果",
-      forForBody: "<ul><li>你已經習慣用 AI；</li><li>你喜歡用清單，想讓 AI 常幫你拉一份；</li><li>覺得現有的清單工具用著不順手，想試點別的。</li></ul>",
-      forNotTitle: "暫時還不適合，如果",
-      forNotBody: "<ul><li>你想要一個裝上就能用、完全做好的 AI App / 軟體；</li><li>你想要它對接 Notion 等其它工具；</li><li>這些現在還沒有（在未來規劃裡）。</li></ul>",
-      ctaRepo: "在 GitHub 查看",
+      ctaRepo:"在 GitHub 查看",
       ctaTemplate: "試一試模板",
       ctaExample: "看一個真實案例",
 
@@ -1109,18 +1048,13 @@
       title: "活页清单",
       sub: "Step by step HTML",
       lead: "チェックリストは好きだけど、いつも使いにくいと感じませんか?どこにあるか分からなくなる、チェックした項目がごちゃつく、追うのに行ったり来たり。これは本当に「生きた」リストです：進捗はひとりでに保存され（閉じて開き直してもそのまま）、何でもワンタップでコピーでき、リストの中で直接 AI に質問できます。",
-      roadmapTitle: "これから向かう先",
+      roadmapTitle: "これから",
       roadmapBody: "単一ファイルのツールは、今このとおり本物で、ちゃんと使えます。その先に描いているのは、「手間」をまるごと省ける場所。計画は、こうしてオープンに進めます。",
-      rmNowKicker: "いま",
-      rmTagLive: "今日から使える",
-      rmNowHeadline: "無料の単一ファイルツール、いますぐ使えます",
-      rmNowNote: "あなた自身の AI でチェックリストを生成し、ファイルをダブルクリック。進捗はひとりでに保存され、進めたステップはその場で折りたたまれます。<strong>今日も使えて、これからもずっと使えます</strong> —— アカウントも、インストールも、待ち時間も要りません。",
       rmNowList: [
-        "<strong>app ではなく、skill です。</strong> —— これは自己完結した一つの HTML ファイル、小さな skill / プラグインであって、単独の製品ではありません。自分の AI で生成しても、手作業で組んでも、できあがったファイルをブラウザで開くだけです。ファイルが用意するのは構造であって、中身の言葉ではありません。",
-        "<strong>中に AI はなく、あなたの AI で動きます。</strong> —— skill / プラグインなので、それ自体には AI がありません。あなたの AI（ChatGPT、Claude）がチェックリストを書いて埋めるか、AI を使わないなら、明確でそろった内容を自分で用意します。<em>（skill とは AI ツールが従う指示ファイル、プラグインとはそのツールに差し込む小さなアドオンのことです。）</em>",
-        "<strong>参考テンプレート —— コードは書けるけれど UI/UX は得意でない人にこそ。</strong> —— フォーム形式の長いページ、ToDo リスト、登録フロー、チェックリストのページは、雑に作りがちです。これは、多くの組み込みフォームページが見落とす仕上げをすでに織り込んでいるので、そのまま写して手直しできる、きれいな見本にもなります。"
+        "<strong>app ではなく、skill です</strong> —— これは自己完結した一つの HTML ファイル、小さな skill / プラグインであって、単独の製品ではありません。自分の AI で生成しても、手作業で組んでも、できあがったファイルをブラウザで開くだけです。ファイルが用意するのは構造であって、中身の言葉ではありません。",
+        "<strong>中に AI はありません</strong> —— あなたの AI で動きます：skill / プラグインなので、それ自体には AI がなく、あなたの AI（ChatGPT、Claude）がチェックリストを書いて埋めるか、AI を使わないなら、明確でそろった内容を自分で用意します。<em>（skill とは AI ツールが従う指示ファイル、プラグインとはそのツールに差し込む小さなアドオンのことです。）</em>",
+        "<strong>参考テンプレート</strong> —— コードは書けるけれど UI/UX は得意でない人にこそ：フォーム形式の長いページ、ToDo リスト、登録フロー、チェックリストのページは、雑に作りがちです。これは、多くの組み込みフォームページが見落とす仕上げをすでに織り込んでいるので、そのまま写して手直しできる、きれいな見本にもなります。"
       ],
-      rmNextKicker: "これから",
       rmTagDev: "開発中",
       rmNextHeadline: "開いたらすぐ使える、ホスト型アプリ",
       rmGoals: [
@@ -1130,13 +1064,9 @@
       ],
       rmPromise: "<strong>オープンコア、ずっと変わらず。</strong>無料の単一ファイルツールは、いつまでも無料・オープンソースのまま。ホスト型アプリはその上に載る有料レイヤー —— だから今日使えるものが、消えてしまうことはありません。",
       rmHonest: "↳ ホスト型アプリはロードマップ上で、まだ公開していません。オープンに作っています —— 今日ほんとうに使えるのは、この無料ツールです。",
-      forWhoTitle: "これは何で、誰のためのものか",
+      forWhoTitle: "これは何か",
       forWhoLead: "これはダウンロードして使う完成済みのアプリではなく、<strong>AI でチェックリストを生成する</strong>ための仕組みです。必要なものを AI（ChatGPT や Claude など）に伝えるか、自分でファイルを編集すると、ダブルクリックで使える HTML チェックリストが出来上がります。ツール自体に AI は入っておらず、あなた自身の AI を使ってチェックリストを作ります。<br><br>手作業で並べ替え続ける ToDo アプリ(Microsoft To Do、Todoist など)というより、カーナビに近いものです。「生きている」と呼ぶのは、あなたの必要に合わせてルートを組み直してくれるからで、すべての手順を自分で並べるからではありません。だから、自分は計画が苦手だと思っている人や、いつも手順を抜かしてしまう人に向いています：やりたいことを伝えれば、あとはたどるだけの道筋を引いてくれます。",
-      forForTitle: "向いているのは",
-      forForBody: "<ul><li>すでに AI を使い慣れている人；</li><li>チェックリストが好きで、AI によく一つ作ってほしい人；</li><li>今あるチェックリストツールがしっくりこず、別のものを試したい人。</li></ul>",
-      forNotTitle: "まだ向いていないのは",
-      forNotBody: "<ul><li>インストールするだけで使える、洗練された完成済みの AI アプリがほしい人；</li><li>Notion など他のツールと連携させたい人；</li><li>それらはまだ存在しません（ロードマップ上のことです）。</li></ul>",
-      ctaRepo: "GitHub で見る",
+      ctaRepo:"GitHub で見る",
       ctaTemplate: "テンプレートを試す",
       ctaExample: "実例を見る",
 
