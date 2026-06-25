@@ -51,7 +51,7 @@ Il n'est pas lié à Claude. `SKILL.md` est du markdown ordinaire que n'importe 
 
 > Un seul fichier HTML qui transforme n'importe quel processus étape par étape en une checklist vivante qui se sauvegarde toute seule.
 
-*Step by step HTML*, c'est comme ça que je l'appelle habituellement.
+*The Step-by-Step HTML*, c'est comme ça que je l'appelle habituellement.
 
 
 **Living Checklist** est un unique fichier `.html` autonome. CSS intégré, JS intégré, zéro dépendance. Double-cliquez dessus et il s'ouvre directement depuis `file://` dans votre navigateur. Aucune étape de build, aucun serveur, aucune connexion internet nécessaire pour le faire fonctionner.

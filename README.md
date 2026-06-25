@@ -51,7 +51,7 @@ It isn't tied to Claude. `SKILL.md` is plain markdown that any tool can read, so
 
 > A single HTML file that turns any step-by-step process into a living, self-saving checklist.
 
-*Step by step HTML*, which is what I usually call it.
+*The Step-by-Step HTML*, which is what I usually call it.
 
 
 **Living Checklist** is one self-contained `.html` file. Inline CSS, inline JS, zero dependencies. Double-click it and it opens straight from `file://` in your browser. No build step, no server, no internet needed to run it.
