@@ -311,21 +311,30 @@
   .rm-list .rm-n {
     font-family: var(--font-mono); font-size: 14px;
     color: var(--accent); font-variant-numeric: tabular-nums;
+    /* nudge the gold index onto the lead's visual baseline */
+    padding-top: 0.18rem;
   }
-  .rm-list .rm-goal { font-size: 1.06rem; line-height: 1.5; color: var(--fg-2); }
-  .rm-list .rm-goal strong { color: var(--fg); font-weight: 600; }
+  /* stacked lead (sub-heading) + explanation (body), no inline dash */
+  .rm-list .rm-item-body { display: flex; flex-direction: column; }
+  .rm-list .rm-lead {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.18rem; line-height: 1.3;
+    font-weight: 600; color: var(--fg);
+    letter-spacing: -0.003em;
+  }
+  .rm-list .rm-exp {
+    display: block;
+    font-size: 1rem; line-height: 1.55; color: var(--fg-2);
+    margin-top: 0.3rem;
+  }
+  .rm-list .rm-exp em { font-style: italic; color: var(--fg-3); }
   /* open-core promise — the closing reassurance line */
   .rm-promise {
     margin-top: 1.6rem; padding-top: 1.2rem; border-top: 1px solid var(--rule);
     font-size: 1.02rem; line-height: 1.55; color: var(--fg-2);
   }
   .rm-promise strong { color: var(--accent); font-weight: 600; }
-  /* honesty footnote under "Next" */
-  .rm-honest {
-    margin-top: 1.2rem;
-    font-family: var(--font-mono); font-size: 13px; line-height: 1.5;
-    letter-spacing: 0.02em; color: var(--fg-3);
-  }
 
   /* ---------- under-the-hood · screenshots subtitle ---------- */
   .shots-subtitle {
@@ -631,7 +640,6 @@
         <h3 class="rm-headline" data-i18n="rmNextHeadline"></h3>
         <ul class="rm-list" data-i18n-list="rmGoals"></ul>
         <p class="rm-promise" data-i18n-html="rmPromise"></p>
-        <p class="rm-honest" data-i18n="rmHonest"></p>
       </div>
     </div>
   </section>
@@ -755,7 +763,6 @@
         "<strong>One place for everything you're tracking</strong> — every checklist and project in a single dashboard, not scattered across loose files."
       ],
       rmPromise: "<strong>Open core, for good.</strong> The free single-file tool stays free and open source forever. The hosted app is a paid layer on top — so the thing you can use today never goes away.",
-      rmHonest: "↳ The hosted app is on the roadmap, not out yet. Building it in the open — the free tool is what's real today.",
       forWhoTitle: "What it is",
       forWhoLead: "It's not a finished app you download. It's a way to <strong>generate a checklist with AI</strong>: tell an AI (ChatGPT, Claude, and the like) what you need, or edit the file yourself, and out comes an HTML checklist you double-click to use. The tool itself has no AI inside; it runs on your own AI to build the checklist.<br><br>It's closer to a GPS than the to-do apps you know (Microsoft To Do, Todoist, and the like), which list your tasks and leave the sorting to you. We call it <em>living</em> because it re-plans the route around what you need, not because you sort every step yourself. So it's for people who worry they're bad at planning, or always miss a step: tell it what you're doing, and it lays out a path you can just follow.",
       ctaRepo: "View on GitHub",
@@ -832,7 +839,6 @@
         "<strong>Un seul endroit pour tout ce que vous suivez</strong> — chaque checklist et chaque projet dans un même tableau de bord, plus de fichiers éparpillés."
       ],
       rmPromise: "<strong>Open core, pour de bon.</strong> L'outil gratuit en fichier unique reste gratuit et open source pour toujours. L'appli hébergée est une couche payante par-dessus — ce que vous utilisez aujourd'hui ne disparaîtra jamais.",
-      rmHonest: "↳ L'appli hébergée est sur la feuille de route, pas encore sortie. On la construit à découvert — l'outil gratuit, lui, est bien réel aujourd'hui.",
       forWhoTitle: "Ce que c'est",
       forWhoLead: "Ce n'est pas une appli finie que vous téléchargez. C'est une façon de <strong>générer une checklist avec l'IA</strong> : décrivez ce qu'il vous faut à une IA (ChatGPT, Claude et compagnie), ou modifiez le fichier vous-même, et il en sort une checklist HTML qu'il suffit de double-cliquer pour utiliser. L'outil lui-même n'a aucune IA à l'intérieur ; il s'appuie sur votre propre IA pour construire la checklist.<br><br>C'est plus proche d'un GPS que des applis de tâches que vous connaissez (Microsoft To Do, Todoist et compagnie), qui listent vos tâches et vous en laissent le tri. On la dit <em>vivante</em> parce qu'elle recalcule l'itinéraire selon vos besoins, pas parce que vous triez chaque étape vous-même. Elle est donc faite pour ceux qui se trouvent mauvais en organisation, ou qui oublient toujours une étape : dites-lui ce que vous faites, et elle vous trace un chemin que vous n'avez plus qu'à suivre.",
       ctaRepo:"Voir sur GitHub",
@@ -909,7 +915,6 @@
         "<strong>所有要追的事，集中在一处</strong> —— 每一份清单、每一个项目都在同一个面板里，不再散落成一堆零碎文件。"
       ],
       rmPromise: "<strong>开放内核，长期不变。</strong>免费的单文件工具永远免费、永远开源。在线 App 是在它之上的付费层 —— 所以你今天能用的这个东西，永远不会消失。",
-      rmHonest: "↳ 在线 App 还在未来规划里，尚未上线。我们公开地把它做出来 —— 今天真正能用的，是这个免费工具。",
       forWhoTitle: "这是什么",
       forWhoLead: "它不是一个下载就能用的成品 App，而是一种<strong>用 AI 生成清单</strong>的方式：你把需求说给 AI（ChatGPT、Claude 这些）、或者自己改一下文件，它就产出一个 HTML 清单，双击就能用。工具本身不带 AI，靠你自己的 AI 来把清单生成出来。<br><br>它更像导航，而不是你熟悉的那些 to-do app(Microsoft To Do、Todoist、滴答清单):那种把事情列出来、排序交给你，它帮你把路线排好、带你照着走。叫它「活」，是因为它能按你的需求把路线重排，不是让你全程手动排。所以它适合那种担心自己不会规划、老漏步骤的人:你说要做什么，它帮你排成一条照着走的路。",
       ctaRepo:"在 GitHub 查看",
@@ -986,7 +991,6 @@
         "<strong>所有要追的事，集中在一處</strong> —— 每一份清單、每一個專案都在同一個面板裡，不再散落成一堆零碎檔案。"
       ],
       rmPromise: "<strong>開放內核，長期不變。</strong>免費的單檔案工具永遠免費、永遠開源。線上 App 是在它之上的付費層 —— 所以你今天能用的這個東西，永遠不會消失。",
-      rmHonest: "↳ 線上 App 還在未來規劃裡，尚未上線。我們公開地把它做出來 —— 今天真正能用的，是這個免費工具。",
       forWhoTitle: "這是什麼",
       forWhoLead: "它不是一個下載就能用的成品 App，而是一種<strong>用 AI 生成清單</strong>的方式：你把需求說給 AI（ChatGPT、Claude 這些）、或者自己改一下檔案，它就產出一個 HTML 清單，雙擊就能用。工具本身不帶 AI，靠你自己的 AI 來把清單生成出來。<br><br>它更像導航，而不是你熟悉的那些 to-do app(Microsoft To Do、Todoist、滴答清單):那種把事情列出來、排序交給你，它幫你把路線排好、帶你照著走。叫它「活」，是因為它能按你的需求把路線重排，不是讓你全程手動排。所以它適合那種擔心自己不會規劃、老漏步驟的人:你說要做什麼，它幫你排成一條照著走的路。",
       ctaRepo:"在 GitHub 查看",
@@ -1063,7 +1067,6 @@
         "<strong>追っているものを、ひとつの場所に</strong> —— すべてのチェックリストとプロジェクトを一つのダッシュボードに。バラバラのファイルに散らばりません。"
       ],
       rmPromise: "<strong>オープンコア、ずっと変わらず。</strong>無料の単一ファイルツールは、いつまでも無料・オープンソースのまま。ホスト型アプリはその上に載る有料レイヤー —— だから今日使えるものが、消えてしまうことはありません。",
-      rmHonest: "↳ ホスト型アプリはロードマップ上で、まだ公開していません。オープンに作っています —— 今日ほんとうに使えるのは、この無料ツールです。",
       forWhoTitle: "これは何か",
       forWhoLead: "これはダウンロードして使う完成済みのアプリではなく、<strong>AI でチェックリストを生成する</strong>ための仕組みです。必要なものを AI（ChatGPT や Claude など）に伝えるか、自分でファイルを編集すると、ダブルクリックで使える HTML チェックリストが出来上がります。ツール自体に AI は入っておらず、あなた自身の AI を使ってチェックリストを作ります。<br><br>手作業で並べ替え続ける ToDo アプリ(Microsoft To Do、Todoist など)というより、カーナビに近いものです。「生きている」と呼ぶのは、あなたの必要に合わせてルートを組み直してくれるからで、すべての手順を自分で並べるからではありません。だから、自分は計画が苦手だと思っている人や、いつも手順を抜かしてしまう人に向いています：やりたいことを伝えれば、あとはたどるだけの道筋を引いてくれます。",
       ctaRepo:"GitHub で見る",
@@ -1153,8 +1156,24 @@
       if (el.classList.contains("rm-list")) {
         el.innerHTML = items.map(function (txt, i) {
           var n = ("0" + (i + 1)).slice(-2);
+          // split the "**lead** — explanation" string into a block sub-heading
+          // (lead) + a block body (explanation). Latin locales use " — ",
+          // CJK locales use " —— "; split on the first one found, drop the dash.
+          var lead = txt, exp = "";
+          var idx = txt.indexOf(" —— ");
+          var sepLen = 4;
+          if (idx < 0) { idx = txt.indexOf(" — "); sepLen = 3; }
+          if (idx > -1) {
+            lead = txt.slice(0, idx);
+            exp = txt.slice(idx + sepLen);
+          }
+          // strip the bold wrapper off the lead — it becomes a block element
+          var leadInner = lead.replace(/^<strong>/, "").replace(/<\/strong>$/, "");
           return '<li><span class="rm-n" aria-hidden="true">' + n + '</span>' +
-                 '<span class="rm-goal">' + txt + "</span></li>";
+                 '<div class="rm-item-body">' +
+                 '<strong class="rm-lead">' + leadInner + '</strong>' +
+                 (exp ? '<span class="rm-exp">' + exp + '</span>' : '') +
+                 '</div></li>';
         }).join("");
       } else {
         el.innerHTML = items.map(function (txt) {
