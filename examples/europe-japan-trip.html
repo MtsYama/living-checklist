@@ -217,8 +217,8 @@
   li.item:hover, li.item:focus-within { background: var(--c-accent-soft); box-shadow: inset 3px 0 0 var(--c-accent); }
   .item-main { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; }
   .item-main input[type="checkbox"] { flex: 0 0 auto; width: 22px; height: 22px; margin-top: 4px; accent-color: var(--c-accent); cursor: pointer; }
-  .item-main label { cursor: pointer; flex: 1 1 auto; }
-  .item-main label code { font-size: var(--fs-mono); background: var(--c-accent-soft); padding: 1px 5px; border-radius: 5px; font-family: var(--font-mono); }
+  .item-main label { cursor: text; flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; user-select: text; }
+  .item-main label code { font-size: var(--fs-mono); background: var(--c-accent-soft); padding: 1px 5px; border-radius: 5px; font-family: var(--font-mono); overflow-wrap: anywhere; word-break: break-word; }
   .item-main label a { color: var(--c-accent); text-underline-offset: 3px; }
   /* When the body text mentions "a button / control elsewhere", wrap it in a little pill that looks like the real button (so it's recognized at a glance) */
   .ui-ref { display: inline-block; font-size: .92em; font-weight: 600; line-height: 1.45; padding: 1px 9px; border-radius: 99px; border: 1px solid var(--c-line); background: var(--c-card); color: var(--c-ink); white-space: nowrap; vertical-align: baseline; }
@@ -246,7 +246,7 @@
   li.subitem { display: flex; gap: 10px; align-items: flex-start; padding: 5px 6px; border-radius: 6px; font-size: .95em; transition: background var(--t-fast) var(--ease); }
   li.subitem:hover, li.subitem:focus-within { background: var(--c-accent-soft); }
   li.subitem input[type="checkbox"] { flex: 0 0 auto; width: 18px; height: 18px; margin-top: 3px; accent-color: var(--c-accent); cursor: pointer; }
-  li.subitem label { cursor: pointer; flex: 1 1 auto; }
+  li.subitem label { cursor: text; flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; user-select: text; }
   li.subitem.checked label { color: var(--c-done); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--c-done) 60%, transparent); }
 
   /* ---- Per-item always-on note (prominent, never folded · obviously writable at a glance) ---- */
@@ -367,6 +367,7 @@
       <button type="button" class="btn" id="btnReset"></button>
       <button type="button" class="btn" id="btnCopyFeedback"></button>
       <button type="button" class="btn btn-toggle" id="btnSink" aria-pressed="true"></button>
+      <button type="button" class="btn btn-toggle" id="btnSinkBottom" aria-pressed="false"></button>
     </div>
   </div>
 
@@ -400,6 +401,8 @@ const SUMMARY = {
   "ja": "<p><strong>現状：</strong>7/15〜8/15が休暇、中国パスポート、<strong>フランス + イタリア</strong>に行って、ついでに<strong>日本</strong>へ。スケジュールは詰め込まず、まずは展示優先。食事にはこだわりあり(イタリアは高級店 / フランスは田舎の家庭料理 / 日本はomakase)。肝心なのは<strong>ビザ、チケット手配、予約、特別展のタイミング</strong>、このあたりの時間軸をきれいに並べること。</p><p><strong>やること:</strong><strong>ビザ</strong>を起点に逆算して進める —— ビザ、人気店の予約、omakaseはどれも数週間〜1〜2ヶ月前から動く必要あり。日付を動かせるところ(特に特別展)は、<strong>空いてる / 無料 / 割引</strong>の日を調べてから決める。各ステップのメモ欄に、調べたことや補足すべき具体的な情報を書き込んでいって。</p>"
 };
 
+/* Self-documenting: the modules explain "the UI buttons" and "how to fill in your own data".
+   item.id / module.id are consistent across languages. */
 const MODULES = {
   "zh-Hans": [
     {
@@ -1307,9 +1310,232 @@ const MODULES = {
     }
   ]
 };
+MODULES["zh-Hant"] = [
+  {
+    id: "basics", stepNum: "1", title: "怎麼用這份清單", tag: "key",
+    meta: "先了解基本操作，再開始往下做。",
+    notePlaceholder: "這裡哪些地方不順手、或前後不一致？寫下來，再點頂部的「複製進度 + 回饋」發給我。",
+    items: [
+      { id: "check", html: "<strong>現在就點左邊的方框，把這一條勾上試試</strong>。勾完它會劃掉、收走。" },
+      { id: "tuck", html: "勾完的條目會收進這一步頂部的 <span class='ui-ref'>✓ 已完成</span>，下一條自動頂上來，不用往下捲去找。不想它動？頂部工具列點 <span class='ui-ref'>勾完自動收起</span> 關掉就行。想反過來,讓完成項沉到模組末、整步完成後沉到頁面底部?點 <span class='ui-ref'>完成項沉底</span> 打開。" },
+      { id: "note", html: "<strong>這一條右邊（手機上在下面）就是備註框</strong> —— 備註、想法、疑問都能寫在這,會自動儲存;複製進度時一起帶走,方便回頭問 AI。現在寫一句試試。" },
+      { id: "fold", html: "<strong>點這一步的標題</strong>，能把整步展開或摺疊；上方「現狀」區塊也一樣。" },
+      { id: "link", html: "<strong>帶底線的是連結</strong>，比如<a href=\"https://github.com/MtsYama/living-checklist\">這一個</a>，點它就能開啟。" },
+      { id: "copy", html: "都試一遍後，點頂部 <span class='ui-ref'>複製進度 + 回饋</span>：進度和備註會整理成文字複製走，貼回 AI 對話就能接著改。" },
+      { id: "nest", html: "需要更細的步驟？<strong>點下面這條的小箭頭</strong>，能再展開一層子清單。", children: [
+        { id: "n1", html: "子項可以單獨勾選，和主條目互不影響。" },
+        { id: "n2", html: "這一層可以隨時<strong>摺疊收起</strong>，不擠佔主清單。" },
+        { id: "n3", html: "以後需求細化、或討論出新規則，就在這一層繼續補細則和對應清單。" },
+      ] },
+    ],
+  },
+  {
+    id: "buttons", stepNum: "2", title: "介面上這些按鈕都做什麼",
+    meta: "一共兩處：頂部一排（隨頁面吸頂）和右下角一組（懸浮）。",
+    notePlaceholder: "哪一條按鈕的說明沒看懂、或和實際對不上？寫在這裡告訴我。",
+    items: [
+      { id: "top", html: "<strong>頂部一排</strong>:<span class='ui-ref'>全部展開</span>、<span class='ui-ref'>全部摺疊</span>、<span class='ui-ref'>清空打勾</span>、<span class='ui-ref'>複製進度 + 回饋</span>。" },
+      { id: "lang", html: "<strong>右下角 · 語言</strong>:EN / FR / 簡 / 繁 / 日；<strong>只顯示這份清單提供的語言</strong>,單一語言的清單不會顯示這個按鈕。" },
+      { id: "theme", html: "<strong>右下角 · 日 / 月</strong>:淺色與深色切換，預設跟隨系統，選擇後會記住。" },
+      { id: "font", html: "<strong>右下角 · 字型</strong>:預設（本套用 <strong>Noto</strong>）或系統字型（離線時使用）;做自己的模板時，可以在這裡換成你選的字型。" },
+    ],
+  },
+  {
+    id: "fill", stepNum: "3", title: "範例：預先填好的欄位", tag: "key",
+    meta: "AI 先把要填的內容準備好，你點「複製」直接貼到表單 —— 這就是 fillData。",
+    notePlaceholder: "複製後還有問題？或者已經複製、但不想手動勾選？又或者預填的內容不對？寫在這裡告訴我。",
+    items: [
+      { id: "demo", html: "實際使用時，把下面這組 <code>fillData</code> 換成你自己的欄位（下面是佔位範例）。" },
+    ],
+    fillData: [
+      { label: "申請人", value: "巍巍" },
+      { label: "出生日期", value: "女媧補天前" },
+      { label: "編號", value: "test333" },
+    ],
+  },
+  {
+    id: "customize", stepNum: "4", title: "自訂 · 個人化", tag: "skip",
+    meta: "只是自己用、單一語言？這一步可以跳過。",
+    notePlaceholder: "想要別的配色、字型或模板，或者想加點什麼？寫在這裡。",
+    items: [
+      { id: "skin", html: "想換<strong>配色和字型</strong>:本 skill 還帶了一套別的風格的模板，你也可以複製一套，改成你自己的配色和字型，做成自己的模板。" },
+      { id: "content", html: "想改<strong>內容</strong>:編輯檔案裡 <code>[1] DATA</code> 的 <code>MODULES</code>（怎麼填見檔案頂部的註解）,或者直接讓 AI 讀這個 skill 幫你產生。" },
+    ],
+    links: [ { text: "→ 看另一套風格：MX Studio", href: "mx-studio.html" } ],
+  },
+];
 
+MODULES["en"] = [
+  {
+    id: "basics", stepNum: "1", title: "How to use this checklist", tag: "key",
+    meta: "Get familiar with the basics first, then start working down the list.",
+    notePlaceholder: "Anything here awkward or inconsistent? Write it down, then click “Copy progress + feedback” at the top and send it to me.",
+    items: [
+      { id: "check", html: "<strong>Go ahead — click the box on the left to check this item.</strong> It greys out and gets tucked away." },
+      { id: "tuck", html: "Checked items tuck into the <span class='ui-ref'>✓ Done</span> strip at the top of the step, and the next one moves up — no scrolling to find it. Don’t want that? Turn off <span class='ui-ref'>Tuck away when done</span> in the toolbar. Prefer the other way? Turn on <span class='ui-ref'>Sink done to bottom</span> to sink checked items to the module’s end and drop finished steps to the bottom of the page." },
+      { id: "note", html: "<strong>See the box to the right of this item (below it on mobile)? That’s its note field</strong> — notes, ideas, questions all go here; it saves automatically and rides along when you copy your progress, so you can ask an AI later. Try a line now." },
+      { id: "fold", html: "<strong>Click this step’s title</strong> to fold or unfold the whole step; the “Status” block at the top works the same way." },
+      { id: "link", html: "<strong>Underlined text is a link</strong> — like <a href=\"https://github.com/MtsYama/living-checklist\">this one</a>; click it to open." },
+      { id: "copy", html: "Once you’ve tried it all, hit <span class='ui-ref'>Copy progress + feedback</span> up top: it bundles your progress and notes into text so you can paste it back into an AI chat and keep going." },
+      { id: "nest", html: "Need finer steps? <strong>Click the little arrow on the item below</strong> to open a sub-list one level down.", children: [
+        { id: "n1", html: "Sub-items are checked on their own and don’t affect the main item." },
+        { id: "n2", html: "This layer <strong>folds away</strong> any time, so it never crowds the main list." },
+        { id: "n3", html: "As needs get more specific, or a new rule comes up, keep adding finer items and checklists right here." },
+      ] },
+    ],
+  },
+  {
+    id: "buttons", stepNum: "2", title: "What each button does",
+    meta: "There are two places: the row at the top (it sticks to the page) and the cluster at the bottom-right (it floats).",
+    notePlaceholder: "Any button explanation you didn’t follow, or that doesn’t match what you see? Tell me here.",
+    items: [
+      { id: "top", html: "<strong>The top row</strong>: <span class='ui-ref'>expand all</span>, <span class='ui-ref'>collapse all</span>, <span class='ui-ref'>reset checks</span>, <span class='ui-ref'>copy progress + feedback</span>." },
+      { id: "lang", html: "<strong>Bottom-right · language</strong>: EN / FR / 简 / 繁 / 日； <strong>only the languages this checklist provides</strong> are shown, and a single-language checklist won’t show this button." },
+      { id: "theme", html: "<strong>Bottom-right · sun / moon</strong>: switches between light and dark. It follows your system by default and remembers your choice." },
+      { id: "font", html: "<strong>Bottom-right · font</strong>: Default (this template uses <strong>Noto</strong>) or your system font (used when offline); when you make your own template, you can switch in the font you prefer here." },
+    ],
+  },
+  {
+    id: "fill", stepNum: "3", title: "Example: fields filled in for you", tag: "key",
+    meta: "The AI prepares the values in advance, and you click “Copy” to paste them straight into a form — that’s fillData.",
+    notePlaceholder: "Still stuck after copying? Or copied but would rather not check items by hand? Or a pre-filled value is wrong? Tell me here.",
+    items: [
+      { id: "demo", html: "In real use, replace the <code>fillData</code> below with your own fields (the ones below are placeholders)." },
+    ],
+    fillData: [
+      { label: "Name", value: "Mts Shu" },
+      { label: "Date of birth", value: "circa Big Bang" },
+      { label: "Pass No.", value: "test333" },
+    ],
+  },
+  {
+    id: "customize", stepNum: "4", title: "Customize · make it your own", tag: "skip",
+    meta: "Just for yourself, in a single language? You can skip this step.",
+    notePlaceholder: "Want different colours, fonts or templates, or something added? Write it here.",
+    items: [
+      { id: "skin", html: "To change the <strong>colours and fonts</strong>: this skill also comes with a template in a different style, and you can copy one and change it into your own colours and fonts to make your own template." },
+      { id: "content", html: "To change the <strong>content</strong>: edit <code>MODULES</code> under <code>[1] DATA</code> in the file (see the comments at the top of the file for how to fill it in), or just let an AI read this skill and generate it for you." },
+    ],
+    links: [ { text: "→ See the other style: MX Studio", href: "mx-studio.html" } ],
+  },
+];
+
+MODULES["fr"] = [
+  {
+    id: "basics", stepNum: "1", title: "Comment utiliser cette liste", tag: "key",
+    meta: "Familiarisez-vous d'abord avec les bases, puis commencez à descendre la liste.",
+    notePlaceholder: "Quelque chose ici vous gêne ou n'est pas cohérent ? Notez-le, puis cliquez sur « Copier progression + retour » en haut et envoyez-le-moi.",
+    items: [
+      { id: "check", html: "<strong>Allez-y — cliquez sur la case à gauche pour cocher cet élément.</strong> Il se grise et se range." },
+      { id: "tuck", html: "Les éléments cochés se rangent dans <span class='ui-ref'>✓ Terminé</span> en haut de l'étape, et le suivant remonte — pas besoin de faire défiler. Vous ne voulez pas ? Désactivez <span class='ui-ref'>Ranger une fois fait</span> dans la barre d'outils. Vous préférez l'inverse ? Activez <span class='ui-ref'>Terminés en bas</span> pour faire descendre les éléments cochés à la fin du module et les étapes terminées en bas de la page." },
+      { id: "note", html: "<strong>Voyez la zone à droite de cet élément (en dessous sur mobile) ? C'est son champ de note</strong> — notes, idées, questions : tout va ici ; c'est enregistré automatiquement et repart quand vous copiez votre progression, pour interroger une IA plus tard. Essayez une ligne." },
+      { id: "fold", html: "<strong>Cliquez sur le titre de cette étape</strong> pour la déplier ou la replier ; le bloc « État » en haut fonctionne pareil." },
+      { id: "link", html: "<strong>Le texte souligné est un lien</strong> — comme <a href=\"https://github.com/MtsYama/living-checklist\">celui-ci</a> ; cliquez dessus pour l'ouvrir." },
+      { id: "copy", html: "Une fois tout essayé, cliquez sur <span class='ui-ref'>Copier progression + retour</span> en haut : votre progression et vos notes deviennent du texte à recoller dans une conversation IA pour continuer." },
+      { id: "nest", html: "Besoin d'étapes plus fines ? <strong>Cliquez sur la petite flèche de l'élément ci-dessous</strong> pour ouvrir une sous-liste.", children: [
+        { id: "n1", html: "Les sous-éléments se cochent séparément et n'affectent pas l'élément principal." },
+        { id: "n2", html: "Cette couche se <strong>replie</strong> à tout moment, sans jamais encombrer la liste principale." },
+        { id: "n3", html: "À mesure que les besoins se précisent, ou qu'une nouvelle règle apparaît, continuez d'ajouter ici des éléments et des listes plus fins." },
+      ] },
+    ],
+  },
+  {
+    id: "buttons", stepNum: "2", title: "À quoi sert chaque bouton",
+    meta: "Il y a deux endroits : la rangée en haut (qui reste fixée à la page) et le groupe en bas à droite (qui flotte).",
+    notePlaceholder: "Une explication de bouton que vous n'avez pas comprise, ou qui ne correspond pas à ce que vous voyez ? Dites-le-moi ici.",
+    items: [
+      { id: "top", html: "<strong>La rangée du haut</strong> : <span class='ui-ref'>tout déplier</span>, <span class='ui-ref'>tout replier</span>, <span class='ui-ref'>réinitialiser les coches</span>, <span class='ui-ref'>copier progression + retour</span>." },
+      { id: "lang", html: "<strong>En bas à droite · langue</strong> : EN / FR / 简 / 繁 / 日 ; <strong>seules les langues fournies par cette liste</strong> sont affichées, et une liste à une seule langue n'affiche pas ce bouton." },
+      { id: "theme", html: "<strong>En bas à droite · soleil / lune</strong> : bascule entre le clair et le sombre. Par défaut, il suit votre système et mémorise votre choix." },
+      { id: "font", html: "<strong>En bas à droite · police</strong> : Défaut (ce modèle utilise <strong>Noto</strong>) ou votre police système (utilisée hors ligne) ; quand vous créez votre propre modèle, vous pouvez choisir ici la police de votre choix." },
+    ],
+  },
+  {
+    id: "fill", stepNum: "3", title: "Exemple : des champs remplis pour vous", tag: "key",
+    meta: "L'IA prépare les valeurs à l'avance, et vous cliquez sur « Copier » pour les coller directement dans un formulaire — c'est cela, fillData.",
+    notePlaceholder: "Toujours bloqué après la copie ? Ou copié mais vous préférez ne pas cocher à la main ? Ou une valeur pré-remplie est fausse ? Dites-le-moi ici.",
+    items: [
+      { id: "demo", html: "En usage réel, remplacez le <code>fillData</code> ci-dessous par vos propres champs (ceux ci-dessous sont des exemples)." },
+    ],
+    fillData: [
+      { label: "Nom", value: "Mts Shu" },
+      { label: "Date de naissance", value: "au commencement" },
+      { label: "N°", value: "test333" },
+    ],
+  },
+  {
+    id: "customize", stepNum: "4", title: "Personnaliser · à votre image", tag: "skip",
+    meta: "Juste pour vous, en une seule langue ? Vous pouvez sauter cette étape.",
+    notePlaceholder: "Envie d'autres couleurs, polices ou modèles, ou de quelque chose en plus ? Écrivez-le ici.",
+    items: [
+      { id: "skin", html: "Pour changer les <strong>couleurs et les polices</strong> : ce skill est également fourni avec un modèle dans un autre style, et vous pouvez en copier un et le modifier avec vos propres couleurs et polices pour en faire votre propre modèle." },
+      { id: "content", html: "Pour changer le <strong>contenu</strong> : modifiez <code>MODULES</code> sous <code>[1] DATA</code> dans le fichier (voir les commentaires en haut du fichier pour savoir comment le remplir), ou laissez simplement une IA lire ce skill et le générer pour vous." },
+    ],
+    links: [ { text: "→ Voir l'autre style : MX Studio", href: "mx-studio.html" } ],
+  },
+];
+
+MODULES["ja"] = [
+  {
+    id: "basics", stepNum: "1", title: "このリストの使い方", tag: "key",
+    meta: "まず基本の操作を知ってから、順に進めていきましょう。",
+    notePlaceholder: "ここで使いにくい所や、前後でちぐはぐな所はありますか?書き留めて、上の「進捗+フィードバックをコピー」を押して送ってください。",
+    items: [
+      { id: "check", html: "<strong>左のボックスをクリックして、この項目にチェックを入れてみて。</strong>グレーになって、しまわれます。" },
+      { id: "tuck", html: "チェックした項目はステップ上部の <span class='ui-ref'>✓ 完了</span> にしまわれ、次の項目がすぐ上がってきます —— スクロール不要。動かしたくなければ、ツールバーの <span class='ui-ref'>完了で自動収納</span> をオフに。逆がよければ、<span class='ui-ref'>完了を最下部へ</span> をオンにすると、チェック済みはモジュール末尾へ、完了したステップはページ最下部へ沈みます。" },
+      { id: "note", html: "<strong>この項目の右側(スマホでは下)にあるのがメモ欄です</strong> —— メモも、思いつきも、質問もここに書けます。自動保存され、進捗をコピーすると一緒に持ち出せるので、後で AI に聞けます。試しに一言どうぞ。" },
+      { id: "fold", html: "<strong>このステップの見出しをクリック</strong>すると、ステップ全体を展開・折りたたみできます;上の「現状」ブロックも同じです。" },
+      { id: "link", html: "<strong>下線のあるテキストはリンク</strong>です —— 例えば<a href=\"https://github.com/MtsYama/living-checklist\">これ</a>、クリックで開きます。" },
+      { id: "copy", html: "一通り試したら、上の <span class='ui-ref'>進捗+フィードバックをコピー</span> を押して;進捗とメモが文章になってコピーされ、AI との会話に貼り戻せば続きを手伝ってもらえます。" },
+      { id: "nest", html: "もっと細かいステップが必要?<strong>下の項目の小さな矢印をクリック</strong>すると、一段下のサブリストを開けます。", children: [
+        { id: "n1", html: "サブ項目は個別にチェックでき、親項目には影響しません。" },
+        { id: "n2", html: "この階層はいつでも<strong>折りたためる</strong>ので、メインのリストを圧迫しません。" },
+        { id: "n3", html: "必要が具体的になったり、新しいルールが出てきたら、ここに細かい項目やリストを足し続けられます。" },
+      ] },
+    ],
+  },
+  {
+    id: "buttons", stepNum: "2", title: "各ボタンの役割",
+    meta: "場所は二つです:上の列(ページに追従します)と、右下のまとまり(画面に浮いています)。",
+    notePlaceholder: "分かりにくかったボタンの説明や、実際の表示と合わない所はありますか?ここに書いてください。",
+    items: [
+      { id: "top", html: "<strong>上の列</strong>:<span class='ui-ref'>すべて展開</span>、<span class='ui-ref'>すべて折りたたみ</span>、<span class='ui-ref'>チェックをリセット</span>、<span class='ui-ref'>進捗+フィードバックをコピー</span>。" },
+      { id: "lang", html: "<strong>右下 · 言語</strong>:EN / FR / 简 / 繁 / 日；<strong>このリストが用意している言語だけ</strong>が表示され、一つの言語だけのリストではこのボタンは表示されません。" },
+      { id: "theme", html: "<strong>右下 · 太陽 / 月</strong>:ライトとダークを切り替えます。既定ではシステムに従い、選んだ設定を記憶します。" },
+      { id: "font", html: "<strong>右下 · フォント</strong>:既定(このテンプレートは <strong>Noto</strong> を使用)か、システムのフォント(オフライン時に使われます);自分のテンプレートを作るときは、ここで好きなフォントに変えられます。" },
+    ],
+  },
+  {
+    id: "fill", stepNum: "3", title: "例：あらかじめ記入されたフィールド", tag: "key",
+    meta: "AI が値を先に用意しておき、あなたは「コピー」を押してフォームへそのまま貼り付けるだけ —— これが fillData です。",
+    notePlaceholder: "コピーした後もまだ問題がありますか?コピーしたけれど手でチェックしたくない?あるいは記入された値が違いますか?ここに書いてください。",
+    items: [
+      { id: "demo", html: "実際に使うときは、下の <code>fillData</code> をあなた自身の項目に差し替えてください(下にあるのはプレースホルダです)。" },
+    ],
+    fillData: [
+      { label: "氏名", value: "山々" },
+      { label: "生年月日", value: "天地開闢のころ" },
+      { label: "番号", value: "test333" },
+    ],
+  },
+  {
+    id: "customize", stepNum: "4", title: "カスタマイズ · 自分仕様に", tag: "skip",
+    meta: "自分用で、一つの言語だけなら、このステップは飛ばして構いません。",
+    notePlaceholder: "別の配色・フォント・テンプレートが欲しい、何か足したいことはありますか?ここに書いてください。",
+    items: [
+      { id: "skin", html: "<strong>配色とフォント</strong>を変えたいとき:この skill には別の雰囲気のテンプレートも付いていて、一つ複製して自分の配色とフォントに変え、自分のテンプレートにすることもできます。" },
+      { id: "content", html: "<strong>内容</strong>を変えたいとき:ファイル内の <code>[1] DATA</code> にある <code>MODULES</code> を編集します(書き方はファイル上部のコメントを参照)。あるいは、AI にこの skill を読ませて作ってもらってもかまいません。" },
+    ],
+    links: [ { text: "→ もう一つの雰囲気を見る:MX Studio", href: "mx-studio.html" } ],
+  },
+];
+
+/* ===========================================================================
+   [2] CONFIG
+   =========================================================================== */
 const CONFIG = {
   storagePrefix: "living-checklist::europe-japan-trip::",
+  tour: true,
   lang: "zh-Hans",                                   // default language
   languages: ["en", "fr", "zh-Hans", "zh-Hant", "ja"], // which languages this checklist provides (only these are shown)
   theme: "auto",                                    // "auto" | "light" | "dark" (the default · once the user switches, localStorage wins)
@@ -1336,13 +1562,7 @@ const SUMMARY_ICON = "compass";
    =========================================================================== */
 const LANG_NAMES = { "zh-Hans": "简", "zh-Hant": "繁", "en": "EN", "fr": "FR", "ja": "日" };
 
-const I18N = {
-  "zh-Hans": { docTitle:"活页清单 · 欧洲日本之行 · 初步方案", appTitle:"活页清单 · 欧洲日本之行 · 初步方案", subtitle:"勾选自动沉底 · 整步完成自动归档 · 进度自动保存", aka:"", subToggle:"更细的步骤", progressCaption:"总体进度", expandAll:"全部展开", collapseAll:"全部折叠", reset:"清空打勾", copyFeedback:"复制进度 + 反馈", summaryHeading:"现状 / 必做", note:"备注 · 点这里写", notePlaceholderDefault:"在这里记录本步骤的备注…", itemNotePlaceholder:"✎ 备注、疑问写这里", nudgeHint:"👆 点一下方框勾上试试 —— 看它怎么动", noteHint:"✍️ 就在这写一句备注试试", linkHint:"👆 带下划线的能点开,试试这个", sinkLabel:"勾完自动收起", toggleOn:"开", toggleOff:"关", doneDivider:"已完成", legendIntro:"图例", legendKey:"关键", legendKeyDesc:"卡住后面所有步骤", legendSkip:"可跳过", legendSkipDesc:"知道结论即可、不用做", legendCheck:"勾选后该条划掉并计入进度", langTitle:"语言", controlsToggle:"显示/隐藏 语言·主题·字体", barToggle:"收起/展开 工具栏", themeTitleAuto:"主题：自动", themeTitleLight:"主题：浅色", themeTitleDark:"主题：深色", fontNoto:"默认", fontSystem:"系统", fontTitle:"字体：Noto / 系统", confirmReset:"确定清空所有打勾吗？(备注保留)", announcedDone:"{title} 已完成 · 已归档到已完成区", announcedBack:"{title} 已回到待办区", announcedReset:"已清空所有打勾，全部模块回到待办区", announcedCopied:"已复制进度与反馈到剪贴板，可直接粘贴回对话", announcedCopyFail:"复制失败，请手动选择文本复制", copiedFlash:"已复制 ✓", copyFailFlash:"复制失败", progressValueText:"{done} / {total} 已完成 ({pct}%)", noteAria:"{title} 的备注", feedbackDone:"已完成", feedbackNote:"备注", fillHeading:"帮你填好的字段", fillCopy:"复制", fillCopyAll:"复制全部", fillCopied:"已复制该字段", fillCopiedAll:"已复制全部字段", ctaText:"喜欢这份清单？你也可以做一份自己的：", ctaInstall:"想长期反复用：GitHub 上的这套 skill ↗", ctaChat:"平时只用网页版 AI 聊天（ChatGPT / Claude / 豆包 / DeepSeek / Gemini 等）?这段提示词能让它拼出一个核心功能一样、外观更朴素的版本：", ctaCopyBtn:"复制提示词 ↗", ctaChatPrompt:"帮我做一个单文件 HTML 的「活页清单」,请严格按下面实现,最后只输出一个完整的 .html 文件(内联 CSS + JS、零外部依赖,双击就能在浏览器打开):\n\n【数据与引擎分离】把所有步骤写成一个数组,每一步有 标题 + 若干可勾选条目;引擎逻辑写好后我只改数据、不动代码。\n\n【核心行为,逐条都要】\n1)勾选一条 → 它置灰、加删除线,并以平滑动画沉到本步骤底部,没勾的留在上面;\n2)某一步所有条目都勾完 → 整张卡片折叠,并移到页面下方的「已完成」区;\n3)顶部一条总进度条,旁边显示「已完成 / 总数」;\n4)每个步骤下面有一个备注输入框;\n5)所有勾选状态和备注都自动存进浏览器 localStorage —— 关掉页面再打开,进度还在;\n6)顶部放几个按钮:全部展开、全部折叠、清空勾选、复制进度(把当前进度和备注拼成纯文本复制到剪贴板,方便我粘回对话让你接着改)。\n\n【可访问性】正文字号至少 16px、所有操作可用键盘、有清晰的焦点框。\n\n这份清单的主题是:【在这里写你要追踪的事,例如「搬家流程」「签证材料准备」「新品上线」】。\n\n外观简洁清爽即可、不用花哨;请直接给我完整的 .html 文件。" },
-  "zh-Hant": { docTitle:"活頁清單 · 歐洲日本之行 · 初步方案", appTitle:"活頁清單 · 歐洲日本之行 · 初步方案", subtitle:"勾選自動沉底 · 整步完成自動歸檔 · 進度自動儲存", aka:"", subToggle:"更細的步驟", progressCaption:"總體進度", expandAll:"全部展開", collapseAll:"全部摺疊", reset:"清空打勾", copyFeedback:"複製進度 + 回饋", summaryHeading:"現狀 / 必做", note:"備註 · 點這裡寫", notePlaceholderDefault:"在這裡記錄本步驟的備註…", itemNotePlaceholder:"✎ 備註、疑問寫這裡", nudgeHint:"👆 點一下方框勾上試試 —— 看它怎麼動", noteHint:"✍️ 就在這寫一句備註試試", linkHint:"👆 帶底線的能點開,試試這個", sinkLabel:"勾完自動收起", toggleOn:"開", toggleOff:"關", doneDivider:"已完成", legendIntro:"圖例", legendKey:"關鍵", legendKeyDesc:"卡住後面所有步驟", legendSkip:"可跳過", legendSkipDesc:"知道結論即可、不用做", legendCheck:"勾選後該條劃掉並計入進度", langTitle:"語言", controlsToggle:"顯示/隱藏 語言·主題·字型", barToggle:"收起/展開 工具列", themeTitleAuto:"主題：自動", themeTitleLight:"主題：淺色", themeTitleDark:"主題：深色", fontNoto:"預設", fontSystem:"系統", fontTitle:"字型：Noto / 系統", confirmReset:"確定清空所有打勾嗎？(備註保留)", announcedDone:"{title} 已完成 · 已歸檔到已完成區", announcedBack:"{title} 已回到待辦區", announcedReset:"已清空所有打勾，全部模組回到待辦區", announcedCopied:"已複製進度與回饋到剪貼簿，可直接貼回對話", announcedCopyFail:"複製失敗，請手動選擇文字複製", copiedFlash:"已複製 ✓", copyFailFlash:"複製失敗", progressValueText:"{done} / {total} 已完成 ({pct}%)", noteAria:"{title} 的備註", feedbackDone:"已完成", feedbackNote:"備註", fillHeading:"幫你填好的欄位", fillCopy:"複製", fillCopyAll:"複製全部", fillCopied:"已複製該欄位", fillCopiedAll:"已複製全部欄位", ctaText:"喜歡這份清單？你也可以做一份自己的：", ctaInstall:"想長期反覆用：GitHub 上的這套 skill ↗", ctaChat:"平時只用網頁版 AI 聊天（ChatGPT / Claude / 豆包 / DeepSeek / Gemini 等）?這段提示詞能讓它拼出一個核心功能一樣、外觀更樸素的版本：", ctaCopyBtn:"複製提示詞 ↗", ctaChatPrompt:"幫我做一個單檔 HTML 的「活頁清單」,請嚴格按下面實現,最後只輸出一個完整的 .html 檔案(內聯 CSS + JS、零外部依賴,雙擊就能在瀏覽器打開):\n\n【資料與引擎分離】把所有步驟寫成一個陣列,每一步有 標題 + 若干可勾選條目;引擎邏輯寫好後我只改資料、不動程式碼。\n\n【核心行為,逐條都要】\n1)勾選一條 → 它置灰、加刪除線,並以平滑動畫沉到本步驟底部,沒勾的留在上面;\n2)某一步所有條目都勾完 → 整張卡片摺疊,並移到頁面下方的「已完成」區;\n3)頂部一條總進度條,旁邊顯示「已完成 / 總數」;\n4)每個步驟下面有一個備註輸入框;\n5)所有勾選狀態和備註都自動存進瀏覽器 localStorage —— 關掉頁面再打開,進度還在;\n6)頂部放幾個按鈕:全部展開、全部摺疊、清空勾選、複製進度(把當前進度和備註拼成純文字複製到剪貼簿,方便我貼回對話讓你接著改)。\n\n【可存取性】正文字級至少 16px、所有操作可用鍵盤、有清晰的焦點框。\n\n這份清單的主題是:【在這裡寫你要追蹤的事,例如「搬家流程」「簽證材料準備」「新品上線」】。\n\n外觀簡潔清爽即可、不用花俏;請直接給我完整的 .html 檔案。" },
-  "en": { docTitle:"Living Checklist · Europe + Japan Trip · Draft Plan", appTitle:"Living Checklist · Europe + Japan Trip · Draft Plan", subtitle:"Checked items sink · finished steps auto-archive · progress auto-saves", aka:"", subToggle:"Finer steps", progressCaption:"Overall progress", expandAll:"Expand all", collapseAll:"Collapse all", reset:"Reset checks", copyFeedback:"Copy progress + feedback", summaryHeading:"Status / To do", note:"Notes · type here", notePlaceholderDefault:"Jot a note for this step…", itemNotePlaceholder:"✎ Notes or questions", nudgeHint:"👆 give the box a click — watch what it does", noteHint:"✍️ now jot a note in here", linkHint:"👆 underlined = a link, try this one", sinkLabel:"Tuck away when done", toggleOn:"on", toggleOff:"off", doneDivider:"Done", legendIntro:"Legend", legendKey:"Key", legendKeyDesc:"blocks every later step", legendSkip:"Skip-ok", legendSkipDesc:"just know the gist, no action", legendCheck:"checking strikes it through and counts toward progress", langTitle:"Language", controlsToggle:"Show/hide settings", barToggle:"Collapse/expand toolbar", themeTitleAuto:"Theme: Auto", themeTitleLight:"Theme: Light", themeTitleDark:"Theme: Dark", fontNoto:"Default", fontSystem:"System", fontTitle:"Font: Noto / System", confirmReset:"Clear all checks? (notes are kept)", announcedDone:"{title} done · archived to the Done area", announcedBack:"{title} moved back to to-do", announcedReset:"All checks cleared; every module back in to-do", announcedCopied:"Progress + feedback copied; paste it back into chat", announcedCopyFail:"Copy failed, please select the text manually", copiedFlash:"Copied ✓", copyFailFlash:"Copy failed", progressValueText:"{done} / {total} done ({pct}%)", noteAria:"Note for {title}", feedbackDone:"done", feedbackNote:"Note", fillHeading:"Pre-filled fields", fillCopy:"Copy", fillCopyAll:"Copy all", fillCopied:"Field copied", fillCopiedAll:"All fields copied", ctaText:"Like this checklist? You can make one of your own:", ctaInstall:"For long-term, repeated use: the skill on GitHub ↗", ctaChat:"Usually just use a web AI chat (ChatGPT / Claude / Gemini / Copilot, etc.)? This prompt gets it to build you a version with the same core features, just a plainer look:", ctaCopyBtn:"Copy the prompt ↗", ctaChatPrompt:"Help me make a single-file HTML 'living checklist'. Follow the spec below exactly, and at the end give me one complete .html file (inline CSS + JS, zero external dependencies, opens in a browser with a double-click):\n\n[Data separate from engine] Put all the steps in one array; each step has a title plus a few checkable items. Once the engine logic is done, I only edit the data, not the code.\n\n[Core behaviors, every one of them]\n1) Check an item and it greys out, gets a strikethrough, and slides smoothly to the bottom of its step; unchecked ones stay on top;\n2) When every item in a step is checked, the whole card folds and moves to a 'Done' area lower on the page;\n3) One overall progress bar at the top, with 'done / total' shown next to it;\n4) A note input box under each step;\n5) Every check state and note auto-saves to the browser's localStorage, so closing and reopening the page keeps the progress;\n6) Buttons at the top: Expand all, Collapse all, Reset checks, and Copy progress (bundle the current progress and notes into plain text on the clipboard so I can paste it back into chat to keep going).\n\n[Accessibility] Body text at least 16px, everything operable by keyboard, clear focus rings.\n\nThe topic of this checklist is: [write what you want to track, e.g. 'moving house', 'visa paperwork', 'product launch'].\n\nKeep the look clean and simple, nothing fancy; just give me the complete .html file." },
-  "fr": { docTitle:"Living Checklist · Voyage Europe + Japon · Plan provisoire", appTitle:"Living Checklist · Voyage Europe + Japon · Plan provisoire", subtitle:"Les éléments cochés descendent · étapes finies auto-archivées · progression auto-enregistrée", aka:"", subToggle:"Étapes détaillées", progressCaption:"Progression globale", expandAll:"Tout ouvrir", collapseAll:"Tout replier", reset:"Réinitialiser", copyFeedback:"Copier progression + retour", summaryHeading:"État / À faire", note:"Notes · écrivez ici", notePlaceholderDefault:"Une note pour cette étape…", itemNotePlaceholder:"✎ Notes ou questions", nudgeHint:"👆 cochez la case — regardez ce qu'elle fait", noteHint:"✍️ écrivez une note ici", linkHint:"👆 souligné = un lien, essayez celui-ci", sinkLabel:"Ranger une fois fait", toggleOn:"activé", toggleOff:"désactivé", doneDivider:"Terminé", legendIntro:"Légende", legendKey:"Clé", legendKeyDesc:"bloque toutes les étapes suivantes", legendSkip:"Optionnel", legendSkipDesc:"il suffit de connaître l'idée", legendCheck:"cocher la barre et compte dans la progression", langTitle:"Langue", controlsToggle:"Afficher/masquer les réglages", barToggle:"Réduire/déployer la barre d'outils", themeTitleAuto:"Thème : Auto", themeTitleLight:"Thème : Clair", themeTitleDark:"Thème : Sombre", fontNoto:"Défaut", fontSystem:"Système", fontTitle:"Police : Noto / Système", confirmReset:"Effacer toutes les coches ? (les notes restent)", announcedDone:"{title} terminé · archivé", announcedBack:"{title} de retour dans à faire", announcedReset:"Coches effacées ; tous les modules de retour", announcedCopied:"Progression + retour copiés ; collez dans le chat", announcedCopyFail:"Échec de copie, sélectionnez le texte manuellement", copiedFlash:"Copié ✓", copyFailFlash:"Échec", progressValueText:"{done} / {total} terminé ({pct}%)", noteAria:"Note pour {title}", feedbackDone:"terminé", feedbackNote:"Note", fillHeading:"Champs pré-remplis", fillCopy:"Copier", fillCopyAll:"Tout copier", fillCopied:"Champ copié", fillCopiedAll:"Tous copiés", ctaText:"Cette liste vous plaît ? Vous pouvez créer la vôtre :", ctaInstall:"Pour un usage répété : le skill sur GitHub ↗", ctaChat:"Vous utilisez d'habitude seulement une IA en ligne (ChatGPT / Claude / Gemini / Le Chat, etc.) ? Ce prompt lui fait construire une version aux mêmes fonctions de base, juste avec un rendu plus sobre :", ctaCopyBtn:"Copier l'invite ↗", ctaChatPrompt:"Aide-moi à créer une « liste vivante » en HTML, dans un seul fichier. Suis exactement les indications ci-dessous et donne-moi à la fin un fichier .html complet (CSS + JS en ligne, zéro dépendance externe, s'ouvre dans le navigateur d'un double-clic) :\n\n[Données séparées du moteur] Mets toutes les étapes dans un tableau ; chaque étape a un titre et quelques éléments cochables. Une fois le moteur écrit, je ne modifie que les données, pas le code.\n\n[Comportements clés, tous]\n1) Cocher un élément : il se grise, se barre et glisse doucement au bas de son étape ; les non cochés restent en haut ;\n2) Quand tous les éléments d'une étape sont cochés, la carte entière se replie et passe dans une zone « Terminé » plus bas ;\n3) Une barre de progression globale en haut, avec « fait / total » à côté ;\n4) Un champ de note sous chaque étape ;\n5) Tous les états de coche et les notes s'enregistrent automatiquement dans le localStorage du navigateur ; fermer puis rouvrir la page conserve la progression ;\n6) Des boutons en haut : Tout ouvrir, Tout replier, Réinitialiser, Copier la progression (rassemble la progression et les notes en texte brut dans le presse-papiers, pour les recoller dans le chat).\n\n[Accessibilité] Texte d'au moins 16px, tout utilisable au clavier, anneaux de focus visibles.\n\nLe sujet de cette liste est : [écris ce que tu veux suivre, ex. « déménagement », « dossier de visa », « lancement de produit »].\n\nGarde un rendu simple et net, rien de tape-à-l'œil ; donne-moi directement le fichier .html complet." },
-  "ja": { docTitle:"活页清单 · 欧州・日本旅行 · 暫定プラン", appTitle:"活页清单 · 欧州・日本旅行 · 暫定プラン", subtitle:"チェックで沈む · 完了ステップは自動保管 · 進捗は自動保存", aka:"", subToggle:"より細かいステップ", progressCaption:"全体の進捗", expandAll:"すべて展開", collapseAll:"すべて折りたたむ", reset:"チェックをリセット", copyFeedback:"進捗+フィードバックをコピー", summaryHeading:"現状 / やること", note:"メモ · ここに入力できます", notePlaceholderDefault:"このステップのメモ…", itemNotePlaceholder:"✎ メモ・質問はここへ", nudgeHint:"👆 ボックスをチェックしてみて — 動きを見てね", noteHint:"✍️ ここにメモを書いてみて", linkHint:"👆 下線付きはリンク、これを押してみて", sinkLabel:"完了で自動収納", toggleOn:"オン", toggleOff:"オフ", doneDivider:"完了", legendIntro:"凡例", legendKey:"重要", legendKeyDesc:"後続すべてを止める", legendSkip:"省略可", legendSkipDesc:"結論だけ分かればよい", legendCheck:"チェックで取り消し線+進捗に加算", langTitle:"言語", controlsToggle:"設定の表示/非表示", barToggle:"ツールバーの折りたたみ/展開", themeTitleAuto:"テーマ：自動", themeTitleLight:"テーマ：ライト", themeTitleDark:"テーマ：ダーク", fontNoto:"既定", fontSystem:"システム", fontTitle:"フォント:Noto / システム", confirmReset:"すべてのチェックを消す?(メモは残ります)", announcedDone:"{title} 完了 · 保管しました", announcedBack:"{title} を未完了へ戻しました", announcedReset:"チェックをすべて消去；全モジュールを未完了へ", announcedCopied:"進捗+フィードバックをコピー;チャットに貼り付け", announcedCopyFail:"コピー失敗、手動で選択してください", copiedFlash:"コピー済 ✓", copyFailFlash:"失敗", progressValueText:"{done} / {total} 完了 ({pct}%)", noteAria:"{title} のメモ", feedbackDone:"完了", feedbackNote:"メモ", fillHeading:"記入済みフィールド", fillCopy:"コピー", fillCopyAll:"全部コピー", fillCopied:"コピーしました", fillCopiedAll:"全部コピーしました", ctaText:"このリストが気に入りましたか?あなた自身のものも作れます:", ctaInstall:"繰り返し使うなら:GitHub のこの skill ↗", ctaChat:"普段はウェブ版の AI チャット(ChatGPT / Claude / Gemini / Copilot など)を使うだけですか?このプロンプトで、中核の機能は同じで見た目だけ素朴な版を作ってもらえます:", ctaCopyBtn:"プロンプトをコピー ↗", ctaChatPrompt:"単一ファイルの HTML で「活页清单(リビング・チェックリスト)」を作ってください。下記の仕様どおりに実装し、最後に完全な .html ファイルを 1 つだけ出力してください(CSS・JS はインライン、外部依存ゼロ、ダブルクリックでブラウザで開ける):\n\n【データとエンジンの分離】すべてのステップを 1 つの配列にし、各ステップに タイトル + いくつかのチェック項目 を持たせる。エンジンを書いたら、私はデータだけ編集し、コードは触らない。\n\n【中核の動作、すべて必須】\n1)項目にチェック → グレーアウト+取り消し線、そのステップの下へなめらかに沈む。未チェックは上に残る;\n2)あるステップの全項目を完了 → カード全体が畳まれ、ページ下部の「完了」エリアへ移動;\n3)上部に全体の進捗バー、横に「完了 / 合計」;\n4)各ステップの下にメモ入力欄;\n5)チェック状態とメモはすべてブラウザの localStorage に自動保存 —— 閉じて開き直しても進捗は残る;\n6)上部にボタン:すべて展開・すべて折りたたみ・チェックをリセット・進捗をコピー(現在の進捗とメモをプレーンテキストでクリップボードへ。チャットに貼り戻して続けられる)。\n\n【アクセシビリティ】本文 16px 以上、すべてキーボード操作可、明確なフォーカスリング。\n\nこのリストのテーマは:【追跡したいことを書く。例「引っ越し」「ビザ書類」「新商品リリース」】。\n\n見た目はシンプルで十分、凝らなくてよい;完全な .html ファイルをそのままください。" },
-};
+const I18N = {"zh-Hans":{"docTitle":"活页清单 · 欧洲日本之行 · 初步方案","appTitle":"活页清单 · 欧洲日本之行 · 初步方案","subtitle":"勾选自动沉底 · 整步完成自动归档 · 进度自动保存","aka":"","subToggle":"更细的步骤","progressCaption":"总体进度","expandAll":"全部展开","collapseAll":"全部折叠","reset":"清空打勾","copyFeedback":"复制进度 + 反馈","summaryHeading":"现状 / 必做","note":"备注 · 点这里写","notePlaceholderDefault":"在这里记录本步骤的备注…","itemNotePlaceholder":"✎ 备注、疑问写这里","nudgeHint":"👆 点一下方框勾上试试 —— 看它怎么动","noteHint":"✍️ 就在这写一句备注试试","linkHint":"👆 带下划线的能点开,试试这个","sinkLabel":"勾完自动收起","sinkBottomLabel":"完成项沉底","toggleOn":"开","toggleOff":"关","doneDivider":"已完成","legendIntro":"图例","legendKey":"关键","legendKeyDesc":"卡住后面所有步骤","legendSkip":"可跳过","legendSkipDesc":"知道结论即可、不用做","legendCheck":"勾选后该条划掉并计入进度","langTitle":"语言","controlsToggle":"显示/隐藏 语言·主题·字体","barToggle":"收起/展开 工具栏","themeTitleAuto":"主题：自动","themeTitleLight":"主题：浅色","themeTitleDark":"主题：深色","fontNoto":"默认","fontSystem":"系统","fontTitle":"字体：Noto / 系统","confirmReset":"确定清空所有打勾吗？(备注保留)","announcedDone":"{title} 已完成 · 已归档到已完成区","announcedBack":"{title} 已回到待办区","announcedReset":"已清空所有打勾，全部模块回到待办区","announcedCopied":"已复制进度与反馈到剪贴板，可直接粘贴回对话","announcedCopyFail":"复制失败，请手动选择文本复制","copiedFlash":"已复制 ✓","copyFailFlash":"复制失败","progressValueText":"{done} / {total} 已完成 ({pct}%)","noteAria":"{title} 的备注","feedbackDone":"已完成","feedbackNote":"备注","fillHeading":"帮你填好的字段","fillCopy":"复制","fillCopyAll":"复制全部","fillCopied":"已复制该字段","fillCopiedAll":"已复制全部字段","ctaText":"喜欢这份清单？你也可以做一份自己的：","ctaInstall":"想以后反复用？→ 这个工具的开源代码库（在 GitHub 上，也教 AI 怎么帮你装好） ↗","ctaChat":"平时只用网页版 AI 聊天（ChatGPT / Claude / 豆包 / DeepSeek / Gemini 等）?这段提示词能让它拼出一个核心功能一样、外观更朴素的版本：","ctaCopyBtn":"复制提示词 ↗","ctaChatPrompt":"帮我做一个单文件 HTML 的「活页清单」,请严格按下面实现,最后只输出一个完整的 .html 文件(内联 CSS + JS、零外部依赖,双击就能在浏览器打开):\n\n【数据与引擎分离】把所有步骤写成一个数组,每一步有 标题 + 若干可勾选条目;引擎逻辑写好后我只改数据、不动代码。\n\n【核心行为,逐条都要】\n1)勾选一条 → 它置灰、加删除线,并以平滑动画沉到本步骤底部,没勾的留在上面;\n2)某一步所有条目都勾完 → 整张卡片折叠,并移到页面下方的「已完成」区;\n3)顶部一条总进度条,旁边显示「已完成 / 总数」;\n4)每个步骤下面有一个备注输入框;\n5)所有勾选状态和备注都自动存进浏览器 localStorage —— 关掉页面再打开,进度还在;\n6)顶部放几个按钮:全部展开、全部折叠、清空勾选、复制进度(把当前进度和备注拼成纯文本复制到剪贴板,方便我粘回对话让你接着改)。\n\n【可访问性】正文字号至少 16px、所有操作可用键盘、有清晰的焦点框。\n\n这份清单的主题是:【在这里写你要追踪的事,例如「搬家流程」「签证材料准备」「新品上线」】。\n\n外观简洁清爽即可、不用花哨;请直接给我完整的 .html 文件。"},"zh-Hant":{"docTitle":"活頁清單 · 歐洲日本之行 · 初步方案","appTitle":"活頁清單 · 歐洲日本之行 · 初步方案","subtitle":"勾選自動沉底 · 整步完成自動歸檔 · 進度自動儲存","aka":"","subToggle":"更細的步驟","progressCaption":"總體進度","expandAll":"全部展開","collapseAll":"全部摺疊","reset":"清空打勾","copyFeedback":"複製進度 + 回饋","summaryHeading":"現狀 / 必做","note":"備註 · 點這裡寫","notePlaceholderDefault":"在這裡記錄本步驟的備註…","itemNotePlaceholder":"✎ 備註、疑問寫這裡","nudgeHint":"👆 點一下方框勾上試試 —— 看它怎麼動","noteHint":"✍️ 就在這寫一句備註試試","linkHint":"👆 帶底線的能點開,試試這個","sinkLabel":"勾完自動收起","sinkBottomLabel":"完成項沉底","toggleOn":"開","toggleOff":"關","doneDivider":"已完成","legendIntro":"圖例","legendKey":"關鍵","legendKeyDesc":"卡住後面所有步驟","legendSkip":"可跳過","legendSkipDesc":"知道結論即可、不用做","legendCheck":"勾選後該條劃掉並計入進度","langTitle":"語言","controlsToggle":"顯示/隱藏 語言·主題·字型","barToggle":"收起/展開 工具列","themeTitleAuto":"主題：自動","themeTitleLight":"主題：淺色","themeTitleDark":"主題：深色","fontNoto":"預設","fontSystem":"系統","fontTitle":"字型：Noto / 系統","confirmReset":"確定清空所有打勾嗎？(備註保留)","announcedDone":"{title} 已完成 · 已歸檔到已完成區","announcedBack":"{title} 已回到待辦區","announcedReset":"已清空所有打勾，全部模組回到待辦區","announcedCopied":"已複製進度與回饋到剪貼簿，可直接貼回對話","announcedCopyFail":"複製失敗，請手動選擇文字複製","copiedFlash":"已複製 ✓","copyFailFlash":"複製失敗","progressValueText":"{done} / {total} 已完成 ({pct}%)","noteAria":"{title} 的備註","feedbackDone":"已完成","feedbackNote":"備註","fillHeading":"幫你填好的欄位","fillCopy":"複製","fillCopyAll":"複製全部","fillCopied":"已複製該欄位","fillCopiedAll":"已複製全部欄位","ctaText":"喜歡這份清單？你也可以做一份自己的：","ctaInstall":"想以後反覆用？→ 這個工具的開源程式碼庫（在 GitHub 上，也教 AI 怎麼幫你裝好） ↗","ctaChat":"平時只用網頁版 AI 聊天（ChatGPT / Claude / 豆包 / DeepSeek / Gemini 等）?這段提示詞能讓它拼出一個核心功能一樣、外觀更樸素的版本：","ctaCopyBtn":"複製提示詞 ↗","ctaChatPrompt":"幫我做一個單檔 HTML 的「活頁清單」,請嚴格按下面實現,最後只輸出一個完整的 .html 檔案(內聯 CSS + JS、零外部依賴,雙擊就能在瀏覽器打開):\n\n【資料與引擎分離】把所有步驟寫成一個陣列,每一步有 標題 + 若干可勾選條目;引擎邏輯寫好後我只改資料、不動程式碼。\n\n【核心行為,逐條都要】\n1)勾選一條 → 它置灰、加刪除線,並以平滑動畫沉到本步驟底部,沒勾的留在上面;\n2)某一步所有條目都勾完 → 整張卡片摺疊,並移到頁面下方的「已完成」區;\n3)頂部一條總進度條,旁邊顯示「已完成 / 總數」;\n4)每個步驟下面有一個備註輸入框;\n5)所有勾選狀態和備註都自動存進瀏覽器 localStorage —— 關掉頁面再打開,進度還在;\n6)頂部放幾個按鈕:全部展開、全部摺疊、清空勾選、複製進度(把當前進度和備註拼成純文字複製到剪貼簿,方便我貼回對話讓你接著改)。\n\n【可存取性】正文字級至少 16px、所有操作可用鍵盤、有清晰的焦點框。\n\n這份清單的主題是:【在這裡寫你要追蹤的事,例如「搬家流程」「簽證材料準備」「新品上線」】。\n\n外觀簡潔清爽即可、不用花俏;請直接給我完整的 .html 檔案。"},"en":{"docTitle":"Living Checklist · Europe + Japan Trip · Draft Plan","appTitle":"Living Checklist · Europe + Japan Trip · Draft Plan","subtitle":"Checked items sink · finished steps auto-archive · progress auto-saves","aka":"","subToggle":"Finer steps","progressCaption":"Overall progress","expandAll":"Expand all","collapseAll":"Collapse all","reset":"Reset checks","copyFeedback":"Copy progress + feedback","summaryHeading":"Status / To do","note":"Notes · type here","notePlaceholderDefault":"Jot a note for this step…","itemNotePlaceholder":"✎ Notes or questions","nudgeHint":"👆 give the box a click — watch what it does","noteHint":"✍️ now jot a note in here","linkHint":"👆 underlined = a link, try this one","sinkLabel":"Tuck away when done","sinkBottomLabel":"Sink done to bottom","toggleOn":"on","toggleOff":"off","doneDivider":"Done","legendIntro":"Legend","legendKey":"Key","legendKeyDesc":"blocks every later step","legendSkip":"Skip-ok","legendSkipDesc":"just know the gist, no action","legendCheck":"checking strikes it through and counts toward progress","langTitle":"Language","controlsToggle":"Show/hide settings","barToggle":"Collapse/expand toolbar","themeTitleAuto":"Theme: Auto","themeTitleLight":"Theme: Light","themeTitleDark":"Theme: Dark","fontNoto":"Default","fontSystem":"System","fontTitle":"Font: Noto / System","confirmReset":"Clear all checks? (notes are kept)","announcedDone":"{title} done · archived to the Done area","announcedBack":"{title} moved back to to-do","announcedReset":"All checks cleared; every module back in to-do","announcedCopied":"Progress + feedback copied; paste it back into chat","announcedCopyFail":"Copy failed, please select the text manually","copiedFlash":"Copied ✓","copyFailFlash":"Copy failed","progressValueText":"{done} / {total} done ({pct}%)","noteAria":"Note for {title}","feedbackDone":"done","feedbackNote":"Note","fillHeading":"Pre-filled fields","fillCopy":"Copy","fillCopyAll":"Copy all","fillCopied":"Field copied","fillCopiedAll":"All fields copied","ctaText":"Like this checklist? You can make one of your own:","ctaInstall":"Want to reuse it later? → the tool's open-source code repository (on GitHub — it also shows an AI how to set it up for you) ↗","ctaChat":"Usually just use a web AI chat (ChatGPT / Claude / Gemini / Copilot, etc.)? This prompt gets it to build you a version with the same core features, just a plainer look:","ctaCopyBtn":"Copy the prompt ↗","ctaChatPrompt":"Help me make a single-file HTML 'living checklist'. Follow the spec below exactly, and at the end give me one complete .html file (inline CSS + JS, zero external dependencies, opens in a browser with a double-click):\n\n[Data separate from engine] Put all the steps in one array; each step has a title plus a few checkable items. Once the engine logic is done, I only edit the data, not the code.\n\n[Core behaviors, every one of them]\n1) Check an item and it greys out, gets a strikethrough, and slides smoothly to the bottom of its step; unchecked ones stay on top;\n2) When every item in a step is checked, the whole card folds and moves to a 'Done' area lower on the page;\n3) One overall progress bar at the top, with 'done / total' shown next to it;\n4) A note input box under each step;\n5) Every check state and note auto-saves to the browser's localStorage, so closing and reopening the page keeps the progress;\n6) Buttons at the top: Expand all, Collapse all, Reset checks, and Copy progress (bundle the current progress and notes into plain text on the clipboard so I can paste it back into chat to keep going).\n\n[Accessibility] Body text at least 16px, everything operable by keyboard, clear focus rings.\n\nThe topic of this checklist is: [write what you want to track, e.g. 'moving house', 'visa paperwork', 'product launch'].\n\nKeep the look clean and simple, nothing fancy; just give me the complete .html file."},"fr":{"docTitle":"Living Checklist · Voyage Europe + Japon · Plan provisoire","appTitle":"Living Checklist · Voyage Europe + Japon · Plan provisoire","subtitle":"Les éléments cochés descendent · étapes finies auto-archivées · progression auto-enregistrée","aka":"","subToggle":"Étapes détaillées","progressCaption":"Progression globale","expandAll":"Tout ouvrir","collapseAll":"Tout replier","reset":"Réinitialiser","copyFeedback":"Copier progression + retour","summaryHeading":"État / À faire","note":"Notes · écrivez ici","notePlaceholderDefault":"Une note pour cette étape…","itemNotePlaceholder":"✎ Notes ou questions","nudgeHint":"👆 cochez la case — regardez ce qu'elle fait","noteHint":"✍️ écrivez une note ici","linkHint":"👆 souligné = un lien, essayez celui-ci","sinkLabel":"Ranger une fois fait","sinkBottomLabel":"Terminés en bas","toggleOn":"activé","toggleOff":"désactivé","doneDivider":"Terminé","legendIntro":"Légende","legendKey":"Clé","legendKeyDesc":"bloque toutes les étapes suivantes","legendSkip":"Optionnel","legendSkipDesc":"il suffit de connaître l'idée","legendCheck":"cocher la barre et compte dans la progression","langTitle":"Langue","controlsToggle":"Afficher/masquer les réglages","barToggle":"Réduire/déployer la barre d'outils","themeTitleAuto":"Thème : Auto","themeTitleLight":"Thème : Clair","themeTitleDark":"Thème : Sombre","fontNoto":"Défaut","fontSystem":"Système","fontTitle":"Police : Noto / Système","confirmReset":"Effacer toutes les coches ? (les notes restent)","announcedDone":"{title} terminé · archivé","announcedBack":"{title} de retour dans à faire","announcedReset":"Coches effacées ; tous les modules de retour","announcedCopied":"Progression + retour copiés ; collez dans le chat","announcedCopyFail":"Échec de copie, sélectionnez le texte manuellement","copiedFlash":"Copié ✓","copyFailFlash":"Échec","progressValueText":"{done} / {total} terminé ({pct}%)","noteAria":"Note pour {title}","feedbackDone":"terminé","feedbackNote":"Note","fillHeading":"Champs pré-remplis","fillCopy":"Copier","fillCopyAll":"Tout copier","fillCopied":"Champ copié","fillCopiedAll":"Tous copiés","ctaText":"Cette liste vous plaît ? Vous pouvez créer la vôtre :","ctaInstall":"Pour le réutiliser plus tard ? → le dépôt de code open source de l’outil (sur GitHub — il montre aussi à une IA comment l’installer pour vous) ↗","ctaChat":"Vous utilisez d'habitude seulement une IA en ligne (ChatGPT / Claude / Gemini / Le Chat, etc.) ? Ce prompt lui fait construire une version aux mêmes fonctions de base, juste avec un rendu plus sobre :","ctaCopyBtn":"Copier l'invite ↗","ctaChatPrompt":"Aide-moi à créer une « liste vivante » en HTML, dans un seul fichier. Suis exactement les indications ci-dessous et donne-moi à la fin un fichier .html complet (CSS + JS en ligne, zéro dépendance externe, s'ouvre dans le navigateur d'un double-clic) :\n\n[Données séparées du moteur] Mets toutes les étapes dans un tableau ; chaque étape a un titre et quelques éléments cochables. Une fois le moteur écrit, je ne modifie que les données, pas le code.\n\n[Comportements clés, tous]\n1) Cocher un élément : il se grise, se barre et glisse doucement au bas de son étape ; les non cochés restent en haut ;\n2) Quand tous les éléments d'une étape sont cochés, la carte entière se replie et passe dans une zone « Terminé » plus bas ;\n3) Une barre de progression globale en haut, avec « fait / total » à côté ;\n4) Un champ de note sous chaque étape ;\n5) Tous les états de coche et les notes s'enregistrent automatiquement dans le localStorage du navigateur ; fermer puis rouvrir la page conserve la progression ;\n6) Des boutons en haut : Tout ouvrir, Tout replier, Réinitialiser, Copier la progression (rassemble la progression et les notes en texte brut dans le presse-papiers, pour les recoller dans le chat).\n\n[Accessibilité] Texte d'au moins 16px, tout utilisable au clavier, anneaux de focus visibles.\n\nLe sujet de cette liste est : [écris ce que tu veux suivre, ex. « déménagement », « dossier de visa », « lancement de produit »].\n\nGarde un rendu simple et net, rien de tape-à-l'œil ; donne-moi directement le fichier .html complet."},"ja":{"docTitle":"活頁清単 · 欧州・日本旅行 · 暫定プラン","appTitle":"活頁清単 · 欧州・日本旅行 · 暫定プラン","subtitle":"チェックで沈む · 完了ステップは自動保管 · 進捗は自動保存","aka":"","subToggle":"より細かいステップ","progressCaption":"全体の進捗","expandAll":"すべて展開","collapseAll":"すべて折りたたむ","reset":"チェックをリセット","copyFeedback":"進捗+フィードバックをコピー","summaryHeading":"現状 / やること","note":"メモ · ここに入力できます","notePlaceholderDefault":"このステップのメモ…","itemNotePlaceholder":"✎ メモ・質問はここへ","nudgeHint":"👆 ボックスをチェックしてみて — 動きを見てね","noteHint":"✍️ ここにメモを書いてみて","linkHint":"👆 下線付きはリンク、これを押してみて","sinkLabel":"完了で自動収納","sinkBottomLabel":"完了を最下部へ","toggleOn":"オン","toggleOff":"オフ","doneDivider":"完了","legendIntro":"凡例","legendKey":"重要","legendKeyDesc":"後続すべてを止める","legendSkip":"省略可","legendSkipDesc":"結論だけ分かればよい","legendCheck":"チェックで取り消し線+進捗に加算","langTitle":"言語","controlsToggle":"設定の表示/非表示","barToggle":"ツールバーの折りたたみ/展開","themeTitleAuto":"テーマ：自動","themeTitleLight":"テーマ：ライト","themeTitleDark":"テーマ：ダーク","fontNoto":"既定","fontSystem":"システム","fontTitle":"フォント:Noto / システム","confirmReset":"すべてのチェックを消す?(メモは残ります)","announcedDone":"{title} 完了 · 保管しました","announcedBack":"{title} を未完了へ戻しました","announcedReset":"チェックをすべて消去；全モジュールを未完了へ","announcedCopied":"進捗+フィードバックをコピー;チャットに貼り付け","announcedCopyFail":"コピー失敗、手動で選択してください","copiedFlash":"コピー済 ✓","copyFailFlash":"失敗","progressValueText":"{done} / {total} 完了 ({pct}%)","noteAria":"{title} のメモ","feedbackDone":"完了","feedbackNote":"メモ","fillHeading":"記入済みフィールド","fillCopy":"コピー","fillCopyAll":"全部コピー","fillCopied":"コピーしました","fillCopiedAll":"全部コピーしました","ctaText":"このリストが気に入りましたか?あなた自身のものも作れます:","ctaInstall":"あとで繰り返し使うなら？→ このツールのオープンソースのコードリポジトリ（GitHub 上。AI に導入のしかたも教えてくれます） ↗","ctaChat":"普段はウェブ版の AI チャット(ChatGPT / Claude / Gemini / Copilot など)を使うだけですか?このプロンプトで、中核の機能は同じで見た目だけ素朴な版を作ってもらえます:","ctaCopyBtn":"プロンプトをコピー ↗","ctaChatPrompt":"単一ファイルの HTML で「活頁清単(リビング・チェックリスト)」を作ってください。下記の仕様どおりに実装し、最後に完全な .html ファイルを 1 つだけ出力してください(CSS・JS はインライン、外部依存ゼロ、ダブルクリックでブラウザで開ける):\n\n【データとエンジンの分離】すべてのステップを 1 つの配列にし、各ステップに タイトル + いくつかのチェック項目 を持たせる。エンジンを書いたら、私はデータだけ編集し、コードは触らない。\n\n【中核の動作、すべて必須】\n1)項目にチェック → グレーアウト+取り消し線、そのステップの下へなめらかに沈む。未チェックは上に残る;\n2)あるステップの全項目を完了 → カード全体が畳まれ、ページ下部の「完了」エリアへ移動;\n3)上部に全体の進捗バー、横に「完了 / 合計」;\n4)各ステップの下にメモ入力欄;\n5)チェック状態とメモはすべてブラウザの localStorage に自動保存 —— 閉じて開き直しても進捗は残る;\n6)上部にボタン:すべて展開・すべて折りたたみ・チェックをリセット・進捗をコピー(現在の進捗とメモをプレーンテキストでクリップボードへ。チャットに貼り戻して続けられる)。\n\n【アクセシビリティ】本文 16px 以上、すべてキーボード操作可、明確なフォーカスリング。\n\nこのリストのテーマは:【追跡したいことを書く。例「引っ越し」「ビザ書類」「新商品リリース」】。\n\n見た目はシンプルで十分、凝らなくてよい;完全な .html ファイルをそのままください。"}};
 
 /* ===========================================================================
    [4] ENGINE
@@ -1383,6 +1603,7 @@ function loadBool(key, fb) { try { const r = localStorage.getItem(key); return r
 function saveBool(key, v) { try { localStorage.setItem(key, v ? "1" : "0"); } catch (_) {} }
 function loadStr(key, fb) { try { const r = localStorage.getItem(key); return r === null ? fb : r; } catch (_) { return fb; } }
 function saveStr(key, v) { try { if (v === "") localStorage.removeItem(key); else localStorage.setItem(key, v); } catch (_) {} }
+function _hashStr(s) { let h = 0; s = String(s); for (let i = 0; i < s.length; i++) { h = (Math.imul(h, 31) + s.charCodeAt(i)) | 0; } return String(h); }
 
 /* ---------- 4.2 Storage keys ---------- */
 const K = {
@@ -1395,8 +1616,11 @@ const K = {
   subChecked:  (mid, iid, sid) => CONFIG.storagePrefix + "sub::" + mid + "::" + iid + "::" + sid,
   subOpen:     (mid, iid) => CONFIG.storagePrefix + "sub-open::" + mid + "::" + iid,
   itemNote:    (mid, iid) => CONFIG.storagePrefix + "inote::" + mid + "::" + iid,
+  noteCleared: (mid, iid, rev) => CONFIG.storagePrefix + "noteclr::" + mid + "::" + iid + "::" + rev,
+  noteHash:    (mid, iid) => CONFIG.storagePrefix + "inhash::" + mid + "::" + iid,
   moduleNote:  (mid) => CONFIG.storagePrefix + "note::" + mid,
   autoSink: () => CONFIG.storagePrefix + "auto-sink",
+  sinkBottom: () => CONFIG.storagePrefix + "sink-bottom",
   tourStep: () => CONFIG.storagePrefix + "tour-step",
   lang: () => CONFIG.storagePrefix + "lang",
   theme: () => CONFIG.storagePrefix + "theme",
@@ -1409,6 +1633,7 @@ function isSubChecked(mid, iid, child) { return loadBool(K.subChecked(mid, iid, 
 function isModuleDone(m) { return m.items.length > 0 && m.items.every((it) => isItemChecked(m.id, it.id)); }
 function computeProgress() { let d = 0, t2 = 0; for (const m of ACTIVE_MODULES) for (const it of m.items) { t2++; if (isItemChecked(m.id, it.id)) d++; } return { done: d, total: t2 }; }
 function autoSinkOn() { return loadBool(K.autoSink(), true); }   // auto-sink on check: on by default (can be turned off in the toolbar, for people who don't want items moving)
+function sinkBottomOn() { return loadBool(K.sinkBottom(), false); }   // sink completed to bottom (the old v2 behavior): off by default. ON = checked items sink to the module's end + fully-done modules collapse and sink below the "✅ 已完成" divider into doneHost
 /* "Dare to click" three-step tour: ① checkbox → ② note field → ③ link. Each step completed moves the hint to the next; one-time overall, and once done it never reappears.
    Pure DOM decoration (called after render), not inlined in renderItem —— this way it can update in place when advancing without losing input focus. */
 function tourStepNum() { const v = loadStr(K.tourStep(), "0"); return v === "done" ? 99 : (parseInt(v, 10) || 0); }
@@ -1503,7 +1728,7 @@ function renderItem(module, item) {
   li.className = "item" + (checked ? " checked" : ""); li.dataset.itemId = item.id;
   const main = document.createElement("div"); main.className = "item-main";
   const cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = checked; cb.id = "cb-" + module.id + "-" + item.id;
-  const label = document.createElement("label"); label.setAttribute("for", cb.id); label.innerHTML = item.html; widont(label);
+  const label = document.createElement("label"); label.id = cb.id + "-lbl"; cb.setAttribute("aria-labelledby", label.id); label.innerHTML = item.html; widont(label);
   cb.addEventListener("change", () => { saveBool(K.itemChecked(module.id, item.id), cb.checked); onToggle(module); maybeAdvanceTour("check"); });
   label.querySelectorAll("a").forEach((a) => { a.target = "_blank"; a.rel = "noopener noreferrer"; });   // always open links in a new tab (don't navigate the checklist page away and lose progress)
   const lk = label.querySelector("a"); if (lk) lk.addEventListener("click", () => maybeAdvanceTour("link"));
@@ -1529,7 +1754,7 @@ function buildSubbranch(module, item) {
     const checked = isSubChecked(module.id, item.id, c);
     const sli = document.createElement("li"); sli.className = "subitem" + (checked ? " checked" : ""); sli.dataset.subId = c.id;
     const scb = document.createElement("input"); scb.type = "checkbox"; scb.checked = checked; scb.id = "cb-sub-" + module.id + "-" + item.id + "-" + c.id;
-    const slabel = document.createElement("label"); slabel.setAttribute("for", scb.id); slabel.innerHTML = c.html; widont(slabel);
+    const slabel = document.createElement("label"); slabel.id = scb.id + "-lbl"; scb.setAttribute("aria-labelledby", slabel.id); slabel.innerHTML = c.html; widont(slabel);
     scb.addEventListener("change", () => { saveBool(K.subChecked(module.id, item.id, c.id), scb.checked); sli.classList.toggle("checked", scb.checked); });
     sli.appendChild(scb); sli.appendChild(slabel); ul.appendChild(sli);
   }
@@ -1544,6 +1769,19 @@ function renderItemNote(module, item) {
   const wrap = document.createElement("div"); wrap.className = "item-note";
   const taId = "inote-" + module.id + "-" + item.id;
   const ta = document.createElement("textarea"); ta.id = taId; ta.rows = 1;
+  // Iteration hygiene: a note is a request to the maintainer; once the item is updated this session to
+  // address it (item.clearNote = a rev tag), the note is consumed and clears itself — one-shot per (item, rev).
+  // Untouched items (no clearNote) keep their notes.
+  if (item.clearNote) {
+    const _clr = K.noteCleared(module.id, item.id, String(item.clearNote));
+    if (!loadBool(_clr, false)) { saveStr(K.itemNote(module.id, item.id), ""); saveBool(_clr, true); }
+  }
+  const _hkey = K.noteHash(module.id, item.id);
+  const _curHash = _hashStr(item.html);
+  const _savedHash = loadStr(_hkey, "");
+  if (loadStr(K.itemNote(module.id, item.id), "") && _savedHash && _savedHash !== _curHash) {
+    saveStr(K.itemNote(module.id, item.id), ""); saveStr(_hkey, "");
+  }
   ta.value = loadStr(K.itemNote(module.id, item.id), "");
   ta.placeholder = t("itemNotePlaceholder");
   ta.setAttribute("aria-label", t("note"));
@@ -1588,6 +1826,7 @@ function buildModuleCard(module) {
   dgBtn.addEventListener("click", () => { const o = dgBtn.getAttribute("aria-expanded") !== "true"; setCollapsed(dgSleeve, doneUl, dgBtn, o, true); saveBool(K.doneGroupOpen(module.id), o); });
   // —— Active (in-progress) list —— checked ones go into the collapse group, the rest stay here in their original order (order not shuffled)
   const activeUl = document.createElement("ul"); activeUl.className = "items items-active";
+  // item-level placement follows 勾完自动收起 (auto-sink); 完成项沉底 is step-level (placeModules / onToggle)
   for (const it of module.items) { const li = renderItem(module, it); ((autoSinkOn() && isItemChecked(module.id, it.id)) ? doneUl : activeUl).appendChild(li); }
   body.appendChild(doneWrap); body.appendChild(activeUl);
   if (module.fillData && module.fillData.length) body.appendChild(renderFill(module));
@@ -1601,7 +1840,7 @@ function buildModuleCard(module) {
 function liOf(rec, iid) { return rec.section.querySelector('li.item[data-item-id="' + cssEscape(iid) + '"]'); }
 function updateDoneGroup(module, rec, animate) {
   const n = module.items.filter((it) => isItemChecked(module.id, it.id)).length;
-  const show = n > 0 && autoSinkOn();
+  const show = n > 0 && autoSinkOn();   // item-level: checked items tuck into the per-step "✓ 已完成" group whenever auto-sink is on (independent of 完成项沉底 = step-level)
   rec.doneWrap.hidden = !show;
   const lbl = rec.dgBtn.querySelector(".done-group-label");
   if (lbl) lbl.textContent = "✓ " + t("doneDivider") + " " + n;
@@ -1672,10 +1911,21 @@ function onToggle(module) {
   const wasDone = rec.section.classList.contains("done");
   rec.section.classList.toggle("done", nowDone);
   if (nowDone !== wasDone) {
-    const open = nowDone ? false : CONFIG.moduleDefaultOpen;   // whole step done → fold in place (no longer slides to the bottom of the page)
+    const open = nowDone ? false : CONFIG.moduleDefaultOpen;   // OFF: fold in place. ON: fold + sink the whole module across to the done region
     saveBool(K.moduleOpen(module.id), open);
-    const isOpenNow = rec.headBtn.getAttribute("aria-expanded") === "true";
-    if (open !== isOpenNow) setCollapsed(rec.sleeve, rec.body, rec.headBtn, open, true);
+    if (sinkBottomOn()) {
+      // ON (v2 behavior): collapse + move the module below the "✅ 已完成" divider into doneHost (or back), all module cards FLIP into place
+      const allCards = Array.from(moduleCards.values()).map((r) => r.section);
+      flip(allCards, () => {
+        const isOpenNow = rec.headBtn.getAttribute("aria-expanded") === "true";
+        if (open !== isOpenNow) setCollapsed(rec.sleeve, rec.body, rec.headBtn, open, true);
+        placeModules();
+      });
+      restoreFocusAndScroll(module.id);
+    } else {
+      const isOpenNow = rec.headBtn.getAttribute("aria-expanded") === "true";
+      if (open !== isOpenNow) setCollapsed(rec.sleeve, rec.body, rec.headBtn, open, true);
+    }
     announce(nowDone ? t("announcedDone", { title: plainTitle(module) }) : t("announcedBack", { title: plainTitle(module) }));
   }
   renderProgress();
@@ -1704,12 +1954,17 @@ function reflowItemsInModule(module) {
 /* ---------- 4.8 Layout —— modules all stay in activeHost in their original order (completed steps fold in place, no longer moved to the bottom of the page) ---------- */
 function placeModules() {
   const activeHost = document.getElementById("activeHost");
+  const doneHost = document.getElementById("doneHost");
+  const sink = sinkBottomOn();
+  let doneAny = false;
   for (const m of ACTIVE_MODULES) {
     let rec = moduleCards.get(m.id);
     if (!rec) { buildModuleCard(m); rec = moduleCards.get(m.id); }
-    activeHost.appendChild(rec.section);
+    if (sink && isModuleDone(m)) { if (doneHost) doneHost.appendChild(rec.section); else activeHost.appendChild(rec.section); doneAny = true; }
+    else { activeHost.appendChild(rec.section); }
   }
-  const divider = document.getElementById("doneDivider"); if (divider) { divider.classList.add("hidden"); divider.setAttribute("aria-hidden", "true"); }
+  const divider = document.getElementById("doneDivider");
+  if (divider) { const showDivider = sink && doneAny; divider.classList.toggle("hidden", !showDivider); divider.setAttribute("aria-hidden", String(!showDivider)); }
 }
 function renderModules() { const a = document.getElementById("activeHost"), d = document.getElementById("doneHost"); moduleCards.clear(); a.innerHTML = ""; if (d) d.innerHTML = ""; placeModules(); applyTourNudge(); }
 
@@ -1802,6 +2057,7 @@ function applyChrome() {
   document.getElementById("btnReset").textContent = t("reset");
   document.getElementById("btnCopyFeedback").textContent = t("copyFeedback");
   refreshSinkBtn();
+  refreshSinkBottomBtn();
   { const bt = document.getElementById("btnBarToggle"); if (bt) bt.setAttribute("aria-label", t("barToggle")); }
   document.getElementById("doneDivider").textContent = "✅ " + t("doneDivider");
   document.getElementById("summaryHost").setAttribute("aria-label", t("summaryHeading"));
@@ -1867,6 +2123,13 @@ function refreshSinkBtn() {
   b.setAttribute("aria-pressed", String(on));
 }
 function toggleSink() { saveBool(K.autoSink(), !autoSinkOn()); refreshSinkBtn(); renderModules(); renderProgress(); }
+function refreshSinkBottomBtn() {
+  const b = document.getElementById("btnSinkBottom"); if (!b) return;
+  const on = sinkBottomOn();
+  b.textContent = t("sinkBottomLabel") + ": " + (on ? t("toggleOn") : t("toggleOff"));
+  b.setAttribute("aria-pressed", String(on));
+}
+function toggleSinkBottom() { saveBool(K.sinkBottom(), !sinkBottomOn()); refreshSinkBottomBtn(); renderModules(); renderProgress(); }
 function setAllOpen(open) { saveBool(K.summaryOpen(), open); for (const m of ACTIVE_MODULES) saveBool(K.moduleOpen(m.id), open); renderSummary(document.getElementById("summaryHost")); renderModules(); renderProgress(); }
 function resetChecks() {
   if (!window.confirm(t("confirmReset"))) return;
@@ -1907,6 +2170,7 @@ function boot() {
   document.getElementById("btnReset").addEventListener("click", resetChecks);
   document.getElementById("btnCopyFeedback").addEventListener("click", copyFeedback);
   document.getElementById("btnSink").addEventListener("click", toggleSink);
+  document.getElementById("btnSinkBottom").addEventListener("click", toggleSinkBottom);
   document.getElementById("btnBarToggle").addEventListener("click", toggleToolbar);
   applyToolbarOpen();
   buildControls();

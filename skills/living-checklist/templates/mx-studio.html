@@ -986,12 +986,8 @@ function buildModuleCard(module) {
   dgBtn.addEventListener("click", () => { const o = dgBtn.getAttribute("aria-expanded") !== "true"; setCollapsed(dgSleeve, doneUl, dgBtn, o, true); saveBool(K.doneGroupOpen(module.id), o); });
   // —— Active (in-progress) list —— checked ones go into the collapse group, the rest stay here in their original order (order not shuffled)
   const activeUl = document.createElement("ul"); activeUl.className = "items items-active";
-  if (sinkBottomOn()) {
-    // ON (v2 behavior): all items live in the active list, checked ones sorted to the module's end; the top "✓ 已完成" group is unused (hidden)
-    for (const it of sortedItems(module)) activeUl.appendChild(renderItem(module, it));
-  } else {
-    for (const it of module.items) { const li = renderItem(module, it); ((autoSinkOn() && isItemChecked(module.id, it.id)) ? doneUl : activeUl).appendChild(li); }
-  }
+  // item-level placement follows 勾完自动收起 (auto-sink); 完成项沉底 is step-level (placeModules / onToggle)
+  for (const it of module.items) { const li = renderItem(module, it); ((autoSinkOn() && isItemChecked(module.id, it.id)) ? doneUl : activeUl).appendChild(li); }
   body.appendChild(doneWrap); body.appendChild(activeUl);
   if (module.fillData && module.fillData.length) body.appendChild(renderFill(module));
   if (module.links && module.links.length) body.appendChild(renderLinks(module));
@@ -1004,7 +1000,7 @@ function buildModuleCard(module) {
 function liOf(rec, iid) { return rec.section.querySelector('li.item[data-item-id="' + cssEscape(iid) + '"]'); }
 function updateDoneGroup(module, rec, animate) {
   const n = module.items.filter((it) => isItemChecked(module.id, it.id)).length;
-  const show = n > 0 && autoSinkOn() && !sinkBottomOn();   // top "✓ 已完成" group is for OFF mode only; ON mode sinks to the module end + doneHost instead
+  const show = n > 0 && autoSinkOn();   // item-level: checked items tuck into the per-step "✓ 已完成" group whenever auto-sink is on (independent of 完成项沉底 = step-level)
   rec.doneWrap.hidden = !show;
   const lbl = rec.dgBtn.querySelector(".done-group-label");
   if (lbl) lbl.textContent = "✓ " + t("doneDivider") + " " + n;
@@ -1103,13 +1099,6 @@ function reflowItemsInModule(module) {
   const cnt = rec.section.querySelector(".module-count");
   const doneCount = module.items.filter((it) => isItemChecked(module.id, it.id)).length;
   if (cnt) cnt.textContent = "(" + doneCount + "/" + module.items.length + ")";
-  if (sinkBottomOn()) {
-    // ON (v2 behavior): items all live in the active list; sink checked ones to the module's end (FLIP). Module-level sinking to doneHost is handled in onToggle.
-    const rows = Array.from(rec.activeUl.querySelectorAll("li.item"));
-    flip(rows, () => { for (const it of sortedItems(module)) { const li = liOf(rec, it.id); if (li) rec.activeUl.appendChild(li); } });
-    updateDoneGroup(module, rec, false);
-    return;
-  }
   if (!autoSinkOn()) {
     for (const it of module.items) { const li = liOf(rec, it.id); if (li) activeUl.appendChild(li); }   // in place: all stay in the active list, original order, checked ones struck through
     updateDoneGroup(module, rec, false); return;
