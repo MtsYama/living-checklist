@@ -1511,6 +1511,7 @@
     document.querySelectorAll(".toggle button").forEach(function (btn) {
       btn.setAttribute("aria-pressed", btn.getAttribute("data-lang") === lang ? "true" : "false");
     });
+    try { localStorage.setItem("lc-landing-lang", lang); } catch (e) {}
   }
 
   // wire up the toggle
@@ -1611,7 +1612,9 @@
     });
   })();
 
-  applyLang(detectLang());
+  var _savedLang = null;
+  try { _savedLang = localStorage.getItem("lc-landing-lang"); } catch (e) {}
+  applyLang(["en", "fr", "zh-Hans", "zh-Hant", "ja"].indexOf(_savedLang) > -1 ? _savedLang : detectLang());
 </script>
 </body>
 </html>
