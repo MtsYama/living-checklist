@@ -922,7 +922,7 @@ function buildSubbranch(module, item) {
   toggle.addEventListener("click", () => { const nowOpen = toggle.getAttribute("aria-expanded") !== "true"; setCollapsed(sleeve, ul, toggle, nowOpen, true); saveBool(K.subOpen(module.id, item.id), nowOpen); });
   wrap.appendChild(toggle); wrap.appendChild(sleeve); return wrap;
 }
-function sortedItems(m) { if (!autoSinkOn()) return m.items; const u = m.items.filter((it) => !isItemChecked(m.id, it.id)); const c = m.items.filter((it) => isItemChecked(m.id, it.id)); return u.concat(c); }
+function sortedItems(m) { if (!autoSinkOn() && !sinkBottomOn()) return m.items; const u = m.items.filter((it) => !isItemChecked(m.id, it.id)); const c = m.items.filter((it) => isItemChecked(m.id, it.id)); return u.concat(c); }
 function renderItemList(m) { const ul = document.createElement("ul"); ul.className = "items"; for (const it of sortedItems(m)) ul.appendChild(renderItem(m, it)); return ul; }
 /* Per-item always-on note: to the right of the item on wide screens, below it on narrow screens; visible at a glance, never folded (discoverability) */
 function renderItemNote(module, item) {
@@ -986,9 +986,15 @@ function buildModuleCard(module) {
   dgBtn.addEventListener("click", () => { const o = dgBtn.getAttribute("aria-expanded") !== "true"; setCollapsed(dgSleeve, doneUl, dgBtn, o, true); saveBool(K.doneGroupOpen(module.id), o); });
   // —— Active (in-progress) list —— checked ones go into the collapse group, the rest stay here in their original order (order not shuffled)
   const activeUl = document.createElement("ul"); activeUl.className = "items items-active";
-  // item-level placement follows 勾完自动收起 (auto-sink); 完成项沉底 is step-level (placeModules / onToggle)
-  for (const it of module.items) { const li = renderItem(module, it); ((autoSinkOn() && isItemChecked(module.id, it.id)) ? doneUl : activeUl).appendChild(li); }
-  body.appendChild(doneWrap); body.appendChild(activeUl);
+  // 收起 = collapse completed into the "✓ 已完成" group; 沉底 = put completed at the bottom (else top/in-place)
+  if (autoSinkOn()) {
+    for (const it of module.items) { const li = renderItem(module, it); (isItemChecked(module.id, it.id) ? doneUl : activeUl).appendChild(li); }
+  } else if (sinkBottomOn()) {
+    for (const it of sortedItems(module)) activeUl.appendChild(renderItem(module, it));
+  } else {
+    for (const it of module.items) activeUl.appendChild(renderItem(module, it));
+  }
+  if (sinkBottomOn()) { body.appendChild(activeUl); body.appendChild(doneWrap); } else { body.appendChild(doneWrap); body.appendChild(activeUl); }
   if (module.fillData && module.fillData.length) body.appendChild(renderFill(module));
   if (module.links && module.links.length) body.appendChild(renderLinks(module));
   sleeve.appendChild(body); setCollapsed(sleeve, body, headBtn, open, false);
@@ -1100,7 +1106,12 @@ function reflowItemsInModule(module) {
   const doneCount = module.items.filter((it) => isItemChecked(module.id, it.id)).length;
   if (cnt) cnt.textContent = "(" + doneCount + "/" + module.items.length + ")";
   if (!autoSinkOn()) {
-    for (const it of module.items) { const li = liOf(rec, it.id); if (li) activeUl.appendChild(li); }   // in place: all stay in the active list, original order, checked ones struck through
+    if (sinkBottomOn()) {
+      const rows = Array.from(rec.activeUl.querySelectorAll("li.item"));
+      flip(rows, () => { for (const it of sortedItems(module)) { const li = liOf(rec, it.id); if (li) rec.activeUl.appendChild(li); } });
+    } else {
+      for (const it of module.items) { const li = liOf(rec, it.id); if (li) activeUl.appendChild(li); }   // in place: original order, checked struck
+    }
     updateDoneGroup(module, rec, false); return;
   }
   const dgOpen = loadBool(K.doneGroupOpen(module.id), false);
