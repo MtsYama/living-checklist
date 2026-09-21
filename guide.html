@@ -35,6 +35,7 @@
     --fg-2: #5A626D;
     --fg-3: #5A626D;
     --accent: #345EA5;
+    --link: #4b6079; --link-ul: rgba(75,96,121,.38);
     --accent-fill: #345EA5;
     --on-accent: #FFFFFF;
     --rule-strong: #DDE1E8;
@@ -57,7 +58,7 @@
   @media (prefers-color-scheme: dark) {
     :root[data-skin="base"]:not([data-theme="light"]) {
       --bg: #1C1C1E; --fg: #F5F5F7; --fg-2: #98989D; --fg-3: #98989D;
-      --accent: #6A8FD6; --accent-fill: #6A8FD6; --on-accent: #FFFFFF;
+      --accent: #6A8FD6; --accent-fill: #6A8FD6; --on-accent: #FFFFFF; --link: #b3c1d4; --link-ul: rgba(179,193,212,.38);
       --rule-strong: #38383A; --rule: #38383A; --rule-soft: #2C2C2E;
       --card: #2C2C2E;
       --bar: rgba(28, 28, 30, 0.86);
@@ -65,7 +66,7 @@
   }
   :root[data-skin="base"][data-theme="dark"] {
     --bg: #1C1C1E; --fg: #F5F5F7; --fg-2: #98989D; --fg-3: #98989D;
-    --accent: #6A8FD6; --accent-fill: #6A8FD6; --on-accent: #FFFFFF;
+    --accent: #6A8FD6; --accent-fill: #6A8FD6; --on-accent: #FFFFFF; --link: #b3c1d4; --link-ul: rgba(179,193,212,.38);
     --rule-strong: #38383A; --rule: #38383A; --rule-soft: #2C2C2E;
     --card: #2C2C2E;
     --bar: rgba(28, 28, 30, 0.86);
@@ -80,6 +81,7 @@
     --fg-2: #4A4438;
     --fg-3: #7A7363;
     --accent: #8A6F3F;
+    --link: #4b6079; --link-ul: rgba(75,96,121,.38);
     --accent-fill: #8A6F3F;
     --on-accent: #FFFFFF;
     --rule-strong: #C9BFA3;
@@ -104,7 +106,7 @@
   @media (prefers-color-scheme: dark) {
     :root[data-skin="mx"]:not([data-theme="light"]) {
       --bg: #000000; --fg: #ECE6D5; --fg-2: #D6CFBB; --fg-3: #A89F88;
-      --accent: #AA9068; --accent-fill: #AA9068; --on-accent: #000000;
+      --accent: #AA9068; --accent-fill: #AA9068; --on-accent: #000000; --link: #b3c1d4; --link-ul: rgba(179,193,212,.38);
       --rule-strong: #5C4E35; --rule: #2A2419; --rule-soft: #1C180F;
       --card: #1C180F;
       --bar: rgba(0, 0, 0, 0.86);
@@ -112,7 +114,7 @@
   }
   :root[data-skin="mx"][data-theme="dark"] {
     --bg: #000000; --fg: #ECE6D5; --fg-2: #D6CFBB; --fg-3: #A89F88;
-    --accent: #AA9068; --accent-fill: #AA9068; --on-accent: #000000;
+    --accent: #AA9068; --accent-fill: #AA9068; --on-accent: #000000; --link: #b3c1d4; --link-ul: rgba(179,193,212,.38);
     --rule-strong: #5C4E35; --rule: #2A2419; --rule-soft: #1C180F;
     --card: #1C180F;
     --bar: rgba(0, 0, 0, 0.86);
@@ -146,8 +148,10 @@
 
   .wrap { max-width: 940px; margin: 0 auto; padding: 0 clamp(1.3rem, 5vw, 2.6rem); }
 
-  a { color: var(--accent); text-underline-offset: 3px; }
-  a:hover { color: var(--fg); }
+  /* links: low-chroma + hairline underline (2026-09-21) */
+  a { color: var(--link); text-decoration: underline; text-decoration-color: var(--link-ul); text-decoration-thickness: 1px; text-underline-offset: .16em; }
+  a:hover { text-decoration-color: var(--link); }
+  .btn, .topbar-label, .transform-shot { text-decoration: none; }
 
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
@@ -504,12 +508,12 @@
   .usage-body .install-note { display: block; margin-top: 0.2rem; }
   .usage-body .install-more { display: block; margin-top: 0.75rem; font-size: 0.9rem; }
   .usage-body .install-more a {
-    color: var(--accent); font-weight: 600;
+    color: var(--link); font-weight: 600;
     text-decoration: underline; text-decoration-thickness: 1px;
     text-underline-offset: 3px;
     transition: text-decoration-color 0.15s ease;
   }
-  .usage-body .install-more a:hover { text-decoration-color: var(--accent); }
+  .usage-body .install-more a:hover { text-decoration-color: var(--link); }
 
   /* ---------- example callout ---------- */
   .example {
@@ -773,10 +777,10 @@
 
   /* ---- .install-more a (underline color) ---- */
   [data-skin="base"] .usage-body .install-more a {
-    text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+    text-decoration-color: var(--link-ul);
   }
   [data-skin="mx"] .usage-body .install-more a {
-    text-decoration-color: rgba(170, 144, 104, 0.5);
+    text-decoration-color: var(--link-ul);
   }
 
   /* ---- .example (frame + ground) ---- */

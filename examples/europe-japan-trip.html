@@ -45,7 +45,7 @@
     /* —— THE ONE ACCENT —— change this single value to re-skin the whole accent color.
        Default is a calm "Lapis blue" (cool, restrained, bookish blue).
        To switch to another color, change just the --c-accent line; the other soft colors derive automatically via color-mix. */
-    --c-accent: #345ea5;
+    --c-accent: #345ea5; --c-link: #4b6079; --c-link-ul: rgba(75,96,121,.38);
 
     /* —— Light theme (default · clean light ground, calendar-app feel) —— */
     --c-bg: #f1f3f6;                /* very pale cool-gray page ground */
@@ -91,7 +91,7 @@
 
   /* —— Dark theme (clean neutral near-black · the calm of iOS dark) —— */
   html[data-theme="dark"] {
-    --c-accent: #6a8fd6;            /* same-family lapis, brightened for dark backgrounds */
+    --c-accent: #6a8fd6; --c-link: #b3c1d4; --c-link-ul: rgba(179,193,212,.38);            /* same-family lapis, brightened for dark backgrounds */
     --c-bg: #1c1c1e;                /* near-black page ground */
     --c-card: #2c2c2e;             /* cards lifted one step */
     --c-panel: #2c2c2e;
@@ -207,7 +207,7 @@
   .tag-skip { color: var(--c-skip-ink); background: var(--c-skip-bg); }     /* soft: gray ground + gray text */
   .module-meta { font-size: var(--fs-caption); color: var(--c-ink-soft); margin: 6px 0 0 calc(1em + 10px); }
   .module-links { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: var(--fs-caption); }
-  .module-links a { color: var(--c-accent); text-underline-offset: 3px; }
+  .module-links a { color: var(--c-link); text-underline-offset: 3px; }
   .module-icon, .summary-icon { display: inline-flex; vertical-align: -0.12em; margin-right: 3px; }
   .module-icon svg, .summary-icon svg { width: 1.05em; height: 1.05em; fill: var(--c-accent); }
 
@@ -219,7 +219,7 @@
   .item-main input[type="checkbox"] { flex: 0 0 auto; width: 22px; height: 22px; margin-top: 4px; accent-color: var(--c-accent); cursor: pointer; }
   .item-main label { cursor: text; flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; user-select: text; }
   .item-main label code { font-size: var(--fs-mono); background: var(--c-accent-soft); padding: 1px 5px; border-radius: 5px; font-family: var(--font-mono); overflow-wrap: anywhere; word-break: break-word; }
-  .item-main label a { color: var(--c-accent); text-underline-offset: 3px; }
+  .item-main label a { color: var(--c-link); text-underline-offset: 3px; }
   /* When the body text mentions "a button / control elsewhere", wrap it in a little pill that looks like the real button (so it's recognized at a glance) */
   .ui-ref { display: inline-block; font-size: .92em; font-weight: 600; line-height: 1.45; padding: 1px 9px; border-radius: 99px; border: 1px solid var(--c-line); background: var(--c-card); color: var(--c-ink); white-space: nowrap; vertical-align: baseline; }
   li.item.checked .item-main label { color: var(--c-done); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--c-done) 60%, transparent); }
@@ -337,6 +337,11 @@
     .float-controls { left: 12px; right: 12px; bottom: 12px; justify-content: center; }
     .app-bar { margin: 0 -12px 14px; padding: 8px 12px; }
   }
+
+  /* links: low-chroma + hairline underline (2026-09-21) */
+  a { color: var(--c-link); text-decoration: underline; text-decoration-color: var(--c-link-ul); text-decoration-thickness: 1px; text-underline-offset: .16em; }
+  a:hover { text-decoration-color: var(--c-link); }
+  .cta-bar a, .cta-path, a.cta-path, .cta-path:hover { text-decoration: none; }
 </style>
 </head>
 <body>

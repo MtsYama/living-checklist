@@ -48,7 +48,7 @@
     --c-ink: #1a1a17;
     --c-ink-soft: #6b6657;
     --c-line: #d8cfb8;
-    --c-accent: #8a6f3f;
+    --c-accent: #8a6f3f; --c-link: #4b6079; --c-link-ul: rgba(75,96,121,.38);
     --c-accent-soft: #e6dcc2;       /* soft ground for the "Key" tag */
     --c-on-accent: #ffffff;
     --c-accent-grad: #aa9068;
@@ -89,7 +89,7 @@
     --c-ink: #ece6d5;
     --c-ink-soft: #9d967f;
     --c-line: #2a2823;
-    --c-accent: #c9a86a;
+    --c-accent: #c9a86a; --c-link: #b3c1d4; --c-link-ul: rgba(179,193,212,.38);
     --c-accent-soft: #221c10;
     --c-on-accent: #131210;
     --c-accent-grad: #aa9068;
@@ -200,7 +200,7 @@
   .tag-skip { color: var(--c-skip-ink); background: var(--c-skip-bg); }     /* soft: gray ground + gray text */
   .module-meta { font-size: var(--fs-caption); color: var(--c-ink-soft); margin: 6px 0 0 calc(1em + 10px); }
   .module-links { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: var(--fs-caption); }
-  .module-links a { color: var(--c-accent); text-underline-offset: 3px; }
+  .module-links a { color: var(--c-link); text-underline-offset: 3px; }
   .module-icon, .summary-icon { display: inline-flex; vertical-align: -0.12em; margin-right: 3px; }
   .module-icon svg, .summary-icon svg { width: 1.05em; height: 1.05em; fill: var(--c-accent); }
 
@@ -212,7 +212,7 @@
   .item-main input[type="checkbox"] { flex: 0 0 auto; width: 22px; height: 22px; margin-top: 4px; accent-color: var(--c-accent); cursor: pointer; }
   .item-main label { cursor: text; flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; user-select: text; }
   .item-main label code { font-size: var(--fs-mono); background: var(--c-accent-soft); padding: 1px 5px; border-radius: 5px; font-family: var(--font-mono); overflow-wrap: anywhere; word-break: break-word; }
-  .item-main label a { color: var(--c-accent); text-underline-offset: 3px; }
+  .item-main label a { color: var(--c-link); text-underline-offset: 3px; }
   /* When the body text mentions "a button / control elsewhere", wrap it in a little pill that looks like the real button (so it's recognized at a glance) */
   .ui-ref { display: inline-block; font-size: .92em; font-weight: 600; line-height: 1.45; padding: 1px 9px; border-radius: 99px; border: 1px solid var(--c-line); background: var(--c-card); color: var(--c-ink); white-space: nowrap; vertical-align: baseline; }
   li.item.checked .item-main label { color: var(--c-done); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--c-done) 60%, transparent); }
@@ -332,6 +332,11 @@
   .module { position: relative; padding-right: 92px; overflow: hidden; }
   .module-step { position: absolute; top: 8px; right: 18px; order: 0; margin: 0; align-self: auto; font-family: var(--font-display); font-style: italic; font-size: 7rem; line-height: .8; font-weight: 500; background: transparent; color: var(--c-accent); opacity: .85; padding: 0; border-radius: 0; pointer-events: none; z-index: 1; }
   .module.done .module-step { background: transparent; color: var(--c-done); font-size: 3rem; top: 12px; }
+
+  /* links: low-chroma + hairline underline (2026-09-21) */
+  a { color: var(--c-link); text-decoration: underline; text-decoration-color: var(--c-link-ul); text-decoration-thickness: 1px; text-underline-offset: .16em; }
+  a:hover { text-decoration-color: var(--c-link); }
+  .cta-bar a, .cta-path, a.cta-path, .cta-path:hover { text-decoration: none; }
 </style>
 </head>
 <body>
