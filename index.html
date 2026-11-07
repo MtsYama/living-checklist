@@ -1801,9 +1801,12 @@
     });
   })();
 
-  var _savedLang = null;
+  var _langs = ["en", "fr", "zh-Hans", "zh-Hant", "ja"];
+  var _urlLang = null, _savedLang = null;
+  try { _urlLang = new URLSearchParams(location.search).get("lang"); } catch (e) {}
   try { _savedLang = localStorage.getItem("lc-landing-lang"); } catch (e) {}
-  applyLang(["en", "fr", "zh-Hans", "zh-Hant", "ja"].indexOf(_savedLang) > -1 ? _savedLang : detectLang());
+  // ?lang= comes first, so a page that embeds this one can choose the language.
+  applyLang(_langs.indexOf(_urlLang) > -1 ? _urlLang : _langs.indexOf(_savedLang) > -1 ? _savedLang : detectLang());
 </script>
 </body>
 </html>
